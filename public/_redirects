@@ -1,0 +1,9 @@
+
+/api/*  http://qrsms-v1.herokuapp.com/api/:splat  200
+/management/*  http://qrsms-v1.herokuapp.com/management/:splat  200
+/teacher/*  http://qrsms-v1.herokuapp.com/teacher/:splat  200
+/student/*  http://qrsms-v1.herokuapp.com/student/:splat  200
+/faculty-api/*  http://qrsms-v1.herokuapp.com/faculty-api/:splat  200
+
+
+/* /index.html 200
