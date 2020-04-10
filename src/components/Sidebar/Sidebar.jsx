@@ -112,7 +112,7 @@ class Sidebar extends React.Component {
     }
     return (
       <Navbar
-        className="navbar-vertical fixed-left navbar-light bg-white"
+        className="navbar-vertical fixed-left navbar-dark bg-dark"
         expand="md"
         id="sidenav-main"
       >
@@ -128,11 +128,21 @@ class Sidebar extends React.Component {
           {/* Brand */}
           {logo ? (
             <NavbarBrand className="pt-0" {...navbarBrandProps}>
-              <img
+              {/* <img
                 alt={logo.imgAlt}
                 className="navbar-brand-img"
                 src={logo.imgSrc}
-              />
+              /> */}
+              <h1
+                style={{
+                  fontWeight: 'bold',
+                  color: 'white',
+                  fontSize: '40px',
+                  paddingTop: '1rem',
+                }}
+              >
+                QRSMS
+              </h1>
             </NavbarBrand>
           ) : null}
           {/* User */}

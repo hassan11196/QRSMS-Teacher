@@ -15,7 +15,9 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import QRAttendance from './Dashboard/Attendance/qr';
 import Index from 'views/Index.jsx';
+import ManualAttendance from './Dashboard/Attendance/manual';
 import Profile from 'views/examples/Profile.jsx';
 import Maps from 'views/examples/Maps.jsx';
 import Register from 'views/examples/Register.jsx';
@@ -32,6 +34,20 @@ var routes = [
     name: 'Dashboard',
     icon: 'ni ni-tv-2 text-primary',
     component: Index,
+    layout: '/admin',
+  },
+  {
+    path: '/manual-attendance',
+    name: 'Maunal Attendance',
+    icon: 'ni ni-tv-2 text-primary',
+    component: ManualAttendance,
+    layout: '/admin',
+  },
+  {
+    path: '/QR-attendance',
+    name: 'QR Attendance',
+    icon: 'ni ni-tv-2 text-primary',
+    component: QRAttendance,
     layout: '/admin',
   },
   {
