@@ -14,19 +14,24 @@ import DashboardLayout from './Dashboard/layout/Layout';
 const istate = {
   selectstatus: false,
   teacher: [],
+  TeacherSections: null,
 };
 const reducer = (state = istate, action) => {
   console.log(action);
-  if (action.type === 'ChangeId')
+  if (action.type === 'TeacherSections') {
+    return {
+      ...state,
+      TeacherSections: action.payload.data,
+    };
+  } else if (action.type === 'ChangeId')
     return {
       ...state,
       teacher: action.payload.s,
     };
   else if (action.type === 'logout') {
-    return{
-      teacher: [],  
-    }
-    
+    return {
+      teacher: [],
+    };
   }
   return state;
 };
@@ -59,14 +64,17 @@ store.subscribe(() => {
 });
 ReactDOM.render(
   <Provider store={store}>
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-      <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
-      <Route path="/dashboard" render={(props) => <DashboardLayout {...props} />} />
-      <Redirect from="/" to="/auth/login" />
-    </Switch>
-  </BrowserRouter>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
+        <Route
+          path="/dashboard"
+          render={(props) => <DashboardLayout {...props} />}
+        />
+        <Redirect from="/" to="/auth/login" />
+      </Switch>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );

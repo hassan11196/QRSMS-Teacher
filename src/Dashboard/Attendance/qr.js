@@ -1,321 +1,330 @@
 import React, { Component } from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
-import {TableRow,  td, } from 'material-ui';
-import { Button as BTTN ,Icon } from 'semantic-ui-react'
-import {Redirect} from 'react-router-dom'
-import {NavBar} from '../Navbar/Navbar'
-import {Button, Row,Col,Form,Breadcrumb} from 'react-bootstrap';
-import {Table, Container} from 'reactstrap'
-import axios from "axios";
-import {connect} from 'react-redux'
+import { TableRow, td } from 'material-ui';
+import { Button as BTTN, Icon } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
+import { NavBar } from '../Navbar/Navbar';
+import { Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
+import { Table, Container } from 'reactstrap';
+import axios from 'axios';
+import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
-import { MDBBTTN, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter} from 'mdbreact';
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+import {
+  MDBBTTN,
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+  MDBModalFooter,
+} from 'mdbreact';
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+axios.defaults.xsrfCookieName = 'csrftoken';
 var QRCode = require('qrcode.react');
-class QRAttendance extends Component
-{
-    constructor(props){
-        super(props)
-        this.state={
-            modal1: false,
-            modal2: false,
-            hour:'',
-            csrf_token: 0,
-            json_qr:'',
-            SectionInfo: [],
-            nodey: [],
-            Section_Nodes:[],
-            new_scsddc:'',
-            new_section:'',
-            new_cc:'',
-            response_start_attendance : '',
-            teacher_sections:''
-        }
-        this.toggle=this.toggle.bind(this);
-        this.Modal1render=this.Modal1render.bind(this);
-        this.Modal2render=this.Modal2render.bind(this);
-        this.startAttendance=this.startAttendance.bind(this);
-    }
-    componentDidMount(){
-        axios.get('/person/get_csrf').then(response => {
-            return response.data.csrftoken;
-          });
-      
-          this.setState({
-            csrf_token: Cookies.get('csrftoken')
-          });
-        
-        axios.get('/teacher/sections/').then((response)=>{
-            console.log('courses ka data')
-            console.log(Array(response.data));
-            this.setState({
-                SectionInfo: Array(response.data.sections[0]),
-                teacher_sections:response.data.sections,
-                SectionInfo: Array(response.data.sections),
-            })
-            this.props.TeacherSections(response.data.sections)
-            console.log('sectiondata')
-            console.log(this.state.SectionInfo)
-            console.log('Weird Table');
-                let nodey = [];
-                // nodey.push(this.renderdata(this.state.SectionInfo[0]));
-            
-                this.state.SectionInfo[0].forEach(element => {
-                    nodey.push(this.renderdata(element));
-                });
+class QRAttendance extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modal1: false,
+      modal2: false,
+      hour: '',
+      csrf_token: 0,
+      json_qr: '',
+      SectionInfo: [],
+      nodey: [],
+      Section_Nodes: [],
+      new_scsddc: '',
+      new_section: '',
+      new_cc: '',
+      response_start_attendance: '',
+      teacher_sections: '',
+    };
+    this.toggle = this.toggle.bind(this);
+    this.Modal1render = this.Modal1render.bind(this);
+    this.Modal2render = this.Modal2render.bind(this);
+    this.startAttendance = this.startAttendance.bind(this);
+  }
+  componentDidMount() {
+    axios.get('/person/get_csrf').then((response) => {
+      return response.data.csrftoken;
+    });
 
-                console.log(nodey);
-                this.setState({
-                    Section_Nodes: nodey
-                });
-        }
-        )
-    }
-    startAttendance=()=>{
-        console.log("calling")
+    this.setState({
+      csrf_token: Cookies.get('csrftoken'),
+    });
+
+    axios.get('/teacher/sections/').then((response) => {
+      console.log('courses ka data');
+      console.log(Array(response.data));
+      this.setState({
+        SectionInfo: Array(response.data.sections[0]),
+        teacher_sections: response.data.sections,
+        SectionInfo: Array(response.data.sections),
+      });
+      this.props.TeacherSections(response.data.sections);
+      console.log('sectiondata');
+      console.log(this.state.SectionInfo);
+      console.log('Weird Table');
+      let nodey = [];
+      // nodey.push(this.renderdata(this.state.SectionInfo[0]));
+
+      this.state.SectionInfo[0].forEach((element) => {
+        nodey.push(this.renderdata(element));
+      });
+
+      console.log(nodey);
+      this.setState({
+        Section_Nodes: nodey,
+      });
+    });
+  }
+  startAttendance = () => {
+    console.log('calling');
+    this.setState({
+      modal1: !this.state.modal1,
+      modal2: !this.state.modal2,
+    });
+    let form = new FormData();
+    form.append('csrfmiddlewaretoekn', this.state.csrf_token);
+    form.append('slot', this.state.hour);
+    form.append('scsddc', this.state.new_scsddc);
+    form.append('section', this.state.new_section);
+    axios
+      .post('/teacher/start_attendance/', form)
+      .then((response) => {
+        // console.log(response.data);
         this.setState({
-            modal1: !this.state.modal1,
-            modal2: !this.state.modal2,
-          });
-        let form= new FormData()
-        form.append('csrfmiddlewaretoekn',this.state.csrf_token)
-        form.append('slot',this.state.hour)
-        form.append('scsddc',this.state.new_scsddc);
-        form.append('section',this.state.new_section)
-        axios.post('/teacher/start_attendance/',form).then((response)=>{
-            // console.log(response.data);
-            this.setState({
-                json_qr:response.data.qr_json,
-                response_start_attendance : response.data.message
-            })
-        }).then(()=>{
-            
-            // this.setState({
-            //     modal2: !this.state.modal2,
-            //     modal1: !this.state.modal1,
-    
-    
-            // })
-        })
-    }
-    
-    toggle = () => {
-        this.setState({
-            modal1: !this.state.modal1
-          });
-    }
-    toggle2 = () => {
-        this.setState({
-          modal2: !this.state.modal2
+          json_qr: response.data.qr_json,
+          response_start_attendance: response.data.message,
         });
-      }
-    MarkAttendance=(cc,ssdc,sec)=>{
-        console.log('cc,')
-        console.log(cc)
-        console.log(ssdc)
-        console.log(sec)
-        this.setState({
-                 new_cc:cc,
-                 new_scsddc:ssdc,
-                 new_section:sec,
-            });
-            this.toggle()
-        }
-    Modal1render=()=>{
-        console.log('this.state.json_qr')
-        console.log(this.state.json_qr)
-        return(
-           
-            <MDBModal isOpen={this.state.modal2} toggle={this.toggle2}>
-              <MDBModalBody>
-              {/* <h3>{this.state.response_start_attendance}</h3> */}
-                        <QRCode level="L" id='QR' size="900" value={JSON.stringify(this.state.json_qr)} style={{width:'50%',height:'50%'}}/>,
-                     <br/>
-                     
-              </MDBModalBody>
-                     <MDBModalFooter>
-                         <div atyle={{float:'left'}}>
-                     <BTTN color="secondary"
-            onClick={() => {
-              this.zoomin();
-            }}
-          >
-           <i className="icon-zoom-in"></i>
-            Zoom In
-          </BTTN>
+      })
+      .then(() => {
+        // this.setState({
+        //     modal2: !this.state.modal2,
+        //     modal1: !this.state.modal1,
+        // })
+      });
+  };
+
+  toggle = () => {
+    this.setState({
+      modal1: !this.state.modal1,
+    });
+  };
+  toggle2 = () => {
+    this.setState({
+      modal2: !this.state.modal2,
+    });
+  };
+  MarkAttendance = (cc, ssdc, sec) => {
+    console.log('cc,');
+    console.log(cc);
+    console.log(ssdc);
+    console.log(sec);
+    this.setState({
+      new_cc: cc,
+      new_scsddc: ssdc,
+      new_section: sec,
+    });
+    this.toggle();
+  };
+  Modal1render = () => {
+    console.log('this.state.json_qr');
+    console.log(this.state.json_qr);
+    return (
+      <MDBModal id="modal" isOpen={this.state.modal2} toggle={this.toggle2}>
+        <MDBModalBody style={{ textAlign: 'center', overflow: 'auto' }}>
+          {/* <h3>{this.state.response_start_attendance}</h3> */}
+          <QRCode
+            level="L"
+            id="QR"
+            size="900"
+            value={JSON.stringify(this.state.json_qr)}
+            style={{ width: '50%', height: '50%' }}
+          />
+          ,
+          <br />
+        </MDBModalBody>
+        <MDBModalFooter>
+          <div atyle={{ float: 'left' }}>
+            <BTTN
+              color="secondary"
+              onClick={() => {
+                this.zoomin();
+              }}
+            >
+              <i className="icon-zoom-in"></i>
+              Zoom In
+            </BTTN>
           </div>
-          <BTTN color="secondary" 
+          <BTTN
+            color="secondary"
             onClick={() => {
               this.zoomout();
             }}
           >
-       <i className="icon-zoom-out"></i>
+            <i className="icon-zoom-out"></i>
             Zoom Out
           </BTTN>
-          </MDBModalFooter>
-              
-            </MDBModal>     
-        );
-    }
-    zoomin=()=> { 
-        var GFG = document.getElementById("QR"); 
-        var currWidth = GFG.clientWidth; 
-        GFG.style.width = (currWidth + 100) + "px"; 
-    } 
-      
-    zoomout=()=> { 
-        var GFG = document.getElementById("QR"); 
-        var currWidth = GFG.clientWidth; 
-        GFG.style.width = (currWidth - 100) + "px"; 
-    }
-    Modal2render=()=>{
-        console.log('hhhhhhhhhhhhhh')
-        return(
-            <MDBModal isOpen={this.state.modal1} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>Class Hour</MDBModalHeader>
-        <MDBModalBody>
-       
-        <Form>
-                <Form.Group as={Col} controlId="formGridState">
-                  <Form.Label>Select Course</Form.Label>
-                  <Form.Control as="select" onChange={this.setHour}>
-                  <option>Select Hour</option>
-                  <option name="1" > 8:00 AM - 9:00</option>
-                  <option name="2" >9:00 AM- 10:00</option>
-                  <option name="3" >10:00 AM- 11:00</option>
-                  <option name="4" >11:00 AM- 12:00</option>
-                  <option name="5" >12:00 AM- 1:00</option>
-                  <option name="6" >1:00 AM- 2:00</option>
-                  <option name="7" >2:00 AM- 3:00</option>
-                  <option name="8" >3:00 AM- 4:00</option>
-
-        </Form.Control>
-                </Form.Group>
-                </Form>
-        </MDBModalBody>
-        <MDBModalFooter>
-            <BTTN color="primary" onClick={()=>this.toggle()}>Close</BTTN>
-            <BTTN color="secondary" onClick={()=>this.startAttendance()}>Start Attendance</BTTN>
         </MDBModalFooter>
       </MDBModal>
-        );
-    }
-    setHour=(e)=>{
-        let h = (e.target.options[e.target.selectedIndex].getAttribute('name'));
-        
-        this.setState(oldState => ({
-          hour : h
-        }));
-    
-    
-        console.log(this.state.hour)
-        }
-    
-    renderdata(c)
-    {
-        console.log('registration table k ander')
-        console.log(c)
-        return (
+    );
+  };
+  zoomin = () => {
+    var GFG = document.getElementById('QR');
+    var modal1 = document.getElementById('modal');
+    var currWidth = GFG.clientWidth;
+    var currHeight = GFG.clientHeight;
+    var modalWidth = modal1.clientWidth;
+    var modalHeight = modal1.clientHeight;
+    GFG.style.width = currWidth + 100 + 'px';
+    GFG.style.height = currHeight + 100 + 'px';
+    modal1.style.width = modalWidth + 100 + 'px';
+    modal1.style.height = modalHeight + 100 + 'px';
+  };
 
-            // <li key={"listKey" + c.course_code} style={{listStyle:'none'}}>
-            <tr>
-                {/* <td style={{color:'#10A7F0',fontSize:'15px',fontWeight:'bold'}} key={"rowCol" + c.course_name}>{c.course_name}</td> */}
-                <td style={{fontSize:'15px',fontWeight:'bold'}} >{c.course_code}</td>
-                <td style={{fontSize:'15px',fontWeight:'bold'}} >{c.section_name}</td>
-                <td style={{fontSize:'15px',fontWeight:'bold'}} >{c.section_seats}</td>
-                <td style={{color:'#10A7F0'}} ><BTTN primary onClick={()=>{this.MarkAttendance(c.course_code,c.scsddc,c.section_name)}}>Mark Attendance</BTTN></td>
-                <div>
-          </div>
-            </tr>
-            // </li>
-        );
-    }
-    render()
-    {
-       
-        // if(this.props.teacher===undefined||this.props.teacher===''||this.props.teacher===null)
-        // return(
-        //     <Redirect to='/axioslogin'/>
-        // )
-        // else
-        return(
-            <div>
-            {/* <Container bsPrefix="cont">
+  zoomout = () => {
+    var GFG = document.getElementById('QR');
+    var modal1 = document.getElementById('modal');
+    var currWidth = GFG.clientWidth;
+    var currHeight = GFG.clientHeight;
+    var modalWidth = modal1.clientWidth;
+    var modalHeight = modal1.clientHeight;
+    GFG.style.width = currWidth - 100 + 'px';
+    GFG.style.height = currHeight - 100 + 'px';
+    modal1.style.width = modalWidth - 100 + 'px';
+    modal1.style.height = modalHeight - 100 + 'px';
+  };
+  Modal2render = () => {
+    return (
+      <MDBModal isOpen={this.state.modal1} toggle={this.toggle}>
+        <MDBModalHeader toggle={this.toggle}>Class Hour</MDBModalHeader>
+        <MDBModalBody>
+          <Form>
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Select Course</Form.Label>
+              <Form.Control as="select" onChange={this.setHour}>
+                <option>Select Hour</option>
+                <option name="1"> 8:00 AM - 9:00</option>
+                <option name="2">9:00 AM- 10:00</option>
+                <option name="3">10:00 AM- 11:00</option>
+                <option name="4">11:00 AM- 12:00</option>
+                <option name="5">12:00 AM- 1:00</option>
+                <option name="6">1:00 AM- 2:00</option>
+                <option name="7">2:00 AM- 3:00</option>
+                <option name="8">3:00 AM- 4:00</option>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </MDBModalBody>
+        <MDBModalFooter>
+          <BTTN color="primary" onClick={() => this.toggle()}>
+            Close
+          </BTTN>
+          <BTTN color="secondary" onClick={() => this.startAttendance()}>
+            Start Attendance
+          </BTTN>
+        </MDBModalFooter>
+      </MDBModal>
+    );
+  };
+  setHour = (e) => {
+    let h = e.target.options[e.target.selectedIndex].getAttribute('name');
+
+    this.setState((oldState) => ({
+      hour: h,
+    }));
+
+    console.log(this.state.hour);
+  };
+
+  renderdata(c) {
+    console.log('registration table k ander');
+    console.log(c);
+    return (
+      // <li key={"listKey" + c.course_code} style={{listStyle:'none'}}>
+      <tr>
+        {/* <td style={{color:'#10A7F0',fontSize:'15px',fontWeight:'bold'}} key={"rowCol" + c.course_name}>{c.course_name}</td> */}
+        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.course_code}</td>
+        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.section_name}</td>
+        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.section_seats}</td>
+        <td style={{ color: '#10A7F0' }}>
+          <BTTN
+            primary
+            onClick={() => {
+              this.MarkAttendance(c.course_code, c.scsddc, c.section_name);
+            }}
+          >
+            Mark Attendance
+          </BTTN>
+        </td>
+        <div></div>
+      </tr>
+      // </li>
+    );
+  }
+  render() {
+    // if(this.props.teacher===undefined||this.props.teacher===''||this.props.teacher===null)
+    // return(
+    //     <Redirect to='/axioslogin'/>
+    // )
+    // else
+    return (
+      <div>
+        {/* <Container bsPrefix="cont">
                 <br/><br/><br/>
                 <h5 style={{ textAlign: "left" }}><span style={{ fontWeight: "bold", color: "black" }}>Marks</span> <span>| Distribution</span></h5> */}
-            <NavBar/>
-                
-                <br/>
-                <Container fluid>
-                <div style={{ width: 'auto', paddingBottom: '2rem' }}>
-                  <Breadcrumb>
-                    <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Manual Attendance</Breadcrumb.Item>
-                  </Breadcrumb>
-                </div>
+        <NavBar />
 
-                                    <Table className="align-items-center table-dark table-flush"
-                  responsive>
-                      <thead className="thead-dark">
-                  
-                                        {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
+        <br />
+        <Container fluid>
+          <div style={{ width: 'auto', paddingBottom: '2rem' }}>
+            <Breadcrumb>
+              <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
+              <Breadcrumb.Item active>QR Attendance</Breadcrumb.Item>
+            </Breadcrumb>
+          </div>
+
+          <Table className="align-items-center table-dark table-flush" responsive>
+            <thead className="thead-dark">
+              {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
 
                                         </th> */}
-                                        {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
+              {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
                                             Course Name
                                         </th> */}
-                                        <th style={{ fontWeight: '700', fontSize: '15px' }}>
-                                            Course Code
-                                        </th>
-                                        <th style={{ fontWeight: '700', fontSize: '15px' }}>
-                                            Section
-                                        </th>
-                                        <th style={{ fontWeight: '700', fontSize: '15px' }}>
-                                            No of Seats
-                                        </th>    
-                                        <th style={{ fontWeight: '700', fontSize: '15px' }} >
-                                            Status
-                                        </th>    
-                        </thead>                
-                                        <tbody>
-
-                                            {this.state.Section_Nodes}
-
-                                        </tbody>
-                                    </Table>
-                                    </Container>
-                    {this.Modal1render()}
-                    {this.Modal2render()}
-              {/* </Container> */}
-            </div>
-        );
-    }
+              <th style={{ fontWeight: '700', fontSize: '15px' }}>Course Code</th>
+              <th style={{ fontWeight: '700', fontSize: '15px' }}>Section</th>
+              <th style={{ fontWeight: '700', fontSize: '15px' }}>No of Seats</th>
+              <th style={{ fontWeight: '700', fontSize: '15px' }}>Status</th>
+            </thead>
+            <tbody>{this.state.Section_Nodes}</tbody>
+          </Table>
+        </Container>
+        {this.Modal1render()}
+        {this.Modal2render()}
+        {/* </Container> */}
+      </div>
+    );
+  }
 }
-const mapDispatchToProps=(dispatch)=>
-{
-
-  return{
-    TeacherSections:(data)=>{
-        dispatch({type:"TeacherSections",payload:{data}})
+const mapDispatchToProps = (dispatch) => {
+  return {
+    TeacherSections: (data) => {
+      dispatch({ type: 'TeacherSections', payload: { data } });
     },
-    changeid:(s)=>{
-      console.log('dispatcher ka nder')
-      console.log(s)
-      dispatch({type:'ChangeId', payload:{s}})
+    changeid: (s) => {
+      console.log('dispatcher ka nder');
+      console.log(s);
+      dispatch({ type: 'ChangeId', payload: { s } });
       //dispatch({type:'ChangeId', payload:id})
-      
-    }
+    },
+  };
+};
 
-  }
-}
-
-const mapStateToProps=(state)=>{
-    
-    console.log(state)
-    return{
-      teacher:state.teacherinfo
-    }
-  }
-export default connect(mapStateToProps,mapDispatchToProps)(QRAttendance);
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    teacher: state.teacherinfo,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(QRAttendance);
