@@ -16,7 +16,7 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
 class AttendanceEntry {
-  constructor() {}
+  constructor() { }
 }
 
 const attendance_data = {
@@ -172,7 +172,8 @@ class ManualAttendance extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
+    console.log('checking')
+    console.log(this.props.teacherSections)
     axios.get('/person/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
@@ -181,93 +182,125 @@ class ManualAttendance extends Component {
       csrf_token: Cookies.get('csrftoken'),
     });
 
-    let query_section = {
-      city: 'Karachi',
-      campus: 'MainCampus',
-      department: 'ComputerSciences',
-      degree: 'BS(CS)',
-      semester_code: 'FALL2019',
-      course_code: this.state.code,
-      section: this.state.section,
-    };
 
-    let config = {
-      headers: {
-        DataType: 'json',
-        'content-type': 'application/json',
-      },
-      // body: qs.stringify(query_section)
-    };
 
-    axios
-      .post('/teacher/get_attendance/', query_section, config)
-      .then((response) => {
-        console.log('attendace data arha h');
-        console.log(response.data);
-        this.setState({
-          // Expected student_api
-          //   {
-          //     "status": "success",
-          //     "student_sheets": [
-          //         {
-          //             "url": "http://localhost:8000/api/studentinfosection/5/",
-          //             "student": "http://localhost:8000/rest/students/17K-3654/",
-          //             "attendance_sheet": "http://localhost:8000/api/attendance_sheet/19/",
-          //             "mark_sheet": "http://localhost:8000/api/marksheet/16/"
-          //         },
-          //         {
-          //             "url": "http://localhost:8000/api/studentinfosection/6/",
-          //             "student": "http://localhost:8000/rest/students/17K-3650/",
-          //             "attendance_sheet": "http://localhost:8000/api/attendance_sheet/20/",
-          //             "mark_sheet": "http://localhost:8000/api/marksheet/17/"
-          //         }
-          //     ],
-          //     "class_sheet": [
-          //         {
-          //             "url": "http://localhost:8000/api/sectionattendance/20/",
-          //             "class_date": "2019-11-27",
-          //             "attendance_slot": 1,
-          //             "attendance_time_start": "03:10:40.528560",
-          //             "attendance_interval_allowed": 30,
-          //             "qr_change_interval": 1800,
-          //             "duration_hour": 1,
-          //             "scsddc": "E_CS309_FALL2019_BS(CS)_ComputerSciences_MainCampus_Karachi",
-          //             "section": "E"
-          //         },
-          //         {
-          //             "url": "http://localhost:8000/api/sectionattendance/21/",
-          //             "class_date": "2020-01-06",
-          //             "attendance_slot": 1,
-          //             "attendance_time_start": "02:09:14.900296",
-          //             "attendance_interval_allowed": 30,
-          //             "qr_change_interval": 1800,
-          //             "duration_hour": 1,
-          //             "scsddc": "E_CS309_FALL2019_BS(CS)_ComputerSciences_MainCampus_Karachi",
-          //             "section": "E"
-          //         },
-          //         {
-          //             "url": "http://localhost:8000/api/sectionattendance/22/",
-          //             "class_date": "2020-01-06",
-          //             "attendance_slot": 2,
-          //             "attendance_time_start": "02:09:35.765007",
-          //             "attendance_interval_allowed": 30,
-          //             "qr_change_interval": 1800,
-          //             "duration_hour": 1,
-          //             "scsddc": "E_CS309_FALL2019_BS(CS)_ComputerSciences_MainCampus_Karachi",
-          //             "section": "E"
-          //         }
-          //     ]
-          // }
-          fetched_attendance_data: response.data.attendance_data,
-          fetched_status: true,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log('something Bad Happend');
-        return;
-      });
+
+    axios.get('/teacher/sections/').then((response) => {
+      console.log('courses ka data');
+      console.log(Array(response.data));
+
+      this.props.TeacherSections(response.data.sections);
+      console.log('sectiondata');
+      console.log(this.state.SectionInfo);
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // let query_section = {
+    //   city: 'Karachi',
+    //   campus: 'MainCampus',
+    //   department: 'ComputerSciences',
+    //   degree: 'BS(CS)',
+    //   semester_code: 'FALL2019',
+    //   course_code: this.state.code,
+    //   section: this.state.section,
+    // };
+
+    // let config = {
+    //   headers: {
+    //     DataType: 'json',
+    //     'content-type': 'application/json',
+    //   },
+    //   // body: qs.stringify(query_section)
+    // };
+
+    // axios
+    //   .post('/teacher/get_attendance/', query_section, config)
+    //   .then((response) => {
+    //     console.log('attendace data arha h');
+    //     console.log(response.data);
+    //     this.setState({
+    //       // Expected student_api
+    //       //   {
+    //       //     "status": "success",
+    //       //     "student_sheets": [
+    //       //         {
+    //       //             "url": "http://localhost:8000/api/studentinfosection/5/",
+    //       //             "student": "http://localhost:8000/rest/students/17K-3654/",
+    //       //             "attendance_sheet": "http://localhost:8000/api/attendance_sheet/19/",
+    //       //             "mark_sheet": "http://localhost:8000/api/marksheet/16/"
+    //       //         },
+    //       //         {
+    //       //             "url": "http://localhost:8000/api/studentinfosection/6/",
+    //       //             "student": "http://localhost:8000/rest/students/17K-3650/",
+    //       //             "attendance_sheet": "http://localhost:8000/api/attendance_sheet/20/",
+    //       //             "mark_sheet": "http://localhost:8000/api/marksheet/17/"
+    //       //         }
+    //       //     ],
+    //       //     "class_sheet": [
+    //       //         {
+    //       //             "url": "http://localhost:8000/api/sectionattendance/20/",
+    //       //             "class_date": "2019-11-27",
+    //       //             "attendance_slot": 1,
+    //       //             "attendance_time_start": "03:10:40.528560",
+    //       //             "attendance_interval_allowed": 30,
+    //       //             "qr_change_interval": 1800,
+    //       //             "duration_hour": 1,
+    //       //             "scsddc": "E_CS309_FALL2019_BS(CS)_ComputerSciences_MainCampus_Karachi",
+    //       //             "section": "E"
+    //       //         },
+    //       //         {
+    //       //             "url": "http://localhost:8000/api/sectionattendance/21/",
+    //       //             "class_date": "2020-01-06",
+    //       //             "attendance_slot": 1,
+    //       //             "attendance_time_start": "02:09:14.900296",
+    //       //             "attendance_interval_allowed": 30,
+    //       //             "qr_change_interval": 1800,
+    //       //             "duration_hour": 1,
+    //       //             "scsddc": "E_CS309_FALL2019_BS(CS)_ComputerSciences_MainCampus_Karachi",
+    //       //             "section": "E"
+    //       //         },
+    //       //         {
+    //       //             "url": "http://localhost:8000/api/sectionattendance/22/",
+    //       //             "class_date": "2020-01-06",
+    //       //             "attendance_slot": 2,
+    //       //             "attendance_time_start": "02:09:35.765007",
+    //       //             "attendance_interval_allowed": 30,
+    //       //             "qr_change_interval": 1800,
+    //       //             "duration_hour": 1,
+    //       //             "scsddc": "E_CS309_FALL2019_BS(CS)_ComputerSciences_MainCampus_Karachi",
+    //       //             "section": "E"
+    //       //         }
+    //       //     ]
+    //       // }
+    //       fetched_attendance_data: response.data.attendance_data,
+    //       fetched_status: true,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     console.log('something Bad Happend');
+    //     return;
+    //   });
   }
+
+
+
+
+
   ///////////////////
   handleAttState(e) {
     let url = e.target.options[e.target.selectedIndex].getAttribute('url');
@@ -418,6 +451,7 @@ class ManualAttendance extends Component {
   }
 
   renderFetchedTable() {
+    console.log(this.state.fetched_attendance_data)
     if (this.state.fetched_status === false) {
       return <h1>Data Not Fetched</h1>;
     }
@@ -441,8 +475,8 @@ class ManualAttendance extends Component {
                 }
               )
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
@@ -456,8 +490,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
@@ -471,8 +505,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
           <tr style={{ border: 'thin solid white' }}>
             <th style={{ fontWeight: '700', fontSize: '15px' }}>S no.</th>
@@ -486,14 +520,15 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
         </thead>
         <tbody>
           {this.state.fetched_attendance_data !== undefined ? (
             this.state.fetched_attendance_data.student_sheets.map(
               (student_data, index) => {
+
                 return (
                   <tr key={index}>
                     <td style={{ fontSize: '15px', fontWeight: 'bold' }}>
@@ -516,7 +551,7 @@ class ManualAttendance extends Component {
                   }))
                   } */}
 
-                    {this.state.fetched_attendance_data ? (
+                    {student_data.attendance_sheet.attendance.length > 0 ? (
                       this.state.fetched_attendance_data.class_sheet.map(
                         (class_att) => {
                           let attendance_of_stud = student_data.attendance_sheet.attendance.filter(
@@ -524,6 +559,7 @@ class ManualAttendance extends Component {
                               att_obj.class_date === class_att.class_date &&
                               att_obj.class_slot == class_att.class_slot
                           );
+                          console.log("Hooooooo")
                           console.log(attendance_of_stud);
                           if (attendance_of_stud[0].state == 'A')
                             return (
@@ -585,21 +621,28 @@ class ManualAttendance extends Component {
                         }
                       )
                     ) : (
-                      <h5></h5>
-                    )}
+                        <h5></h5>
+                      )}
                   </tr>
                 );
               }
             )
           ) : (
-            <h5></h5>
-          )}
+              <h5></h5>
+            )}
         </tbody>
       </Table>
     );
   }
 
   addAttendance() {
+    let sheet = this.state.fetched_data;
+    console.log(sheet)
+    let new_entry = this.getNewAttendanceEntry(sheet.attendance_list, sheet.student_list);
+    sheet.attendance_list.push(new_entry);
+    this.setState({
+      fetched_data: sheet
+    })
     let form = new FormData();
     form.append('csrfmiddlewaretoekn', this.state.csrf_token);
     form.append('slot', this.state.hour);
@@ -669,7 +712,8 @@ class ManualAttendance extends Component {
       .post('/teacher/get_attendance/', query_section, config)
       .then((response) => {
         console.log('attendace data arha h');
-        console.log(attendance_data.student_sheets[0].attendance_sheet.scsddc);
+        console.log(response.data)
+        //console.log(attendance_data.student_sheets[0].attendance_sheet.scsddc);
         console.log(
           response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
         );
@@ -687,8 +731,9 @@ class ManualAttendance extends Component {
       });
   }
   SectionBox(data) {
-    if (data.course_code === this.state.code)
-      return <option name={data.section_name}>{data.section_name}</option>;
+    console.log(data)
+    //if (data.course_code === this.state.code)
+    return <option name={data.section_name}>{data.section_name}</option>;
   }
   handleCourse(e) {
     let course_code = e.target.options[e.target.selectedIndex].getAttribute('name');
@@ -759,8 +804,8 @@ class ManualAttendance extends Component {
                       return this.SectionBox(c);
                     })
                   ) : (
-                    <option>Select A Course First</option>
-                  )}
+                      <option>Select A Course First</option>
+                    )}
                 </Form.Control>
               </form>
             </Col>
@@ -774,8 +819,8 @@ class ManualAttendance extends Component {
                       return this.CourseBox(c);
                     })
                   ) : (
-                    <h2>Courses Not Available</h2>
-                  )}
+                      <h2>Courses Not Available</h2>
+                    )}
                   {/* <option>Database Systems</option>
                     <option>Calculus</option> */}
                 </Form.Control>
@@ -805,6 +850,11 @@ class ManualAttendance extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
+
+    TeacherSections: (data) => {
+      dispatch({ type: 'TeacherSections', payload: { data } });
+    },
+
     changeid: (s) => {
       console.log('dispatcher ka nder');
       console.log(s);
