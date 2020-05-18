@@ -16,7 +16,7 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
 class AttendanceEntry {
-  constructor() { }
+  constructor() {}
 }
 
 const attendance_data = {
@@ -172,8 +172,8 @@ class ManualAttendance extends Component {
   }
 
   componentDidMount() {
-    console.log('checking')
-    console.log(this.props.teacherSections)
+    console.log('checking');
+    console.log(this.props.teacherSections);
     axios.get('/person/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
@@ -182,9 +182,6 @@ class ManualAttendance extends Component {
       csrf_token: Cookies.get('csrftoken'),
     });
 
-
-
-
     axios.get('/teacher/sections/').then((response) => {
       console.log('courses ka data');
       console.log(Array(response.data));
@@ -192,22 +189,7 @@ class ManualAttendance extends Component {
       this.props.TeacherSections(response.data.sections);
       console.log('sectiondata');
       console.log(this.state.SectionInfo);
-
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // let query_section = {
     //   city: 'Karachi',
@@ -296,10 +278,6 @@ class ManualAttendance extends Component {
     //     return;
     //   });
   }
-
-
-
-
 
   ///////////////////
   handleAttState(e) {
@@ -451,7 +429,7 @@ class ManualAttendance extends Component {
   }
 
   renderFetchedTable() {
-    console.log(this.state.fetched_attendance_data)
+    console.log(this.state.fetched_attendance_data);
     if (this.state.fetched_status === false) {
       return <h1>Data Not Fetched</h1>;
     }
@@ -465,18 +443,18 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
             <th style={{ fontWeight: '700', fontSize: '15px' }}>Lecture No.</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet.map(
-                (day_att, index) => {
+              this.state.fetched_attendance_data.class_sheet
+                .reverse()
+                .map((day_att, index) => {
                   return (
                     <th key={index} style={{ fontWeight: '700', fontSize: '15px' }}>
                       {index + 1}
                     </th>
                   );
-                }
-              )
+                })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
@@ -490,8 +468,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
@@ -505,8 +483,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr style={{ border: 'thin solid white' }}>
             <th style={{ fontWeight: '700', fontSize: '15px' }}>S no.</th>
@@ -520,15 +498,14 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
         </thead>
         <tbody>
           {this.state.fetched_attendance_data !== undefined ? (
             this.state.fetched_attendance_data.student_sheets.map(
               (student_data, index) => {
-
                 return (
                   <tr key={index}>
                     <td style={{ fontSize: '15px', fontWeight: 'bold' }}>
@@ -559,7 +536,7 @@ class ManualAttendance extends Component {
                               att_obj.class_date === class_att.class_date &&
                               att_obj.class_slot == class_att.class_slot
                           );
-                          console.log("Hooooooo")
+                          console.log('Hooooooo');
                           console.log(attendance_of_stud);
                           if (attendance_of_stud[0].state == 'A')
                             return (
@@ -621,15 +598,15 @@ class ManualAttendance extends Component {
                         }
                       )
                     ) : (
-                        <h5></h5>
-                      )}
+                      <h5></h5>
+                    )}
                   </tr>
                 );
               }
             )
           ) : (
-              <h5></h5>
-            )}
+            <h5></h5>
+          )}
         </tbody>
       </Table>
     );
@@ -637,17 +614,21 @@ class ManualAttendance extends Component {
 
   addAttendance() {
     let sheet = this.state.fetched_data;
-    console.log(sheet)
-    let new_entry = this.getNewAttendanceEntry(sheet.attendance_list, sheet.student_list);
+    console.log(sheet);
+    let new_entry = this.getNewAttendanceEntry(
+      sheet.attendance_list,
+      sheet.student_list
+    );
     sheet.attendance_list.push(new_entry);
     this.setState({
-      fetched_data: sheet
-    })
+      fetched_data: sheet,
+    });
     let form = new FormData();
-    form.append('csrfmiddlewaretoekn', this.state.csrf_token);
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('slot', this.state.hour);
     form.append('scsddc', this.state.ssdc);
     form.append('section', this.state.section);
+    form.append('course_code', this.state.course_code);
     axios
       .post('/teacher/start_attendance/', form)
       .then((response) => {
@@ -712,7 +693,7 @@ class ManualAttendance extends Component {
       .post('/teacher/get_attendance/', query_section, config)
       .then((response) => {
         console.log('attendace data arha h');
-        console.log(response.data)
+        console.log(response.data);
         //console.log(attendance_data.student_sheets[0].attendance_sheet.scsddc);
         console.log(
           response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
@@ -722,6 +703,8 @@ class ManualAttendance extends Component {
           fetched_status: true,
           ssdc:
             response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc,
+          course_code: response.data.attendance_data.course_code,
+          section: response.data.attendance_data.section,
         });
       })
       .catch((err) => {
@@ -731,7 +714,7 @@ class ManualAttendance extends Component {
       });
   }
   SectionBox(data) {
-    console.log(data)
+    console.log(data);
     //if (data.course_code === this.state.code)
     return <option name={data.section_name}>{data.section_name}</option>;
   }
@@ -804,8 +787,8 @@ class ManualAttendance extends Component {
                       return this.SectionBox(c);
                     })
                   ) : (
-                      <option>Select A Course First</option>
-                    )}
+                    <option>Select A Course First</option>
+                  )}
                 </Form.Control>
               </form>
             </Col>
@@ -819,8 +802,8 @@ class ManualAttendance extends Component {
                       return this.CourseBox(c);
                     })
                   ) : (
-                      <h2>Courses Not Available</h2>
-                    )}
+                    <h2>Courses Not Available</h2>
+                  )}
                   {/* <option>Database Systems</option>
                     <option>Calculus</option> */}
                 </Form.Control>
@@ -850,7 +833,6 @@ class ManualAttendance extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-
     TeacherSections: (data) => {
       dispatch({ type: 'TeacherSections', payload: { data } });
     },

@@ -84,10 +84,11 @@ class QRAttendance extends Component {
       modal2: !this.state.modal2,
     });
     let form = new FormData();
-    form.append('csrfmiddlewaretoekn', this.state.csrf_token);
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('slot', this.state.hour);
     form.append('scsddc', this.state.new_scsddc);
     form.append('section', this.state.new_section);
+    form.append('course_code', this.state.new_cc);
     axios
       .post('/teacher/start_attendance/', form)
       .then((response) => {
