@@ -4,7 +4,7 @@ import 'mdbreact/dist/css/mdb.css';
 import { TableRow, td } from 'material-ui';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-import { NavBar } from '../Navbar/Navbar';
+import NavBar from '../Navbar/Navbar';
 import { Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
 import { Table, Container } from 'reactstrap';
 import axios from 'axios';

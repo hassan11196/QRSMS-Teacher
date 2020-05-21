@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavBar } from '../Navbar/Navbar';
+import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import 'mdbreact/dist/css/mdb.css';
 import { Redirect } from 'react-router-dom';
@@ -8,8 +8,6 @@ import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
 // import { FaChartBar, FaBook, FaWrench, FaHome, FaUser, FaBookReader, FaChalkboardTeacher, FaRegListAlt, FaMarkdown, FaUserGraduate, FaFilePdf } from "react-icons/fa";
 import { connect } from 'react-redux';
 import axios from 'axios';
-// import { Tab } from 'material-ui';
-// import qs from 'qs';
 import Cookies from 'js-cookie';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -172,8 +170,6 @@ class ManualAttendance extends Component {
   }
 
   componentDidMount() {
-    console.log('checking');
-    console.log(this.props.teacherSections);
     axios.get('/person/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
@@ -777,21 +773,7 @@ class ManualAttendance extends Component {
                 </Form.Control>
               </form>
             </Col>
-            <Col md="3">
-              <form>
-                <Form.Label style={{ fontWeight: 'bold' }}>Section</Form.Label>
-                <Form.Control as="select" onChange={this.setSection}>
-                  <option>Select Section</option>
-                  {this.state.code !== '' ? (
-                    this.props.teacherSections.map((c) => {
-                      return this.SectionBox(c);
-                    })
-                  ) : (
-                    <option>Select A Course First</option>
-                  )}
-                </Form.Control>
-              </form>
-            </Col>
+
             <Col md="3">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
@@ -804,8 +786,21 @@ class ManualAttendance extends Component {
                   ) : (
                     <h2>Courses Not Available</h2>
                   )}
-                  {/* <option>Database Systems</option>
-                    <option>Calculus</option> */}
+                </Form.Control>
+              </form>
+            </Col>
+            <Col md="3">
+              <form>
+                <Form.Label style={{ fontWeight: 'bold' }}>Section</Form.Label>
+                <Form.Control as="select" onChange={this.setSection}>
+                  <option>Select Section</option>
+                  {this.state.code !== '' ? (
+                    this.props.teacherSections.map((c) => {
+                      return this.SectionBox(c);
+                    })
+                  ) : (
+                    <option>Select A Course First</option>
+                  )}
                 </Form.Control>
               </form>
             </Col>

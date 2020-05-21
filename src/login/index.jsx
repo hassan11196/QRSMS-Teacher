@@ -19,7 +19,7 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-
+import { connect } from 'react-redux';
 // reactstrap components
 import {
   Button,
@@ -92,16 +92,11 @@ class FacultyLogin extends React.Component {
     axios
       .post(this.state.loginURL, formd)
       .then((res) => {
-        // this.setState(
-        //   {status:res.data.status,
-        //     teacherdata:res.data}
-        //   )
-        console.log('login horaha hai');
         axios.get(this.state.home_jsonURL).then((response) => {
           console.log(response.data);
           if (response.data.status === 'success') {
             console.log(response.data);
-
+            this.props.changeid(response.data);
             console.log(this.props);
             this.setState({
               status: response.data.status,
@@ -111,15 +106,10 @@ class FacultyLogin extends React.Component {
         });
       })
       .finally((response) => {
-        console.log('end mein set hone se pehle');
         this.setState({ loading: false });
-        console.log('end mein set hone k baad');
-
-        console.log(this.state.loading);
       });
   }
   get_csrf_token() {
-    //console.log("TAKING TOKEN ");
     axios.get('/management/get_csrf').then((response) => {
       Cookies.set('csrftoken', response.data.csrfToken);
       this.setState({
@@ -230,4 +220,23 @@ class FacultyLogin extends React.Component {
   }
 }
 
-export default FacultyLogin;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    TeacherSections: (data) => {
+      dispatch({ type: 'TeacherSections', payload: { data } });
+    },
+
+    changeid: (s) => {
+      console.log(s, 'ahsan');
+      dispatch({ type: 'ChangeId', payload: { s } });
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    teacher: state.teacher,
+    teacherSections: state.TeacherSections,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(FacultyLogin);
