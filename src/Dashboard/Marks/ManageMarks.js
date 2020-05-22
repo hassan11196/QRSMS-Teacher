@@ -36,7 +36,7 @@ class ManageMarks extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount() {
-    axios.get('/person/get_csrf').then((response) => {
+    axios.get('/management/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
 
@@ -44,7 +44,7 @@ class ManageMarks extends Component {
       csrf_token: Cookies.get('csrftoken'),
     });
 
-    axios.get('teacher/sections/').then((response) => {
+    axios.get('/teacher/sections/').then((response) => {
       this.setState({
         TeacherFetchedCourses: response.data.sections,
       });
@@ -58,40 +58,34 @@ class ManageMarks extends Component {
   }
   startMarking() {
     let form = new FormData();
-    form.append('csrfmiddlewaretoken', this.state.csrf_token)
-    form.append('scsddc', this.state.scsddc)
-    form.append('marks_type', this.state.Evaluation)
-    form.append('total_marks', this.state.Tmarks)
-    form.append('weightage', this.state.weightage)
-    form.append('section', this.state.section)
-    axios.get('/person/get_csrf')
-    axios.post('http://localhost:3000/teacher/add_marks/', form).then((response) => {
-      console.log(response.data)
-    })
-
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
+    form.append('scsddc', this.state.scsddc);
+    form.append('marks_type', this.state.Evaluation);
+    form.append('total_marks', this.state.Tmarks);
+    form.append('weightage', this.state.weightage);
+    form.append('section', this.state.section);
+    axios.get('/management/get_csrf');
+    axios.post('/teacher/add_marks/', form).then((response) => {
+      console.log(response.data);
+    });
   }
   setCourse(e) {
-    this.setState({ course: e.target.value })
+    this.setState({ course: e.target.value });
   }
   setSection(e) {
     this.setState({
       section: e.target.value,
       scsddc: e.target[e.target.selectedIndex].getAttribute('name'),
-    })
+    });
     let form = new FormData();
-    console.log(e.target[e.target.selectedIndex].getAttribute('name'))
-    form.append('csrfmiddlewaretoken', this.state.csrf_token)
-    form.append('scsddc', e.target[e.target.selectedIndex].getAttribute('name'))
-    axios.post('http://localhost:3000/teacher/get_marks_info/', form).then((response) => {
+    console.log(e.target[e.target.selectedIndex].getAttribute('name'));
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
+    form.append('scsddc', e.target[e.target.selectedIndex].getAttribute('name'));
+    axios.post('/teacher/get_marks_info/', form).then((response) => {
       this.setState({
-        marksInfo: response.data
-      })
-    })
-    form.append('marks_type', 'Mid 1')
-    axios.post('http://localhost:3000/teacher/get_marks/', form).then((response) => {
-      console.log(response.data)
-    })
-
+        marksInfo: response.data,
+      });
+    });
   }
   setEvaluation(e) {
     this.setState(
@@ -105,12 +99,12 @@ class ManageMarks extends Component {
   }
   SectionBox(data) {
     //if (data.course_code === this.state.code)
-    return <option name={data.scsddc} >{data.section_name}</option>;
+    return <option name={data.scsddc}>{data.section_name}</option>;
   }
   handleChange(e) {
     this.setState({
-      [e.target.name]: e.target.value
-    })
+      [e.target.name]: e.target.value,
+    });
   }
   CourseBox(data) {
     return <option name={data.course_code}>{data.course_code}</option>;
@@ -128,8 +122,6 @@ class ManageMarks extends Component {
             </Breadcrumb>
           </div>
           <Row>
-
-
             <Col md="3">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
@@ -194,20 +186,29 @@ class ManageMarks extends Component {
               </form>
             </Col>
           </Row>
-          <br /><br />
+          <br />
+          <br />
           <Row>
             <Form.Label style={{ fontWeight: 'bold' }}>Add New Marks</Form.Label>
 
             <Col md="3">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Total Marks</Form.Label>
-                <Form.Control as="input" onChange={this.handleChange} name="Tmarks"></Form.Control>
+                <Form.Control
+                  as="input"
+                  onChange={this.handleChange}
+                  name="Tmarks"
+                ></Form.Control>
               </form>
             </Col>
             <Col md="3">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Weightage</Form.Label>
-                <Form.Control as="input" onChange={this.handleChange} name="weightage"></Form.Control>
+                <Form.Control
+                  as="input"
+                  onChange={this.handleChange}
+                  name="weightage"
+                ></Form.Control>
               </form>
             </Col>
           </Row>
@@ -221,10 +222,7 @@ class ManageMarks extends Component {
           ></div>
           <br />
           <br />
-          <BTTN
-            primary
-            onClick={this.startMarking}
-          >
+          <BTTN primary onClick={this.startMarking}>
             Generate Marks
           </BTTN>
         </Container>
