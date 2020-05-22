@@ -61,6 +61,7 @@
     "react-scripts": "2.1.8",
     "reactstrap": "7.1.0",
     "redux": "^4.0.5",
+    "rodal": "^1.8.1",
     "semantic-ui-react": "^0.88.2"
   },
   "devDependencies": {

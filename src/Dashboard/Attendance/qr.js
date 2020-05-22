@@ -287,16 +287,10 @@ class QRAttendance extends Component {
 
           <Table className="align-items-center table-dark table-flush" responsive>
             <thead className="thead-dark">
-              {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
-
-                                        </th> */}
-              {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
-                                            Course Name
-                                        </th> */}
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>Course Code</th>
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>Section</th>
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>No of Seats</th>
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>Status</th>
+             <th >Course Code</th>
+              <th >Section</th>
+              <th >No of Seats</th>
+              <th >Status</th>
             </thead>
             <tbody>{this.state.Section_Nodes}</tbody>
           </Table>
