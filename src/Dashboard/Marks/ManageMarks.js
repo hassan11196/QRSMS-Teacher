@@ -82,11 +82,16 @@ class ManageMarks extends Component {
     console.log(e.target[e.target.selectedIndex].getAttribute('name'))
     form.append('csrfmiddlewaretoken', this.state.csrf_token)
     form.append('scsddc', e.target[e.target.selectedIndex].getAttribute('name'))
-    axios.post('http://localhost:3000/teacher/get_marks_info', form).then((response) => {
+    axios.post('http://localhost:3000/teacher/get_marks_info/', form).then((response) => {
       this.setState({
         marksInfo: response.data
       })
     })
+    form.append('marks_type', 'Mid 1')
+    axios.post('http://localhost:3000/teacher/get_marks/', form).then((response) => {
+      console.log(response.data)
+    })
+
   }
   setEvaluation(e) {
     this.setState(
