@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Initial } from 'react-initial'
 
 import Rodal from 'rodal';
 import 'mdbreact/dist/css/mdb.css';
 import { Redirect } from 'react-router-dom';
-import { Table,  Card,
-  CardHeader,Modal,ModalBody,ModalFooter,ModalHeader } from 'reactstrap';
+import { Table,  Card,Media,
+  CardHeader,Modal,ModalBody,ModalFooter,ModalHeader,CardBody } from 'reactstrap';
 import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -40,9 +41,8 @@ class ManageMarks extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount() {
-    axios.get('http://localhost:3000/person/get_csrf').then((response) => {
-    console.log(response)
-    // return response.data.csrftoken;
+    axios.get('/management/get_csrf').then((response) => {
+      return response.data.csrftoken;
     });
 
     this.setState({
@@ -51,9 +51,8 @@ class ManageMarks extends Component {
       console.log(this.state.csrf_token)
     });
 
-    axios.get('http://localhost:3000/teacher/sections/').then((response) => {
-    console.log(response)  
-    this.setState({
+    axios.get('/teacher/sections/').then((response) => {
+      this.setState({
         TeacherFetchedCourses: response.data.sections,
       });
       console.log('courses ka data');
@@ -66,36 +65,37 @@ class ManageMarks extends Component {
   }
   startMarking() {
     let form = new FormData();
-    form.append('csrfmiddlewaretoken', this.state.csrf_token)
-    form.append('scsddc', this.state.scsddc)
-    form.append('marks_type', this.state.Evaluation)
-    form.append('total_marks', this.state.Tmarks)
-    form.append('weightage', this.state.weightage)
-    form.append('section', this.state.section)
-    // axios.get('/person/get_csrf')
-    console.log(form)
-    axios.post('http://localhost:3000/teacher/add_marks/', form).then((response) => {
-      console.log(response.data)
-    })
-
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
+    form.append('scsddc', this.state.scsddc);
+    form.append('marks_type', this.state.Evaluation);
+    form.append('total_marks', this.state.Tmarks);
+    form.append('weightage', this.state.weightage);
+    form.append('section', this.state.section);
+    axios.get('/management/get_csrf');
+    axios.post('/teacher/add_marks/', form).then((response) => {
+      console.log(response.data);
+      this.setState({
+        visible:false
+      })
+    });
   }
   setCourse(e) {
-    this.setState({ course: e.target.value })
+    this.setState({ course: e.target.value });
   }
   setSection(e) {
     this.setState({
       section: e.target.value,
       scsddc: e.target[e.target.selectedIndex].getAttribute('name'),
-    })
+    });
     let form = new FormData();
-    console.log(e.target[e.target.selectedIndex].getAttribute('name'))
-    form.append('csrfmiddlewaretoken', this.state.csrf_token)
-    form.append('scsddc', e.target[e.target.selectedIndex].getAttribute('name'))
-    axios.post('http://localhost:3000/teacher/get_marks_info', form).then((response) => {
+    console.log(e.target[e.target.selectedIndex].getAttribute('name'));
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
+    form.append('scsddc', e.target[e.target.selectedIndex].getAttribute('name'));
+    axios.post('/teacher/get_marks_info/', form).then((response) => {
       this.setState({
-        marksInfo: response.data
-      })
-    })
+        marksInfo: response.data,
+      });
+    });
   }
   setEvaluation(e) {
     this.setState(
@@ -109,12 +109,12 @@ class ManageMarks extends Component {
   }
   SectionBox(data) {
     //if (data.course_code === this.state.code)
-    return <option name={data.scsddc} >{data.section_name}</option>;
+    return <option name={data.scsddc}>{data.section_name}</option>;
   }
   handleChange(e) {
     this.setState({
-      [e.target.name]: e.target.value
-    })
+      [e.target.name]: e.target.value,
+    });
   }
   CourseBox(data) {
     return <option name={data.course_code}>{data.course_code}</option>;
@@ -260,10 +260,23 @@ class ManageMarks extends Component {
 
           {
             this.state.marksInfo.length !==0 ?
-            <Table  style={{paddingTop:'1rem', borderRadius:'0.25rem',borderTopLeftRadius:'0.25rem',borderTopRightRadius: '0.25rem',}} className="align-items-center table-dark table-flush" responsive>
+            <div>
+<Card>
+              <CardHeader style={{backgroundColor:'black'}}>
+              <span>
+                  <h3
+                    style={{ fontWeight: 'bold', color: 'white' }}
+                  >
+                      Student Marks
+              
+                  </h3>
+                </span>
+              </CardHeader>
+            <CardBody style={{border:'1px solid'}}>
+            <Table  style={{paddingTop:'1rem', borderRadius:'0.25rem',borderTopLeftRadius:'0.25rem',borderTopRightRadius: '0.25rem',}} className=" table-dark table-flush" responsive>
             <thead className="thead-dark">
-            <th style={{textAlign:'center'}}>Serial No.</th>
-              <th style={{textAlign:'center'}}>Evaluation</th>
+            {/* <th style={{textAlign:'center'}}>Serial No.</th> */}
+              <th ><span style={{marginLeft:'2rem'}}>Evaluation</span></th>
               <th style={{textAlign:'center'}}>Section</th>
               <th style={{textAlign:'center'}}>Total Marks</th>
               <th style={{textAlign:'center'}}>Weightage</th>
@@ -274,21 +287,32 @@ class ManageMarks extends Component {
                 this.state.marksInfo.map((obj,i)=>{
                 return(
                   <tr key={i}>
-                <td style={{textAlign:'center'}}>
-                  {i+1}
+                    <th scope="row" style={{textAlign:'center'}}>
+                        <Media className="align-items-center">
+                          <a
+                            className="avatar rounded-circle mr-3"
+                            onClick={e => e.preventDefault()}
+                          >
+                            <Initial radius={55} height={40} width={40} seed={1} fontSize={20}
+        name={obj.marks_type}
+      />
+                          </a>
+                          <Media>
+                            <span style={{textAlign:'center'}} className="mb-0 text-sm">
+                            {obj.marks_type}
+                            </span>
+                          </Media>
+                        </Media>
+                      </th>
+                <td style={{textAlign:'center',paddingTop:"2rem"}}>
+                {obj.section}
                 </td>
-                <td style={{textAlign:'center'}}>
-                  {obj.marks_type}
-                </td>
-                <td style={{textAlign:'center'}}>
-                  {obj.section}
-                </td>
-                <td style={{textAlign:'center'}}>
+                <td style={{textAlign:'center',paddingTop:"2rem"}}>
                   {obj.total_marks}
                 </td>
-                <td style={{textAlign:'center'}}>
+                <td style={{textAlign:'center',paddingTop:"2rem"}}>
                   {obj.weightage}
-                </td><td style={{textAlign:'center'}}>
+                </td><td style={{textAlign:'center',paddingTop:"1.5rem"}}>
                   <BTTN
             primary >
                     Details
@@ -303,6 +327,12 @@ class ManageMarks extends Component {
               
             </tbody>
           </Table>
+            
+            </CardBody>
+            </Card>
+            
+            </div>
+            
          :<div style={{fontSize:'20px',fontWeight:"bold",marginTop:'2rem',textAlign:'center'}}>
             Select Course and Section First
           </div> 

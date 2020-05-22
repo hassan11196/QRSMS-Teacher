@@ -44,7 +44,7 @@ class QRAttendance extends Component {
     this.startAttendance = this.startAttendance.bind(this);
   }
   componentDidMount() {
-    axios.get('/person/get_csrf').then((response) => {
+    axios.get('/management/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
 
@@ -245,9 +245,9 @@ class QRAttendance extends Component {
       // <li key={"listKey" + c.course_code} style={{listStyle:'none'}}>
       <tr>
         {/* <td style={{color:'#10A7F0',fontSize:'15px',fontWeight:'bold'}} key={"rowCol" + c.course_name}>{c.course_name}</td> */}
-        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.course_code}</td>
-        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.section_name}</td>
-        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.section_seats}</td>
+        <td style={{ fontSize: '13.5px' }}>{c.course_code}</td>
+        <td style={{ fontSize: '13.5px' }}>{c.section_name}</td>
+        <td style={{ fontSize: '13.5px' }}>{c.section_seats}</td>
         <td style={{ color: '#10A7F0' }}>
           <BTTN
             primary
