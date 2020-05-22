@@ -44,7 +44,7 @@ class QRAttendance extends Component {
     this.startAttendance = this.startAttendance.bind(this);
   }
   componentDidMount() {
-    axios.get('/person/get_csrf').then((response) => {
+    axios.get('/management/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
 
