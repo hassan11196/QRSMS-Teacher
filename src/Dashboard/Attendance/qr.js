@@ -5,18 +5,12 @@ import { TableRow, td } from 'material-ui';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../Navbar/Navbar';
-import { Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
+import { Card, Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
 import { Table, Container } from 'reactstrap';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
-import {
-  MDBBTTN,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter,
-} from 'mdbreact';
+import { MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
 var QRCode = require('qrcode.react');
@@ -284,16 +278,35 @@ class QRAttendance extends Component {
               <Breadcrumb.Item active>QR Attendance</Breadcrumb.Item>
             </Breadcrumb>
           </div>
-
-          <Table className="align-items-center table-dark table-flush" responsive>
-            <thead className="thead-dark">
-             <th >Course Code</th>
-              <th >Section</th>
-              <th >No of Seats</th>
-              <th >Status</th>
-            </thead>
-            <tbody>{this.state.Section_Nodes}</tbody>
-          </Table>
+          <Card style={{ border: '1px solid black' }}>
+            <Card.Header
+              style={{
+                backgroundColor: 'black',
+                border: '1px solid black',
+                marginLeft: '-1px',
+              }}
+            >
+              <span>
+                <h3 style={{ fontWeight: 'bold', color: 'white' }}>
+                  Assign Sections
+                </h3>
+              </span>
+            </Card.Header>
+            <Card.Body>
+              <Table
+                className="align-items-center table-dark table-flush"
+                responsive
+              >
+                <thead className="thead-dark">
+                  <th>Course Code</th>
+                  <th>Section</th>
+                  <th>No of Seats</th>
+                  <th>Status</th>
+                </thead>
+                <tbody>{this.state.Section_Nodes}</tbody>
+              </Table>
+            </Card.Body>
+          </Card>
         </Container>
         {this.Modal1render()}
         {this.Modal2render()}
