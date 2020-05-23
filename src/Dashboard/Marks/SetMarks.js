@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
-import 'mdbreact/dist/css/mdb.css';
 import { Redirect } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';

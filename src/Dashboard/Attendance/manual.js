@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
-import 'mdbreact/dist/css/mdb.css';
 import { Redirect } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
@@ -14,7 +13,7 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
 class AttendanceEntry {
-  constructor() {}
+  constructor() { }
 }
 
 const attendance_data = {
@@ -449,8 +448,8 @@ class ManualAttendance extends Component {
                   );
                 })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
@@ -464,8 +463,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
@@ -479,8 +478,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
           <tr style={{ border: 'thin solid white' }}>
             <th style={{ fontWeight: '700', fontSize: '15px' }}>S no.</th>
@@ -494,8 +493,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-              <h5></h5>
-            )}
+                <h5></h5>
+              )}
           </tr>
         </thead>
         <tbody>
@@ -594,15 +593,15 @@ class ManualAttendance extends Component {
                         }
                       )
                     ) : (
-                      <h5></h5>
-                    )}
+                        <h5></h5>
+                      )}
                   </tr>
                 );
               }
             )
           ) : (
-            <h5></h5>
-          )}
+              <h5></h5>
+            )}
         </tbody>
       </Table>
     );
@@ -784,8 +783,8 @@ class ManualAttendance extends Component {
                       return this.CourseBox(c);
                     })
                   ) : (
-                    <h2>Courses Not Available</h2>
-                  )}
+                      <h2>Courses Not Available</h2>
+                    )}
                 </Form.Control>
               </form>
             </Col>
@@ -799,8 +798,8 @@ class ManualAttendance extends Component {
                       return this.SectionBox(c);
                     })
                   ) : (
-                    <option>Select A Course First</option>
-                  )}
+                      <option>Select A Course First</option>
+                    )}
                 </Form.Control>
               </form>
             </Col>

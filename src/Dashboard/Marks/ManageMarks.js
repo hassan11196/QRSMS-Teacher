@@ -4,7 +4,6 @@ import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Initial } from 'react-initial';
 import { FaSlidersH, FaInfoCircle } from 'react-icons/fa';
-import 'mdbreact/dist/css/mdb.css';
 import { Redirect } from 'react-router-dom';
 import {
   Table,
@@ -344,8 +343,8 @@ class ManageMarks extends Component {
                       return this.CourseBox(c);
                     })
                   ) : (
-                    <h2>Courses Not Available</h2>
-                  )}
+                      <h2>Courses Not Available</h2>
+                    )}
                 </Form.Control>
               </form>
             </Col>
@@ -359,8 +358,8 @@ class ManageMarks extends Component {
                       return this.SectionBox(c);
                     })
                   ) : (
-                    <option>Select A Course First</option>
-                  )}
+                      <option>Select A Course First</option>
+                    )}
                 </Form.Control>
               </form>
             </Col>
@@ -505,17 +504,17 @@ class ManageMarks extends Component {
               </Card>
             </div>
           ) : (
-            <div
-              style={{
-                fontSize: '20px',
-                fontWeight: 'bold',
-                marginTop: '2rem',
-                textAlign: 'center',
-              }}
-            >
-              Select Course and Section First
-            </div>
-          )}
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                Select Course and Section First
+              </div>
+            )}
         </Container>
       </div>
     );
