@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
+// import 'mdbreact/dist/css/mdb.css';
 import { TableRow, td } from 'material-ui';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../Navbar/Navbar';
-import { Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
-import { Table, Container } from 'reactstrap';
+import { Card, Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
+import { Table, Container,Modal,ModalFooter,ModalHeader,ModalBody } from 'reactstrap';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
-import {
-  MDBBTTN,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter,
-} from 'mdbreact';
+// import { MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
 var QRCode = require('qrcode.react');
@@ -132,8 +126,8 @@ class QRAttendance extends Component {
     console.log('this.state.json_qr');
     console.log(this.state.json_qr);
     return (
-      <MDBModal id="modal" isOpen={this.state.modal2} toggle={this.toggle2}>
-        <MDBModalBody style={{ textAlign: 'center', overflow: 'auto' }}>
+      <Modal id="modal" isOpen={this.state.modal2} toggle={this.toggle2}>
+        <ModalBody style={{ textAlign: 'center', overflow: 'auto' }}>
           {/* <h3>{this.state.response_start_attendance}</h3> */}
           <QRCode
             level="L"
@@ -144,8 +138,8 @@ class QRAttendance extends Component {
           />
           ,
           <br />
-        </MDBModalBody>
-        <MDBModalFooter>
+        </ModalBody>
+        <ModalFooter>
           <div atyle={{ float: 'left' }}>
             <BTTN
               color="secondary"
@@ -166,8 +160,8 @@ class QRAttendance extends Component {
             <i className="icon-zoom-out"></i>
             Zoom Out
           </BTTN>
-        </MDBModalFooter>
-      </MDBModal>
+        </ModalFooter>
+      </Modal>
     );
   };
   zoomin = () => {
@@ -197,9 +191,9 @@ class QRAttendance extends Component {
   };
   Modal2render = () => {
     return (
-      <MDBModal isOpen={this.state.modal1} toggle={this.toggle}>
-        <MDBModalHeader toggle={this.toggle}>Class Hour</MDBModalHeader>
-        <MDBModalBody>
+      <Modal isOpen={this.state.modal1} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle}>Class Hour</ModalHeader>
+        <ModalBody>
           <Form>
             <Form.Group as={Col} controlId="formGridState">
               <Form.Label>Select Course</Form.Label>
@@ -216,16 +210,16 @@ class QRAttendance extends Component {
               </Form.Control>
             </Form.Group>
           </Form>
-        </MDBModalBody>
-        <MDBModalFooter>
+        </ModalBody>
+        <ModalFooter>
           <BTTN color="primary" onClick={() => this.toggle()}>
             Close
           </BTTN>
           <BTTN color="secondary" onClick={() => this.startAttendance()}>
             Start Attendance
           </BTTN>
-        </MDBModalFooter>
-      </MDBModal>
+        </ModalFooter>
+      </Modal>
     );
   };
   setHour = (e) => {
@@ -242,12 +236,11 @@ class QRAttendance extends Component {
     console.log('registration table k ander');
     console.log(c);
     return (
-      // <li key={"listKey" + c.course_code} style={{listStyle:'none'}}>
       <tr>
-        {/* <td style={{color:'#10A7F0',fontSize:'15px',fontWeight:'bold'}} key={"rowCol" + c.course_name}>{c.course_name}</td> */}
-        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.course_code}</td>
-        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.section_name}</td>
-        <td style={{ fontSize: '15px', fontWeight: 'bold' }}>{c.section_seats}</td>
+        <td style={{fontSize: '13.5px' }} key={"rowCol" + c.course_name}>{c.course_name}</td>
+        <td style={{ fontSize: '13.5px' }}>{c.course_code}</td>
+        <td style={{ fontSize: '13.5px' }}>{c.section_name}</td>
+        <td style={{ fontSize: '13.5px' }}>{c.section_seats}</td>
         <td style={{ color: '#10A7F0' }}>
           <BTTN
             primary
@@ -284,22 +277,35 @@ class QRAttendance extends Component {
               <Breadcrumb.Item active>QR Attendance</Breadcrumb.Item>
             </Breadcrumb>
           </div>
-
-          <Table className="align-items-center table-dark table-flush" responsive>
-            <thead className="thead-dark">
-              {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
-
-                                        </th> */}
-              {/* <th style={{ fontWeight: '700', fontSize: '15px' }}>
-                                            Course Name
-                                        </th> */}
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>Course Code</th>
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>Section</th>
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>No of Seats</th>
-              <th style={{ fontWeight: '700', fontSize: '15px' }}>Status</th>
-            </thead>
-            <tbody>{this.state.Section_Nodes}</tbody>
-          </Table>
+          <Card style={{ border: '1px solid black' }}>
+            <Card.Header
+              style={{
+                backgroundColor: 'black',
+                border: '1px solid black',
+                marginLeft: '-1px',
+              }}
+            >
+              <span>
+                <h3 style={{ fontWeight: 'bold', color: 'white' }}>
+                  Assign Sections
+                </h3>
+              </span>
+            </Card.Header>
+            <Card.Body>
+              <Table
+                className="align-items-center table-dark table-flush"
+                responsive
+              >
+                <thead className="thead-dark">
+                  <th>Course Code</th>
+                  <th>Section</th>
+                  <th>No of Seats</th>
+                  <th>Status</th>
+                </thead>
+                <tbody>{this.state.Section_Nodes}</tbody>
+              </Table>
+            </Card.Body>
+          </Card>
         </Container>
         {this.Modal1render()}
         {this.Modal2render()}

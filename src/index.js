@@ -15,6 +15,8 @@ const istate = {
   selectstatus: false,
   teacher: [],
   TeacherSections: null,
+  marksType:null,
+  sectionMarksSemester:null
 };
 const reducer = (state = istate, action) => {
   console.log(action);
@@ -28,10 +30,18 @@ const reducer = (state = istate, action) => {
       ...state,
       teacher: action.payload.s,
     };
+
   else if (action.type === 'logout') {
     return {
       teacher: [],
     };
+  }
+  else if(action.type === 'setMarksInfo'){
+    return{
+      ...state,
+      marksType:action.payload.s,
+      sectionMarksSemester:action.payload.d
+    }
   }
   return state;
 };

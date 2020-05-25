@@ -25,7 +25,7 @@ import Login from 'views/examples/Login.jsx';
 import Tables from 'views/examples/Tables.jsx';
 import Icons from 'views/examples/Icons.jsx';
 import ManageMarks from './Dashboard/Marks/ManageMarks.js';
-
+import SetMarks from './Dashboard/Marks/SetMarks.js';
 import DashboardHome from './Dashboard/home/index';
 import CustomLogin from './login';
 
@@ -56,6 +56,13 @@ var routes = [
     name: 'Manage Marks',
     icon: 'ni ni-tv-2 text-primary',
     component: ManageMarks,
+    layout: '/admin',
+  },
+  {
+    path: '/SetMarks',
+    name: 'Set Marks',
+    icon: 'ni ni-tv-2 text-primary',
+    component: SetMarks,
     layout: '/admin',
   },
   // {
@@ -107,5 +114,6 @@ var routes = [
     component: DashboardHome,
     layout: '/dashboard',
   },
+
 ];
 export default routes;

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
-import 'mdbreact/dist/css/mdb.css';
 import { Redirect } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
@@ -746,7 +745,7 @@ class ManualAttendance extends Component {
             </Breadcrumb>
           </div>
           <Row>
-            <Col md="3">
+            <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>
                   Attendance Hour
@@ -774,7 +773,7 @@ class ManualAttendance extends Component {
               </form>
             </Col>
 
-            <Col md="3">
+            <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
                 <Form.Control as="select" onChange={this.handleCourse}>
@@ -789,7 +788,7 @@ class ManualAttendance extends Component {
                 </Form.Control>
               </form>
             </Col>
-            <Col md="3">
+            <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Section</Form.Label>
                 <Form.Control as="select" onChange={this.setSection}>

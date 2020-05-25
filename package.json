@@ -44,7 +44,6 @@
     "http-proxy-middleware": "^0.20.0",
     "js-cookie": "^2.2.1",
     "material-ui": "^0.20.2",
-    "mdbreact": "^4.25.5",
     "moment": "2.24.0",
     "node-sass": "^4.13.1",
     "nouislider": "13.1.1",
@@ -56,11 +55,13 @@
     "react-datetime": "2.16.3",
     "react-dom": "16.8.4",
     "react-google-maps": "9.4.5",
+    "react-icons": "^3.10.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.8",
     "reactstrap": "7.1.0",
     "redux": "^4.0.5",
+    "rodal": "^1.8.1",
     "semantic-ui-react": "^0.88.2"
   },
   "devDependencies": {
