@@ -168,7 +168,7 @@ class FacultyLogin extends React.Component {
                   ) : (
                     <Button
                       className="my-4"
-                      style={{borderRadius:'0.5rem', backgroundColor:'black'}}
+                      style={{borderRadius:'0.5rem',color:'white', backgroundColor:'black'}}
                       type="button"
                       color="black"
                       onClick={this.handlelogin}
