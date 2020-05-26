@@ -4,7 +4,6 @@ import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Initial } from 'react-initial';
 import { FaSlidersH, FaInfoCircle } from 'react-icons/fa';
-import { Redirect } from 'react-router-dom';
 import {
   Table,
   Card,

@@ -47,14 +47,14 @@ var routes = [
   {
     path: '/QR-attendance',
     name: 'QR Attendance',
-    icon: 'ni ni-tv-2 text-primary',
+    icon: 'fas fa-qrcode text-primary',
     component: QRAttendance,
     layout: '/portal',
   },
   {
     path: '/Marks',
     name: 'Manage Marks',
-    icon: 'ni ni-tv-2 text-primary',
+    icon: 'fas fa-poll-h text-primary',
     component: ManageMarks,
     layout: '/portal',
   },
