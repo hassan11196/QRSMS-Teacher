@@ -608,7 +608,6 @@ class ManualAttendance extends Component {
   }
 
   addAttendance() {
-
     let sheet = this.state.fetched_data;
     console.log(sheet);
     let new_entry = this.getNewAttendanceEntry(
@@ -761,6 +760,15 @@ class ManualAttendance extends Component {
                   <option name="6">1:00 AM- 2:00</option>
                   <option name="7">2:00 AM- 3:00</option>
                   <option name="8">3:00 AM- 4:00</option>
+                </Form.Control>
+              </form>
+            </Col>
+            <Col md="3">
+              <form>
+                <Form.Label style={{ fontWeight: 'bold' }}>Semester</Form.Label>
+                <Form.Control as="select">
+                  <option>Fall 2020</option>
+                  <option>Spring 2019</option>
                 </Form.Control>
               </form>
             </Col>
