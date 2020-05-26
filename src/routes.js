@@ -42,28 +42,28 @@ var routes = [
     name: 'Maunal Attendance',
     icon: 'ni ni-single-copy-04 text-primary',
     component: ManualAttendance,
-    layout: '/admin',
+    layout: '/portal',
   },
   {
     path: '/QR-attendance',
     name: 'QR Attendance',
     icon: 'ni ni-tv-2 text-primary',
     component: QRAttendance,
-    layout: '/admin',
+    layout: '/portal',
   },
   {
     path: '/Marks',
     name: 'Manage Marks',
     icon: 'ni ni-tv-2 text-primary',
     component: ManageMarks,
-    layout: '/admin',
+    layout: '/portal',
   },
   {
     path: '/SetMarks',
     name: 'Set Marks',
     icon: 'ni ni-tv-2 text-primary',
     component: SetMarks,
-    layout: '/admin',
+    layout: '/portal',
   },
   // {
   //   path: '/icons',
@@ -114,6 +114,5 @@ var routes = [
     component: DashboardHome,
     layout: '/dashboard',
   },
-
 ];
 export default routes;
