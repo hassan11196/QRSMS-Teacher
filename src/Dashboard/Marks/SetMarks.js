@@ -18,6 +18,8 @@ class SetMarks extends Component {
         super(props)
         this.state = {
             csrf_token: 0,
+            currentSCSDDC:'',
+            currentMarksType:'',
         }
 
     }
@@ -28,18 +30,57 @@ class SetMarks extends Component {
 
         this.setState({
             csrf_token: Cookies.get('csrftoken'),
-        });
+        });   
     }
     componentDidMount() {
+        this.setState({
+            currentMarksType:this.props.marks,
+            currentSCSDDC:this.props.scsddc
+        })
+        
 
+        let form = new FormData();
+        form.append('csrfmiddlewaretoken', this.state.csrf_token);
+        form.append('scsddc', this.state.currentSCSDDC);
+        form.append('marks_type', 'Mid 1');
+        axios.post('/teacher/get_marks/', form).then((response) => {
+        console.log(response.data)
+            this.setState({
+            marksInfo: response.data,
+        });
+    });
     }
     render() {
         return (
-            <di>
+            <div>
 
-            </di>
+            </div>
         )
     }
 }
-
-export default SetMarks
+const mapStateToProps = (state) => {
+    return {
+      scsddc: state.sectionMarksSemester,
+      marks: state.marksType,  
+      teacher: state.teacher,
+      teacherSections: state.TeacherSections,
+    };
+  };
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      TeacherSections: (data) => {
+        dispatch({ type: 'TeacherSections', payload: { data } });
+      },
+  
+      setMarksInfo:(s,d)=>{
+        dispatch({type: 'setMarksInfo',payload:{s,d}})
+      },
+  
+      changeid: (s) => {
+        console.log(s);
+        dispatch({ type: 'ChangeId', payload: { s } });
+      },
+    };
+  };
+  
+export default connect(mapStateToProps, mapDispatchToProps)(SetMarks);

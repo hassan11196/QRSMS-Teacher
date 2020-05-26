@@ -608,6 +608,7 @@ class ManualAttendance extends Component {
   }
 
   addAttendance() {
+
     let sheet = this.state.fetched_data;
     console.log(sheet);
     let new_entry = this.getNewAttendanceEntry(
@@ -671,7 +672,7 @@ class ManualAttendance extends Component {
       campus: 'MainCampus',
       department: 'ComputerSciences',
       degree: 'BS(CS)',
-      semester_code: 'FALL2019',
+      semester_code: 'FALL2020',
       course_code: this.state.code,
       section: sec,
     };
@@ -745,7 +746,7 @@ class ManualAttendance extends Component {
             </Breadcrumb>
           </div>
           <Row>
-            <Col md="3">
+            <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>
                   Attendance Hour
@@ -763,17 +764,8 @@ class ManualAttendance extends Component {
                 </Form.Control>
               </form>
             </Col>
-            <Col md="3">
-              <form>
-                <Form.Label style={{ fontWeight: 'bold' }}>Semester</Form.Label>
-                <Form.Control as="select">
-                  <option>Fall 2019</option>
-                  <option>Spring 2019</option>
-                </Form.Control>
-              </form>
-            </Col>
 
-            <Col md="3">
+            <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
                 <Form.Control as="select" onChange={this.handleCourse}>
@@ -788,7 +780,7 @@ class ManualAttendance extends Component {
                 </Form.Control>
               </form>
             </Col>
-            <Col md="3">
+            <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Section</Form.Label>
                 <Form.Control as="select" onChange={this.setSection}>

@@ -252,7 +252,7 @@ class QRAttendance extends Component {
           </BTTN>
         </td>
         <div></div>
-      </tr>
+      </tr >
       // </li>
     );
   }
