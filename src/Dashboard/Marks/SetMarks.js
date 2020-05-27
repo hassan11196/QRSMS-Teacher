@@ -46,7 +46,7 @@ class SetMarks extends Component {
                 wtgArray: this.state.wtgArray.map((c, m) => {
                   if (m == i) {
                     c = (e.target.value / obj.total_marks) * obj.weightage;
-                    console.log(e.target.value, obj.total_marks, obj.weightage);
+                    console.log(c,e.target.value, obj.total_marks, obj.weightage);
                   }
                   return c;
                 }),
@@ -56,7 +56,7 @@ class SetMarks extends Component {
         });
         obj.obtained_marks = e.target.value;
         obj.obtained_weightage =
-          (obj.obtained_marks / obj.total_marks) * obj.weightage;
+          (e.target.value / obj.total_marks) * obj.weightage;
       }
     });
   }
@@ -82,8 +82,8 @@ class SetMarks extends Component {
           console.log(len);
           var a = 0;
           for (a = 0; a < len; a++) {
-            arrayMarks.push(0);
-            arrayWtg.push(0);
+            arrayMarks.push(this.state.marksInfo[a].obtained_marks);
+            arrayWtg.push(this.state.marksInfo[a].obtained_weightage);
           }
           this.setState(
             {
@@ -159,8 +159,7 @@ class SetMarks extends Component {
               >
                 <thead className="thead-dark">
                   {/* <th style={{textAlign:'center'}}>Serial No.</th> */}
-                  <th>
-                    <span style={{ textAlign: 'center' }}>S No.</span>
+                  <th style={{ textAlign: 'center' }}>S No.
                   </th>
                   <th style={{ textAlign: 'center' }}>ID</th>
                   {/* <th style={{ textAlign: 'center' }}>Name</th> */}
@@ -174,9 +173,9 @@ class SetMarks extends Component {
                         <td>{i + 1}</td>
                         <td>{obj.student_id}</td>
                         {/* <td></td> */}
-                        <td style={{ textAlign: 'center' }}>
+                        <td style={{ width: '5rem', textAlign: 'center' }}>
                           <Input
-                            style={{ width: '5rem', textAlign: 'center' }}
+                            style={{ width: '5rem',height:'1.75rem', textAlign: 'center' }}
                             name={obj.student_id}
                             value={this.state.marksArray[i]}
                             onChange={this.onChange}
