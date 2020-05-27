@@ -19,11 +19,37 @@ class SetMarks extends Component {
       currentSCSDDC: '',
       currentMarksType: '',
       marksInfo: [],
+      copyMarksInfo:[],
       marksArray: [],
       wtgArray: [],
     };
+    this.onSearch = this.onSearch.bind(this);
     this.SaveMarks = this.SaveMarks.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+  onSearch(e) {
+    console.log(e.target.value)
+    if (e.target.value === '') {
+      this.setState({ copyMarksInfo: this.state.marksInfo });
+    }
+    const searchValue = e.target.value.toLowerCase();
+    var newData = [];
+    this.state.marksInfo.some(item => {
+        let name=item.student_id 
+        if (name.toLowerCase().includes(searchValue)) {
+          newData.push(item);
+        }
+      });
+      if (newData) {
+        this.setState({
+          copyMarksInfo: newData
+        });
+      } else {
+        this.setState({
+          copyMarksInfo:[]
+        });
+      }
+    
   }
   componentWillMount() {
     axios.get('/management/get_csrf').then((response) => {
@@ -35,9 +61,11 @@ class SetMarks extends Component {
     });
   }
   onChange(e) {
-    console.log(e.target.name, e.target.value);
     this.state.marksInfo.map((obj, i) => {
       if (obj.student_id === e.target.name) {
+        if(obj.total_marks < parseInt(e.target.value)){
+          return;
+        }
         this.setState({
           marksArray: this.state.marksArray.map((object, j) => {
             if (j == i) {
@@ -46,7 +74,6 @@ class SetMarks extends Component {
                 wtgArray: this.state.wtgArray.map((c, m) => {
                   if (m == i) {
                     c = (e.target.value / obj.total_marks) * obj.weightage;
-                    console.log(c,e.target.value, obj.total_marks, obj.weightage);
                   }
                   return c;
                 }),
@@ -58,7 +85,12 @@ class SetMarks extends Component {
         obj.obtained_weightage =
           (e.target.value / obj.total_marks) * obj.weightage;
       }
+    },()=>{
+      this.setState({
+        copyMarksInfo:this.state.marksInfo
+      })
     });
+    
   }
   componentDidMount() {
     this.setState({
@@ -76,6 +108,7 @@ class SetMarks extends Component {
       this.setState(
         {
           marksInfo: response.data.studentMarks,
+          copyMarksInfo: response.data.studentMarks
         },
         () => {
           var len = this.state.marksInfo.length;
@@ -91,7 +124,7 @@ class SetMarks extends Component {
               wtgArray: arrayWtg,
             },
             () => {
-              console.log(this.state.marksArray, arrayMarks, this.state.wtgArray);
+              // console.log(this.state.marksArray, arrayMarks, this.state.wtgArray);
             }
           );
         }
@@ -108,13 +141,10 @@ class SetMarks extends Component {
 
     axios.post('/teacher/update_marks/', form).then((response) => {
       console.log(response);
-      this.setState({
-        marksInfo: response.data.studentMarks,
-      });
     });
   }
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     // if (this.props.teacher === []) {
     //   return <Redirect to="/auth/login" />;
     // } else
@@ -122,7 +152,7 @@ class SetMarks extends Component {
       <div>
         <NavBar />
         <Container fluid style={{ paddingTop: '2rem' }}>
-          <div style={{ width: 'auto', paddingBottom: '1rem' }}>
+          <div style={{ width: 'auto', paddingBottom: '0' }}>
             <Breadcrumb>
               <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
               <Breadcrumb.Item active>Manage Marks</Breadcrumb.Item>
@@ -130,7 +160,9 @@ class SetMarks extends Component {
           </div>
 
           {/* <Container> */}
-          <div style={{ paddingBottom: '1rem' }}>
+          <Row>
+            <Col xs={9}>
+            <div style={{ paddingBottom: '1rem' }}>
             <BTTN
               primary
               onClick={() => {
@@ -140,6 +172,19 @@ class SetMarks extends Component {
               Save
             </BTTN>
           </div>
+        
+            </Col>
+            <Col xs={3}>
+            <div className="search">
+      <span className="fa fa-search" style={{position: "absolute",
+  paddingLeft:"1.5rem",
+  top: "13px",
+  left: "18px",
+  fontSize: "15px"}}></span>  
+      <Input type="search" onChange={this.onSearch} style={{width:'96%',marginLeft:'1rem'}}/>
+      </div>
+            </Col>
+          </Row>
           <Card style={{ border: '1px solid' }}>
             <CardHeader style={{ backgroundColor: 'black', margin: '-1px' }}>
               <span>
@@ -167,7 +212,7 @@ class SetMarks extends Component {
                   <th style={{ textAlign: 'center' }}>Weightage</th>
                 </thead>
                 <tbody>
-                  {this.state.marksInfo.map((obj, i) => {
+                  {this.state.copyMarksInfo.map((obj, i) => {
                     return (
                       <tr key={i} style={{ textAlign: 'center' }}>
                         <td>{i + 1}</td>
