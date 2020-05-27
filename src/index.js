@@ -15,8 +15,8 @@ const istate = {
   selectstatus: false,
   teacher: [],
   TeacherSections: null,
-  marksType:null,
-  sectionMarksSemester:null
+  marksType: null,
+  sectionMarksSemester: null,
 };
 const reducer = (state = istate, action) => {
   console.log(action);
@@ -30,18 +30,16 @@ const reducer = (state = istate, action) => {
       ...state,
       teacher: action.payload.s,
     };
-
   else if (action.type === 'logout') {
     return {
       teacher: [],
     };
-  }
-  else if(action.type === 'setMarksInfo'){
-    return{
+  } else if (action.type === 'setMarksInfo') {
+    return {
       ...state,
-      marksType:action.payload.s,
-      sectionMarksSemester:action.payload.d
-    }
+      marksType: action.payload.s,
+      sectionMarksSemester: action.payload.d,
+    };
   }
   return state;
 };
@@ -76,7 +74,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+        <Route path="/portal" render={(props) => <AdminLayout {...props} />} />
         <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
         <Route
           path="/dashboard"

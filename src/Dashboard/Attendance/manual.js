@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom';
-import { Table } from 'reactstrap';
-import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
+import { Table,Input } from 'reactstrap';
+import { Button, Card,Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
 // import { FaChartBar, FaBook, FaWrench, FaHome, FaUser, FaBookReader, FaChalkboardTeacher, FaRegListAlt, FaMarkdown, FaUserGraduate, FaFilePdf } from "react-icons/fa";
 import { connect } from 'react-redux';
 import axios from 'axios';
@@ -154,6 +153,7 @@ class ManualAttendance extends Component {
       students_sheets: [],
       class_attendances: [],
       fetched_attendance_data: undefined,
+      copy:undefined,
       fetched_status: false,
       code: '',
       section: '',
@@ -166,8 +166,33 @@ class ManualAttendance extends Component {
     this.setSection = this.setSection.bind(this);
     this.handleAttState = this.handleAttState.bind(this);
     this.setHour = this.setHour.bind(this);
+    // this.onSearch = this.onSearch.bind(this);
   }
-
+  // onSearch(e) {
+  //   console.log(e.target.value)
+  //   if (e.target.value === '') {
+  //     this.setState({ fetched_attendance_data: this.state.copy });
+  //   }
+  //   const searchValue = e.target.value.toLowerCase();
+  //   var newData = [];
+  //   console.log("copy",this.state.copyList)
+  //   this.state.fetched_attendance_data.student_sheets.some(item => {
+  //       let name=item.student.user.first_name + ' ' + item.student.user.last_name  
+  //       if (name.toLowerCase().includes(searchValue)) {
+  //         newData.push(item);
+  //       }
+  //     });
+  //     if (newData) {
+  //       this.setState({
+  //         fetched_attendance_data: newData
+  //       });
+  //     } else {
+  //       this.setState({
+  //         fetched_attendance_data:undefined
+  //       });
+  //     }
+    
+  // }
   componentDidMount() {
     axios.get('/management/get_csrf').then((response) => {
       return response.data.csrftoken;
@@ -435,14 +460,14 @@ class ManualAttendance extends Component {
       >
         <thead className="thead-dark">
           <tr>
-            <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
-            <th style={{ fontWeight: '700', fontSize: '15px' }}>Lecture No.</th>
+            <th style={{ fontWeight: '700' }} colSpan="2"></th>
+            <th style={{ fontWeight: '700' }}>Lecture No.</th>
             {this.state.fetched_attendance_data !== undefined ? (
               this.state.fetched_attendance_data.class_sheet
                 .reverse()
                 .map((day_att, index) => {
                   return (
-                    <th key={index} style={{ fontWeight: '700', fontSize: '15px' }}>
+                    <th key={index} style={{ fontWeight: '700'}}>
                       {index + 1}
                     </th>
                   );
@@ -452,12 +477,12 @@ class ManualAttendance extends Component {
               )}
           </tr>
           <tr>
-            <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
-            <th style={{ fontWeight: '700', fontSize: '15px' }}>Lecture Date.</th>
+            <th style={{ fontWeight: '700'}} colSpan="2"></th>
+            <th style={{ fontWeight: '700'}}>Lecture Date.</th>
             {this.state.fetched_attendance_data !== undefined ? (
               this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
                 return (
-                  <th style={{ fontWeight: '700', fontSize: '15px' }} key={i}>
+                  <th style={{ fontWeight: '700' }} key={i}>
                     {day_att.class_date}
                   </th>
                 );
@@ -467,12 +492,12 @@ class ManualAttendance extends Component {
               )}
           </tr>
           <tr>
-            <th style={{ fontWeight: '700', fontSize: '15px' }} colSpan="2"></th>
-            <th style={{ fontWeight: '700', fontSize: '15px' }}>Duration Hours</th>
+            <th style={{ fontWeight: '700' }} colSpan="2"></th>
+            <th style={{ fontWeight: '700' }}>Duration Hours</th>
             {this.state.fetched_attendance_data !== undefined ? (
               this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
                 return (
-                  <th style={{ fontWeight: '700', fontSize: '15px' }} key={i}>
+                  <th style={{ fontWeight: '700'}} key={i}>
                     {day_att.duration_hour}
                   </th>
                 );
@@ -482,9 +507,9 @@ class ManualAttendance extends Component {
               )}
           </tr>
           <tr style={{ border: 'thin solid white' }}>
-            <th style={{ fontWeight: '700', fontSize: '15px' }}>S no.</th>
-            <th style={{ fontWeight: '700', fontSize: '15px' }}>Name</th>
-            <th style={{ fontWeight: '700', fontSize: '15px' }}>Roll No </th>
+            <th style={{ fontWeight: '700' }}>S no.</th>
+            <th style={{ fontWeight: '700' }}>Name</th>
+            <th style={{ fontWeight: '700' }}>Roll No </th>
 
             {this.state.fetched_attendance_data !== undefined ? (
               this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
@@ -498,31 +523,24 @@ class ManualAttendance extends Component {
           </tr>
         </thead>
         <tbody>
+          {console.log("Ahsan",this.state.fetched_attendance_data.student_sheets)}
           {this.state.fetched_attendance_data !== undefined ? (
             this.state.fetched_attendance_data.student_sheets.map(
               (student_data, index) => {
                 return (
                   <tr key={index}>
-                    <td style={{ fontSize: '15px', fontWeight: 'bold' }}>
+                    <td >
                       {index + 1}
                     </td>
-                    <td style={{ fontSize: '15px', fontWeight: 'bold' }}>
+                    <td >
                       {student_data.student.user.first_name +
                         ' ' +
                         student_data.student.user.last_name}
                     </td>
-                    <td style={{ fontSize: '15px', fontWeight: 'bold' }}>
+                    <td >
                       {student_data.student.uid}
                     </td>
-                    {/* {student_data.attendance_sheet.attendance.map((day_att => {
-                    return (
-                      <td>
-                        {day_att.state}
-                      </td>
-                    );
-                  }))
-                  } */}
-
+                    
                     {student_data.attendance_sheet.attendance.length > 0 ? (
                       this.state.fetched_attendance_data.class_sheet.map(
                         (class_att) => {
@@ -695,6 +713,7 @@ class ManualAttendance extends Component {
         );
         this.setState({
           fetched_attendance_data: response.data.attendance_data,
+          copy:response.data.attendance_data,
           fetched_status: true,
           ssdc:
             response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc,
@@ -763,16 +782,6 @@ class ManualAttendance extends Component {
                 </Form.Control>
               </form>
             </Col>
-            <Col md="3">
-              <form>
-                <Form.Label style={{ fontWeight: 'bold' }}>Semester</Form.Label>
-                <Form.Control as="select">
-                  <option>Fall 2020</option>
-                  <option>Spring 2019</option>
-                </Form.Control>
-              </form>
-            </Col>
-
             <Col md="4">
               <form>
                 <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
@@ -804,21 +813,45 @@ class ManualAttendance extends Component {
               </form>
             </Col>
           </Row>
+          <Row>
+          <Col xs={9}>
           <div
             style={{
-              paddingLeft: '1rem',
-              paddingTop: '1rem',
-              paddingBottom: '1rem',
-              float: 'right',
+              paddingTop: '2rem',
+              paddingBottom:'1rem'
             }}
           >
-            <BTTN color="secondary" onClick={() => this.addAttendance()}>
+            <BTTN primary onClick={() => this.addAttendance()}>
               Add Attendance
             </BTTN>
           </div>
-          <br />
-          <br />
-          {this.renderFetchedTable()}
+          </Col>
+          <Col xs={3} >
+            {/* <div className="search">
+      <span className="fa fa-search" style={{position: "absolute",
+  paddingLeft:"1.5rem",
+  top: "11px",
+  left: "7px",
+  fontSize: "15px"}}></span>  
+      <Input type="search" onChange={this.onSearch} style={{width:'96%',marginLeft:'1rem'}}/>
+      </div> */}
+      </Col>
+          </Row>
+          
+<div style={{marginLeft:'-2px',marginTop:'1rem'}}>
+          <Card style={{border:'1px solid black'}}>
+            <Card.Header style={{backgroundColor:'black'}}>
+            <span>
+                    <h3 style={{ fontWeight: 'bold', color: 'white' }}>
+                      Student Attendance
+                    </h3>
+                  </span>
+            </Card.Header>
+            <Card.Body>
+            {this.renderFetchedTable()}
+            </Card.Body>
+            </Card>
+            </div>     
         </Container>
         {/* </Container> */}
       </div>

@@ -179,15 +179,15 @@ class QRAttendance extends Component {
 
   zoomout = () => {
     var GFG = document.getElementById('QR');
-    var modal1 = document.getElementById('modal');
+    // var modal1 = document.getElementById('modal');
     var currWidth = GFG.clientWidth;
     var currHeight = GFG.clientHeight;
-    var modalWidth = modal1.clientWidth;
-    var modalHeight = modal1.clientHeight;
+    // var modalWidth = modal1.clientWidth;
+    // var modalHeight = modal1.clientHeight;
     GFG.style.width = currWidth - 100 + 'px';
     GFG.style.height = currHeight - 100 + 'px';
-    modal1.style.width = modalWidth - 100 + 'px';
-    modal1.style.height = modalHeight - 100 + 'px';
+    // modal1.style.width = modalWidth - 100 + 'px';
+    // modal1.style.height = modalHeight - 100 + 'px';
   };
   Modal2render = () => {
     return (
@@ -237,12 +237,13 @@ class QRAttendance extends Component {
     console.log(c);
     return (
       <tr>
-        <td style={{ fontSize: '13.5px' }} key={"rowCol" + c.course_name}>{c.course_name}</td>
-        <td style={{ fontSize: '13.5px' }}>{c.course_code}</td>
-        <td style={{ fontSize: '13.5px' }}>{c.section_name}</td>
-        <td style={{ fontSize: '13.5px' }}>{c.section_seats}</td>
-        <td style={{ color: '#10A7F0' }}>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }} key={"rowCol" + c.course_name}>{c.course_name}</td>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.course_code}</td>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.section_name}</td>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.section_seats}</td>
+        <td style={{ color: '#10A7F0', textAlign: 'center' }}>
           <BTTN
+            size='tiny'
             primary
             onClick={() => {
               this.MarkAttendance(c.course_code, c.scsddc, c.section_name);
@@ -297,10 +298,11 @@ class QRAttendance extends Component {
                 responsive
               >
                 <thead className="thead-dark">
-                  <th>Course Code</th>
-                  <th>Section</th>
-                  <th>No of Seats</th>
-                  <th>Status</th>
+                  <th style={{ textAlign: 'center' }}>Course Name</th>
+                  <th style={{ textAlign: 'center' }}>Course Code</th>
+                  <th style={{ textAlign: 'center' }}>Section</th>
+                  <th style={{ textAlign: 'center' }}>No of Seats</th>
+                  <th style={{ textAlign: 'center' }}>Action</th>
                 </thead>
                 <tbody>{this.state.Section_Nodes}</tbody>
               </Table>

@@ -4,7 +4,6 @@ import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Initial } from 'react-initial';
 import { FaSlidersH, FaInfoCircle } from 'react-icons/fa';
-import { Redirect } from 'react-router-dom';
 import {
   Table,
   Card,
@@ -46,7 +45,6 @@ class ManageMarks extends Component {
       marksInfo: '',
       visible: false,
       open: false,
-
     };
     this.CourseBox = this.CourseBox.bind(this);
     this.SectionBox = this.SectionBox.bind(this);
@@ -57,7 +55,7 @@ class ManageMarks extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount() {
-    console.log(this.props.teacherSections)
+    console.log(this.props.teacherSections);
     axios.get('/management/get_csrf').then((response) => {
       return response.data.csrftoken;
     });
@@ -92,7 +90,7 @@ class ManageMarks extends Component {
     form.append('weightage', this.state.weightage);
     form.append('section', this.state.section);
     axios.get('/management/get_csrf');
-    console.log(form)
+    console.log(form);
     axios.post('/teacher/add_marks/', form).then((response) => {
       console.log(response.data);
       this.setState({
@@ -104,13 +102,16 @@ class ManageMarks extends Component {
     this.setState({ course: e.target.value });
   }
   setSection(e) {
-    console.log(e.target.name)
-    this.setState({
-      section: e.target.value,
-      scsddc: e.target[e.target.selectedIndex].getAttribute('name'),
-    }, () => {
-      console.log(this.state.scsddc)
-    });
+    console.log(e.target.name);
+    this.setState(
+      {
+        section: e.target.value,
+        scsddc: e.target[e.target.selectedIndex].getAttribute('name'),
+      },
+      () => {
+        console.log(this.state.scsddc);
+      }
+    );
     let form = new FormData();
     console.log(e.target[e.target.selectedIndex].getAttribute('name'));
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
@@ -120,12 +121,7 @@ class ManageMarks extends Component {
         marksInfo: response.data,
       });
     });
-    console.log(this.state.marksInfo)
-    form.append('id', '17K-3755')
-    axios.post('/management/get_transcript/', form).then((response) => {
-      console.log(response.data)
-    })
-
+    console.log(this.state.marksInfo);
   }
   setEvaluation(e) {
     this.setState(
@@ -389,7 +385,7 @@ class ManageMarks extends Component {
           </BTTN>
           <br />
           <div style={{ height: '1rem' }}></div>
-          {this.state.section !== null ?
+          {this.state.section !== null ? (
             <div>
               {this.state.marksInfo.length !== 0 ? (
                 <div>
@@ -398,7 +394,7 @@ class ManageMarks extends Component {
                       <span>
                         <h3 style={{ fontWeight: 'bold', color: 'white' }}>
                           Student Marks
-                    </h3>
+                        </h3>
                       </span>
                     </CardHeader>
                     <CardBody style={{ border: '1px solid' }}>
@@ -453,22 +449,34 @@ class ManageMarks extends Component {
                                     </Media>
                                   </Media>
                                 </th>
-                                <td style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                                <td
+                                  style={{ textAlign: 'center', paddingTop: '2rem' }}
+                                >
                                   {obj.section}
                                 </td>
-                                <td style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                                <td
+                                  style={{ textAlign: 'center', paddingTop: '2rem' }}
+                                >
                                   {obj.total_marks}
                                 </td>
-                                <td style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                                <td
+                                  style={{ textAlign: 'center', paddingTop: '2rem' }}
+                                >
                                   {obj.weightage}
                                 </td>
-                                <td style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                                <td
+                                  style={{ textAlign: 'center', paddingTop: '2rem' }}
+                                >
                                   {obj.mean}
                                 </td>
-                                <td style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                                <td
+                                  style={{ textAlign: 'center', paddingTop: '2rem' }}
+                                >
                                   {obj.sd}
                                 </td>
-                                <td style={{ textAlign: 'center', paddingTop: '2rem' }}>
+                                <td
+                                  style={{ textAlign: 'center', paddingTop: '2rem' }}
+                                >
                                   <UncontrolledDropdown>
                                     <DropdownToggle
                                       style={{ border: 'none' }}
@@ -489,7 +497,6 @@ class ManageMarks extends Component {
                                         border: 'none',
                                         minWidth: '8rem',
                                         maxWidth: '8rem',
-
                                       }}
                                     >
                                       <DropdownItem
@@ -504,10 +511,18 @@ class ManageMarks extends Component {
                                         }}
                                       >
                                         <FaSlidersH /> Edit
-                                  </DropdownItem>
-                                      <DropdownItem onClick={() => { this.props.setMarksInfo(this.state.scsddc, obj.marks_type) }} href='/admin/SetMarks'>
+                                      </DropdownItem>
+                                      <DropdownItem
+                                        onClick={() => {
+                                          this.props.setMarksInfo(
+                                            this.state.scsddc,
+                                            obj.marks_type
+                                          );
+                                        }}
+                                        href="/portal/SetMarks"
+                                      >
                                         <FaInfoCircle /> Details
-                                  </DropdownItem>
+                                      </DropdownItem>
                                     </DropdownMenu>
                                   </UncontrolledDropdown>
                                 </td>
@@ -532,18 +547,18 @@ class ManageMarks extends Component {
                   </div>
                 )}
             </div>
-            : <div
-              style={{
-                fontSize: '20px',
-                fontWeight: 'bold',
-                marginTop: '2rem',
-                textAlign: 'center',
-              }}
-            >
-              Select Course and Section First
-            </div>
-          }
-
+          ) : (
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                Select Course and Section First
+              </div>
+            )}
         </Container>
       </div>
     );
@@ -556,7 +571,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     setMarksInfo: (s, d) => {
-      dispatch({ type: 'setMarksInfo', payload: { s, d } })
+      dispatch({ type: 'setMarksInfo', payload: { s, d } });
     },
 
     changeid: (s) => {
