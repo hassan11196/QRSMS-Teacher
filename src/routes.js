@@ -1,20 +1,3 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import QRAttendance from './Dashboard/Attendance/qr';
 import Index from 'views/Index.jsx';
 import ManualAttendance from './Dashboard/Attendance/manual';
@@ -49,28 +32,28 @@ var routes = [
     name: 'Maunal Attendance',
     icon: 'ni ni-single-copy-04 text-white',
     component: ManualAttendance,
-    layout: '/admin',
+    layout: '/portal',
   },
   {
     path: '/QR-attendance',
     name: 'QR Attendance',
     icon: 'fas fa-qrcode text-white',
     component: QRAttendance,
-    layout: '/admin',
+    layout: '/portal',
   },
   {
     path: '/Marks',
     name: 'Manage Marks',
     icon: 'fas fa-poll-h text-white',
     component: ManageMarks,
-    layout: '/admin',
+    layout: '/portal',
   },
   {
     path: '/SetMarks',
     name: 'Set Marks',
     icon: 'ni ni-tv-2 text-white',
     component: SetMarks,
-    layout: '/admin',
+    layout: '/portal',
   },
   // {
   //   path: '/icons',
