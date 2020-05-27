@@ -146,6 +146,7 @@ class ManageMarks extends Component {
     return <option name={data.course_code}>{data.course_code}</option>;
   }
   render() {
+    console.log('SS', this.state.scsddc);
     if (
       this.props.teacher === [] ||
       this.props.teacher === null ||
@@ -550,7 +551,7 @@ class ManageMarks extends Component {
                                               obj.marks_type
                                             );
                                           }}
-                                          href="/admin/SetMarks"
+                                          href="/portal/SetMarks"
                                         >
                                           <FaInfoCircle /> Details
                                         </DropdownItem>
