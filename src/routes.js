@@ -38,30 +38,37 @@ var routes = [
   //   layout: '/admin',
   // },
   {
+    path: '/home',
+    name: 'Home',
+    icon: 'ni ni-circle-08 text-white',
+    component: DashboardHome,
+    layout: '/dashboard',
+  },
+  {
     path: '/manual-attendance',
     name: 'Maunal Attendance',
-    icon: 'ni ni-single-copy-04 text-primary',
+    icon: 'ni ni-single-copy-04 text-white',
     component: ManualAttendance,
     layout: '/admin',
   },
   {
     path: '/QR-attendance',
     name: 'QR Attendance',
-    icon: 'fas fa-qrcode text-primary',
+    icon: 'fas fa-qrcode text-white',
     component: QRAttendance,
     layout: '/admin',
   },
   {
     path: '/Marks',
     name: 'Manage Marks',
-    icon: 'fas fa-poll-h text-primary',
+    icon: 'fas fa-poll-h text-white',
     component: ManageMarks,
     layout: '/admin',
   },
   {
     path: '/SetMarks',
     name: 'Set Marks',
-    icon: 'ni ni-tv-2 text-primary',
+    icon: 'ni ni-tv-2 text-white',
     component: SetMarks,
     layout: '/admin',
   },
@@ -103,17 +110,9 @@ var routes = [
   {
     path: '/login',
     name: 'Login',
-    icon: 'ni ni-circle-08 text-pink',
+    icon: 'ni ni-circle-08 text-white',
     component: CustomLogin,
     layout: '/auth',
   },
-  {
-    path: '/home',
-    name: 'home',
-    icon: 'ni ni-circle-08 text-pink',
-    component: DashboardHome,
-    layout: '/dashboard',
-  },
-
 ];
 export default routes;

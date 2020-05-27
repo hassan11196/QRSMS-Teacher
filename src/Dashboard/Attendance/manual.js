@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
-import { Table,Input } from 'reactstrap';
-import { Button, Card,Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
+import { Table, Input } from 'reactstrap';
+import {
+  Button,
+  Card,
+  Container,
+  Row,
+  Col,
+  Form,
+  Breadcrumb,
+} from 'react-bootstrap';
 // import { FaChartBar, FaBook, FaWrench, FaHome, FaUser, FaBookReader, FaChalkboardTeacher, FaRegListAlt, FaMarkdown, FaUserGraduate, FaFilePdf } from "react-icons/fa";
 import { connect } from 'react-redux';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Redirect } from 'react-router-dom';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
@@ -153,7 +162,7 @@ class ManualAttendance extends Component {
       students_sheets: [],
       class_attendances: [],
       fetched_attendance_data: undefined,
-      copy:undefined,
+      copy: undefined,
       fetched_status: false,
       code: '',
       section: '',
@@ -177,7 +186,7 @@ class ManualAttendance extends Component {
   //   var newData = [];
   //   console.log("copy",this.state.copyList)
   //   this.state.fetched_attendance_data.student_sheets.some(item => {
-  //       let name=item.student.user.first_name + ' ' + item.student.user.last_name  
+  //       let name=item.student.user.first_name + ' ' + item.student.user.last_name
   //       if (name.toLowerCase().includes(searchValue)) {
   //         newData.push(item);
   //       }
@@ -191,7 +200,7 @@ class ManualAttendance extends Component {
   //         fetched_attendance_data:undefined
   //       });
   //     }
-    
+
   // }
   componentDidMount() {
     axios.get('/management/get_csrf').then((response) => {
@@ -467,7 +476,7 @@ class ManualAttendance extends Component {
                 .reverse()
                 .map((day_att, index) => {
                   return (
-                    <th key={index} style={{ fontWeight: '700'}}>
+                    <th key={index} style={{ fontWeight: '700' }}>
                       {index + 1}
                     </th>
                   );
@@ -477,8 +486,8 @@ class ManualAttendance extends Component {
             )}
           </tr>
           <tr>
-            <th style={{ fontWeight: '700'}} colSpan="2"></th>
-            <th style={{ fontWeight: '700'}}>Lecture Date.</th>
+            <th style={{ fontWeight: '700' }} colSpan="2"></th>
+            <th style={{ fontWeight: '700' }}>Lecture Date.</th>
             {this.state.fetched_attendance_data !== undefined ? (
               this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
                 return (
@@ -497,7 +506,7 @@ class ManualAttendance extends Component {
             {this.state.fetched_attendance_data !== undefined ? (
               this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
                 return (
-                  <th style={{ fontWeight: '700'}} key={i}>
+                  <th style={{ fontWeight: '700' }} key={i}>
                     {day_att.duration_hour}
                   </th>
                 );
@@ -523,24 +532,20 @@ class ManualAttendance extends Component {
           </tr>
         </thead>
         <tbody>
-          {console.log("Ahsan",this.state.fetched_attendance_data.student_sheets)}
+          {console.log('Ahsan', this.state.fetched_attendance_data.student_sheets)}
           {this.state.fetched_attendance_data !== undefined ? (
             this.state.fetched_attendance_data.student_sheets.map(
               (student_data, index) => {
                 return (
                   <tr key={index}>
-                    <td >
-                      {index + 1}
-                    </td>
-                    <td >
+                    <td>{index + 1}</td>
+                    <td>
                       {student_data.student.user.first_name +
                         ' ' +
                         student_data.student.user.last_name}
                     </td>
-                    <td >
-                      {student_data.student.uid}
-                    </td>
-                    
+                    <td>{student_data.student.uid}</td>
+
                     {student_data.attendance_sheet.attendance.length > 0 ? (
                       this.state.fetched_attendance_data.class_sheet.map(
                         (class_att) => {
@@ -713,7 +718,7 @@ class ManualAttendance extends Component {
         );
         this.setState({
           fetched_attendance_data: response.data.attendance_data,
-          copy:response.data.attendance_data,
+          copy: response.data.attendance_data,
           fetched_status: true,
           ssdc:
             response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc,
@@ -752,82 +757,85 @@ class ManualAttendance extends Component {
     console.log(this.state.hour);
   };
   render() {
-    return (
-      <div>
-        <NavBar />
-        <Container fluid>
-          <br />
-          <div style={{ width: 'auto', paddingBottom: '2rem' }}>
-            <Breadcrumb>
-              <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
-              <Breadcrumb.Item active>Manual Attendance</Breadcrumb.Item>
-            </Breadcrumb>
-          </div>
-          <Row>
-            <Col md="4">
-              <form>
-                <Form.Label style={{ fontWeight: 'bold' }}>
-                  Attendance Hour
-                </Form.Label>
-                <Form.Control as="select" onChange={this.setHour}>
-                  <option>Select Hour</option>
-                  <option name="1"> 8:00 AM - 9:00</option>
-                  <option name="2">9:00 AM- 10:00</option>
-                  <option name="3">10:00 AM- 11:00</option>
-                  <option name="4">11:00 AM- 12:00</option>
-                  <option name="5">12:00 AM- 1:00</option>
-                  <option name="6">1:00 AM- 2:00</option>
-                  <option name="7">2:00 AM- 3:00</option>
-                  <option name="8">3:00 AM- 4:00</option>
-                </Form.Control>
-              </form>
-            </Col>
-            <Col md="4">
-              <form>
-                <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
-                <Form.Control as="select" onChange={this.handleCourse}>
-                  <option>Select Course</option>
-                  {this.props.teacherSections ? (
-                    this.props.teacherSections.map((c) => {
-                      return this.CourseBox(c);
-                    })
-                  ) : (
-                    <h2>Courses Not Available</h2>
-                  )}
-                </Form.Control>
-              </form>
-            </Col>
-            <Col md="4">
-              <form>
-                <Form.Label style={{ fontWeight: 'bold' }}>Section</Form.Label>
-                <Form.Control as="select" onChange={this.setSection}>
-                  <option>Select Section</option>
-                  {this.state.code !== '' ? (
-                    this.props.teacherSections.map((c) => {
-                      return this.SectionBox(c);
-                    })
-                  ) : (
-                    <option>Select A Course First</option>
-                  )}
-                </Form.Control>
-              </form>
-            </Col>
-          </Row>
-          <Row>
-          <Col xs={9}>
-          <div
-            style={{
-              paddingTop: '2rem',
-              paddingBottom:'1rem'
-            }}
-          >
-            <BTTN primary onClick={() => this.addAttendance()}>
-              Add Attendance
-            </BTTN>
-          </div>
-          </Col>
-          <Col xs={3} >
-            {/* <div className="search">
+    if (this.props.teacher === [] || this.props.teacher === null) {
+      return <Redirect to="/auth/login" />;
+    } else
+      return (
+        <div>
+          <NavBar />
+          <Container fluid>
+            <br />
+            <div style={{ width: 'auto', paddingBottom: '2rem' }}>
+              <Breadcrumb>
+                <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
+                <Breadcrumb.Item active>Manual Attendance</Breadcrumb.Item>
+              </Breadcrumb>
+            </div>
+            <Row>
+              <Col md="4">
+                <form>
+                  <Form.Label style={{ fontWeight: 'bold' }}>
+                    Attendance Hour
+                  </Form.Label>
+                  <Form.Control as="select" onChange={this.setHour}>
+                    <option>Select Hour</option>
+                    <option name="1"> 8:00 AM - 9:00</option>
+                    <option name="2">9:00 AM- 10:00</option>
+                    <option name="3">10:00 AM- 11:00</option>
+                    <option name="4">11:00 AM- 12:00</option>
+                    <option name="5">12:00 AM- 1:00</option>
+                    <option name="6">1:00 AM- 2:00</option>
+                    <option name="7">2:00 AM- 3:00</option>
+                    <option name="8">3:00 AM- 4:00</option>
+                  </Form.Control>
+                </form>
+              </Col>
+              <Col md="4">
+                <form>
+                  <Form.Label style={{ fontWeight: 'bold' }}>Course</Form.Label>
+                  <Form.Control as="select" onChange={this.handleCourse}>
+                    <option>Select Course</option>
+                    {this.props.teacherSections ? (
+                      this.props.teacherSections.map((c) => {
+                        return this.CourseBox(c);
+                      })
+                    ) : (
+                      <h2>Courses Not Available</h2>
+                    )}
+                  </Form.Control>
+                </form>
+              </Col>
+              <Col md="4">
+                <form>
+                  <Form.Label style={{ fontWeight: 'bold' }}>Section</Form.Label>
+                  <Form.Control as="select" onChange={this.setSection}>
+                    <option>Select Section</option>
+                    {this.state.code !== '' ? (
+                      this.props.teacherSections.map((c) => {
+                        return this.SectionBox(c);
+                      })
+                    ) : (
+                      <option>Select A Course First</option>
+                    )}
+                  </Form.Control>
+                </form>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={9}>
+                <div
+                  style={{
+                    paddingTop: '2rem',
+                    paddingBottom: '1rem',
+                  }}
+                >
+                  <BTTN primary onClick={() => this.addAttendance()}>
+                    Add Attendance
+                  </BTTN>
+                </div>
+              </Col>
+              <Col xs={3}>
+                {/* <div className="search">
       <span className="fa fa-search" style={{position: "absolute",
   paddingLeft:"1.5rem",
   top: "11px",
@@ -835,27 +843,25 @@ class ManualAttendance extends Component {
   fontSize: "15px"}}></span>  
       <Input type="search" onChange={this.onSearch} style={{width:'96%',marginLeft:'1rem'}}/>
       </div> */}
-      </Col>
-          </Row>
-          
-<div style={{marginLeft:'-2px',marginTop:'1rem'}}>
-          <Card style={{border:'1px solid black'}}>
-            <Card.Header style={{backgroundColor:'black'}}>
-            <span>
+              </Col>
+            </Row>
+
+            <div style={{ marginLeft: '-2px', marginTop: '1rem' }}>
+              <Card style={{ border: '1px solid black' }}>
+                <Card.Header style={{ backgroundColor: 'black' }}>
+                  <span>
                     <h3 style={{ fontWeight: 'bold', color: 'white' }}>
                       Student Attendance
                     </h3>
                   </span>
-            </Card.Header>
-            <Card.Body>
-            {this.renderFetchedTable()}
-            </Card.Body>
-            </Card>
-            </div>     
-        </Container>
-        {/* </Container> */}
-      </div>
-    );
+                </Card.Header>
+                <Card.Body>{this.renderFetchedTable()}</Card.Body>
+              </Card>
+            </div>
+          </Container>
+          {/* </Container> */}
+        </div>
+      );
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -865,17 +871,12 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     changeid: (s) => {
-      console.log('dispatcher ka nder');
-      console.log(s);
       dispatch({ type: 'ChangeId', payload: { s } });
-      //dispatch({type:'ChangeId', payload:id})
     },
   };
 };
 
 const mapStateToProps = (state) => {
-  console.log('mapstatetoptops k ander');
-  console.log('Attendance register ka page');
   console.log(state);
   return {
     teacher: state.teacherinfo,
