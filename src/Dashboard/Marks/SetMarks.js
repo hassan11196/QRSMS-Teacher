@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
+import './SetMarks.css'
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { Table, Input, CardBody, Card, CardHeader } from 'reactstrap';
@@ -175,7 +176,7 @@ class SetMarks extends Component {
         
             </Col>
             <Col xs={3}>
-            <div className="search">
+            <div style={{paddingRight:"0.4rem"}} className="search">
       <span className="fa fa-search" style={{position: "absolute",
   paddingLeft:"1.5rem",
   top: "13px",
