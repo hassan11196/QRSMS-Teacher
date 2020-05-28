@@ -409,6 +409,7 @@ class ManageMarks extends Component {
                 });
               }}
             >
+              <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
               Add Evaluation
             </BTTN>
             <br />

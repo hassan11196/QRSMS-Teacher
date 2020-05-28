@@ -828,6 +828,7 @@ class ManualAttendance extends Component {
                   }}
                 >
                   <BTTN primary onClick={() => this.addAttendance()}>
+                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
                     Add Attendance
                   </BTTN>
                 </div>

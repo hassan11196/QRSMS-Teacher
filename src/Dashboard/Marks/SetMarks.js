@@ -187,6 +187,7 @@ class SetMarks extends Component {
                       this.SaveMarks();
                     }}
                   >
+                    <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
                     Save
                   </BTTN>
                 )}
