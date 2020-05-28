@@ -640,16 +640,76 @@ class ManualAttendance extends Component {
     this.setState({
       fetched_data: sheet,
     });
+    var sec = this.state.ssdc.split('_');
     let form = new FormData();
+    console.log(this.state.section);
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('slot', this.state.hour);
     form.append('scsddc', this.state.ssdc);
-    form.append('section', this.state.section);
+    form.append('section', sec[0]);
     form.append('course_code', this.state.code);
     axios
       .post('/teacher/start_attendance/', form)
       .then((response) => {
         console.log(response);
+        /**
+       * Created by MeePwn
+       * https://github.com/maybewaityou
+       *
+       * description:
+       *
+      
+       */
+        let query_section = {
+          city: 'Karachi',
+          campus: 'MainCampus',
+          department: 'ComputerSciences',
+          degree: 'BS(CS)',
+          semester_code: 'FALL2020',
+          course_code: this.state.code,
+          section: sec[0],
+        };
+
+        let config = {
+          headers: {
+            DataType: 'json',
+            'content-type': 'application/json',
+          },
+          // body: qs.stringify(query_section)
+        };
+        console.log('check', query_section);
+        axios
+          .post('/teacher/get_attendance/', query_section, config)
+          .then((response) => {
+            console.log('attendace data arha h');
+            console.log(response.data);
+            //console.log(attendance_data.student_sheets[0].attendance_sheet.scsddc);
+            console.log(
+              response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
+            );
+            this.setState({
+              fetched_attendance_data: response.data.attendance_data,
+              copy: response.data.attendance_data,
+              fetched_status: true,
+              ssdc:
+                response.data.attendance_data.student_sheets[0].attendance_sheet
+                  .scsddc,
+              course_code: response.data.attendance_data.course_code,
+              section: response.data.attendance_data.section,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log('something Bad Happend');
+            return;
+          });
+        /**
+         * Created by MeePwn
+         * https://github.com/maybewaityou
+         *
+         * description:
+         *
+         */
       })
       .catch((err) => {
         console.log(err);
@@ -682,12 +742,32 @@ class ManualAttendance extends Component {
     });
   }
   setSection(e) {
+    this.setState(
+      {
+        section: e.target.options[e.target.selectedIndex].getAttribute('name'),
+      },
+      () => {
+        console.log(this.state.section);
+      }
+    );
     let sec = e.target.options[e.target.selectedIndex].getAttribute('name');
-
-    this.setState((oldState) => ({
-      section: sec,
-    }));
-
+    this.setState(
+      {
+        section: sec,
+      },
+      () => {
+        console.log(this.state.section);
+      }
+    );
+    // this.setState(
+    //   (oldState) => ({
+    //     section: sec,
+    //   }),
+    //   () => {
+    //     console.log(this.state.section);
+    //   }
+    // );
+    console.log(this.state.section);
     let query_section = {
       city: 'Karachi',
       campus: 'MainCampus',
@@ -755,6 +835,7 @@ class ManualAttendance extends Component {
     console.log(this.state.hour);
   };
   render() {
+    console.log('state', this.state);
     if (this.props.teacher === [] || this.props.teacher === null) {
       return <Redirect to="/auth/login" />;
     } else
