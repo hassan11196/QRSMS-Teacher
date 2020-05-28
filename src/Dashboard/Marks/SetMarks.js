@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
-import './SetMarks.css'
+import './SetMarks.css';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import { Table, Input, CardBody, Card, CardHeader } from 'reactstrap';
@@ -20,37 +20,37 @@ class SetMarks extends Component {
       currentSCSDDC: '',
       currentMarksType: '',
       marksInfo: [],
-      copyMarksInfo:[],
+      copyMarksInfo: [],
       marksArray: [],
       wtgArray: [],
+      showSave: false,
     };
     this.onSearch = this.onSearch.bind(this);
     this.SaveMarks = this.SaveMarks.bind(this);
     this.onChange = this.onChange.bind(this);
   }
   onSearch(e) {
-    console.log(e.target.value)
+    console.log(e.target.value);
     if (e.target.value === '') {
       this.setState({ copyMarksInfo: this.state.marksInfo });
     }
     const searchValue = e.target.value.toLowerCase();
     var newData = [];
-    this.state.marksInfo.some(item => {
-        let name=item.student_id 
-        if (name.toLowerCase().includes(searchValue)) {
-          newData.push(item);
-        }
-      });
-      if (newData) {
-        this.setState({
-          copyMarksInfo: newData
-        });
-      } else {
-        this.setState({
-          copyMarksInfo:[]
-        });
+    this.state.marksInfo.some((item) => {
+      let name = item.student_id;
+      if (name.toLowerCase().includes(searchValue)) {
+        newData.push(item);
       }
-    
+    });
+    if (newData) {
+      this.setState({
+        copyMarksInfo: newData,
+      });
+    } else {
+      this.setState({
+        copyMarksInfo: [],
+      });
+    }
   }
   componentWillMount() {
     axios.get('/management/get_csrf').then((response) => {
@@ -62,36 +62,39 @@ class SetMarks extends Component {
     });
   }
   onChange(e) {
-    this.state.marksInfo.map((obj, i) => {
-      if (obj.student_id === e.target.name) {
-        if(obj.total_marks < parseInt(e.target.value)){
-          return;
+    this.state.marksInfo.map(
+      (obj, i) => {
+        if (obj.student_id === e.target.name) {
+          if (obj.total_marks < parseInt(e.target.value)) {
+            return;
+          }
+          this.setState({
+            showSave: true,
+            marksArray: this.state.marksArray.map((object, j) => {
+              if (j == i) {
+                object = e.target.value;
+                this.setState({
+                  wtgArray: this.state.wtgArray.map((c, m) => {
+                    if (m == i) {
+                      c = (e.target.value / obj.total_marks) * obj.weightage;
+                    }
+                    return c;
+                  }),
+                });
+              }
+            }),
+          });
+          obj.obtained_marks = e.target.value;
+          obj.obtained_weightage =
+            (e.target.value / obj.total_marks) * obj.weightage;
         }
+      },
+      () => {
         this.setState({
-          marksArray: this.state.marksArray.map((object, j) => {
-            if (j == i) {
-              object = e.target.value;
-              this.setState({
-                wtgArray: this.state.wtgArray.map((c, m) => {
-                  if (m == i) {
-                    c = (e.target.value / obj.total_marks) * obj.weightage;
-                  }
-                  return c;
-                }),
-              });
-            }
-          }),
+          copyMarksInfo: this.state.marksInfo,
         });
-        obj.obtained_marks = e.target.value;
-        obj.obtained_weightage =
-          (e.target.value / obj.total_marks) * obj.weightage;
       }
-    },()=>{
-      this.setState({
-        copyMarksInfo:this.state.marksInfo
-      })
-    });
-    
+    );
   }
   componentDidMount() {
     this.setState({
@@ -109,7 +112,7 @@ class SetMarks extends Component {
       this.setState(
         {
           marksInfo: response.data.studentMarks,
-          copyMarksInfo: response.data.studentMarks
+          copyMarksInfo: response.data.studentMarks,
         },
         () => {
           var len = this.state.marksInfo.length;
@@ -142,6 +145,9 @@ class SetMarks extends Component {
 
     axios.post('/teacher/update_marks/', form).then((response) => {
       console.log(response);
+      this.setState({
+        showSave: true,
+      });
     });
   }
   render() {
@@ -163,27 +169,47 @@ class SetMarks extends Component {
           {/* <Container> */}
           <Row>
             <Col xs={9}>
-            <div style={{ paddingBottom: '1rem' }}>
-            <BTTN
-              primary
-              onClick={() => {
-                this.SaveMarks();
-              }}
-            >
-              Save
-            </BTTN>
-          </div>
-        
+              <div style={{ paddingBottom: '1rem' }}>
+                {this.state.showSave ? (
+                  <BTTN
+                    primary
+                    onClick={() => {
+                      this.SaveMarks();
+                    }}
+                  >
+                    Save
+                  </BTTN>
+                ) : (
+                  <BTTN
+                    disabled
+                    primary
+                    onClick={() => {
+                      this.SaveMarks();
+                    }}
+                  >
+                    Save
+                  </BTTN>
+                )}
+              </div>
             </Col>
             <Col xs={3}>
-            <div style={{paddingRight:"0.4rem"}} className="search">
-      <span className="fa fa-search" style={{position: "absolute",
-  paddingLeft:"1.5rem",
-  top: "13px",
-  left: "18px",
-  fontSize: "15px"}}></span>  
-      <Input type="search" onChange={this.onSearch} style={{width:'96%',marginLeft:'1rem'}}/>
-      </div>
+              <div style={{ paddingRight: '0.4rem' }} className="search">
+                <span
+                  className="fa fa-search"
+                  style={{
+                    position: 'absolute',
+                    paddingLeft: '1.5rem',
+                    top: '13px',
+                    left: '18px',
+                    fontSize: '15px',
+                  }}
+                ></span>
+                <Input
+                  type="search"
+                  onChange={this.onSearch}
+                  style={{ width: '96%', marginLeft: '1rem' }}
+                />
+              </div>
             </Col>
           </Row>
           <Card style={{ border: '1px solid' }}>
@@ -205,8 +231,7 @@ class SetMarks extends Component {
               >
                 <thead className="thead-dark">
                   {/* <th style={{textAlign:'center'}}>Serial No.</th> */}
-                  <th style={{ textAlign: 'center' }}>S No.
-                  </th>
+                  <th style={{ textAlign: 'center' }}>S No.</th>
                   <th style={{ textAlign: 'center' }}>ID</th>
                   {/* <th style={{ textAlign: 'center' }}>Name</th> */}
                   <th style={{ textAlign: 'center' }}>Marks</th>
@@ -221,7 +246,11 @@ class SetMarks extends Component {
                         {/* <td></td> */}
                         <td style={{ width: '5rem', textAlign: 'center' }}>
                           <Input
-                            style={{ width: '5rem',height:'1.75rem', textAlign: 'center' }}
+                            style={{
+                              width: '5rem',
+                              height: '1.75rem',
+                              textAlign: 'center',
+                            }}
                             name={obj.student_id}
                             value={this.state.marksArray[i]}
                             onChange={this.onChange}

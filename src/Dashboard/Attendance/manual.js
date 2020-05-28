@@ -21,7 +21,7 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
 class AttendanceEntry {
-  constructor() { }
+  constructor() {}
 }
 
 const attendance_data = {
@@ -458,7 +458,6 @@ class ManualAttendance extends Component {
   }
 
   renderFetchedTable() {
-    console.log(this.state.fetched_attendance_data);
     if (this.state.fetched_status === false) {
       return <h1>Data Not Fetched</h1>;
     }
@@ -482,8 +481,8 @@ class ManualAttendance extends Component {
                   );
                 })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
@@ -497,8 +496,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
@@ -512,8 +511,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr style={{ border: 'thin solid white' }}>
             <th style={{ fontWeight: '700' }}>S no.</th>
@@ -527,8 +526,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -616,15 +615,15 @@ class ManualAttendance extends Component {
                         }
                       )
                     ) : (
-                        <h5></h5>
-                      )}
+                      <h5></h5>
+                    )}
                   </tr>
                 );
               }
             )
           ) : (
-              <h5></h5>
-            )}
+            <h5></h5>
+          )}
         </tbody>
       </Table>
     );
@@ -646,7 +645,7 @@ class ManualAttendance extends Component {
     form.append('slot', this.state.hour);
     form.append('scsddc', this.state.ssdc);
     form.append('section', this.state.section);
-    form.append('course_code', this.state.course_code);
+    form.append('course_code', this.state.code);
     axios
       .post('/teacher/start_attendance/', form)
       .then((response) => {
@@ -706,7 +705,7 @@ class ManualAttendance extends Component {
       },
       // body: qs.stringify(query_section)
     };
-
+    console.log('check', query_section);
     axios
       .post('/teacher/get_attendance/', query_section, config)
       .then((response) => {
@@ -733,9 +732,8 @@ class ManualAttendance extends Component {
       });
   }
   SectionBox(data) {
-    console.log(data);
-    //if (data.course_code === this.state.code)
-    return <option name={data.section_name}>{data.section_name}</option>;
+    if (data.course_code === this.state.code)
+      return <option name={data.section_name}>{data.section_name}</option>;
   }
   handleCourse(e) {
     let course_code = e.target.options[e.target.selectedIndex].getAttribute('name');
@@ -800,8 +798,8 @@ class ManualAttendance extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                        <h2>Courses Not Available</h2>
-                      )}
+                      <h2>Courses Not Available</h2>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -815,8 +813,8 @@ class ManualAttendance extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                        <option>Select A Course First</option>
-                      )}
+                      <option>Select A Course First</option>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
