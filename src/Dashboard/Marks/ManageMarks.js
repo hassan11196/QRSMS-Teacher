@@ -93,6 +93,16 @@ class ManageMarks extends Component {
     axios.get('/management/get_csrf');
     console.log(form);
     axios.post('/teacher/add_marks/', form).then((response) => {
+      let form = new FormData();
+
+      form.append('csrfmiddlewaretoken', this.state.csrf_token);
+      form.append('scsddc', this.state.scsddc);
+      axios.post('/teacher/get_marks_info/', form).then((response) => {
+        console.log(response.data);
+        this.setState({
+          marksInfo: response.data,
+        });
+      });
       console.log(response.data);
       this.setState({
         visible: false,
@@ -100,9 +110,12 @@ class ManageMarks extends Component {
     });
   }
   setCourse(e) {
-    this.setState({ course: e.target.value });
+    this.setState({ course: e.target.value }, () => {
+      console.log(this.state.course);
+    });
   }
   setSection(e) {
+    let newscs = e.target[e.target.selectedIndex].getAttribute('name');
     console.log(e.target.name);
     this.setState(
       {
@@ -114,10 +127,11 @@ class ManageMarks extends Component {
       }
     );
     let form = new FormData();
-    console.log(e.target[e.target.selectedIndex].getAttribute('name'));
+
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
-    form.append('scsddc', e.target[e.target.selectedIndex].getAttribute('name'));
+    form.append('scsddc', newscs);
     axios.post('/teacher/get_marks_info/', form).then((response) => {
+      console.log(response.data);
       this.setState({
         marksInfo: response.data,
       });
@@ -135,7 +149,9 @@ class ManageMarks extends Component {
     );
   }
   SectionBox(data) {
-    return <option name={data.scsddc}>{data.section_name} </option>;
+    if (this.state.course === data.course_code) {
+      return <option name={data.scsddc}>{data.section_name} </option>;
+    }
   }
   handleChange(e) {
     this.setState({
@@ -146,7 +162,7 @@ class ManageMarks extends Component {
     return <option name={data.course_code}>{data.course_code}</option>;
   }
   render() {
-    console.log('SS', this.state.scsddc);
+    console.log('SS', this.props.teacherSections);
     if (
       this.props.teacher === [] ||
       this.props.teacher === null ||
@@ -362,8 +378,8 @@ class ManageMarks extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                        <h2>Courses Not Available</h2>
-                      )}
+                      <h2>Courses Not Available</h2>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -377,8 +393,8 @@ class ManageMarks extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                        <option>Select A Course First</option>
-                      )}
+                      <option>Select A Course First</option>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -567,30 +583,30 @@ class ManageMarks extends Component {
                     </Card>
                   </div>
                 ) : (
-                    <div
-                      style={{
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        marginTop: '2rem',
-                        textAlign: 'center',
-                      }}
-                    >
-                      No Marks Data
-                    </div>
-                  )}
+                  <div
+                    style={{
+                      fontSize: '20px',
+                      fontWeight: 'bold',
+                      marginTop: '2rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    No Marks Data
+                  </div>
+                )}
               </div>
             ) : (
-                <div
-                  style={{
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                    marginTop: '2rem',
-                    textAlign: 'center',
-                  }}
-                >
-                  Select Course and Section First
-                </div>
-              )}
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                Select Course and Section First
+              </div>
+            )}
           </Container>
         </div>
       );
