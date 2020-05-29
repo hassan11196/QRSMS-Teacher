@@ -94,69 +94,70 @@ const attendance_data = {
   ],
 };
 
+let students = [
+  {
+    Sno: 1,
+    id: 'k173650',
+    name: 'Ahsan',
+    regdate: '21-Sept-18',
+    status: ['P', 'A', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 2,
+    id: 'k173755',
+    name: 'Noman',
+    regdate: '1-Sept-18',
+    status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 3,
+    id: 'k173654',
+    name: 'Hassan',
+    regdate: '2-Sept-18',
+    status: ['P', 'P', 'A', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 4,
+    id: 'k173621',
+    name: 'Mustafa',
+    regdate: '3-Sept-18',
+    status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 5,
+    id: 'k173745',
+    name: 'Huzaiafa',
+    regdate: '20-Sept-18',
+    status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 6,
+    id: 'k173795',
+    name: 'Danish',
+    regdate: '11-Sept-18',
+    status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 7,
+    id: 'k173652',
+    name: 'Qadri',
+    regdate: '8-Sept-18',
+    status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+  {
+    Sno: 8,
+    id: 'k173850',
+    name: 'Junaid',
+    regdate: '7-Sept-18',
+    status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+  },
+];
 class ManualAttendance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      students: [
-        {
-          Sno: 1,
-          id: 'k173650',
-          name: 'Ahsan',
-          regdate: '21-Sept-18',
-          status: ['P', 'A', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 2,
-          id: 'k173755',
-          name: 'Noman',
-          regdate: '1-Sept-18',
-          status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 3,
-          id: 'k173654',
-          name: 'Hassan',
-          regdate: '2-Sept-18',
-          status: ['P', 'P', 'A', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 4,
-          id: 'k173621',
-          name: 'Mustafa',
-          regdate: '3-Sept-18',
-          status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 5,
-          id: 'k173745',
-          name: 'Huzaiafa',
-          regdate: '20-Sept-18',
-          status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 6,
-          id: 'k173795',
-          name: 'Danish',
-          regdate: '11-Sept-18',
-          status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 7,
-          id: 'k173652',
-          name: 'Qadri',
-          regdate: '8-Sept-18',
-          status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-        {
-          Sno: 8,
-          id: 'k173850',
-          name: 'Junaid',
-          regdate: '7-Sept-18',
-          status: ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-        },
-      ],
-      fetched_data: attendance_data,
+      students: undefined,
+      fetched_data: undefined,
       students_api: undefined,
       class_api: undefined,
       students_sheets: [],
@@ -476,7 +477,24 @@ class ManualAttendance extends Component {
                 .map((day_att, index) => {
                   return (
                     <th key={index} style={{ fontWeight: '700' }}>
-                      {index + 1}
+                      {this.state.fetched_attendance_data.class_sheet.length - index}
+                    </th>
+                  );
+                })
+            ) : (
+              <h5></h5>
+            )}
+          </tr>
+          <tr>
+            <th style={{ fontWeight: '700' }} colSpan="2"></th>
+            <th style={{ fontWeight: '700' }}>Lecture Slot</th>
+            {this.state.fetched_attendance_data !== undefined ? (
+              this.state.fetched_attendance_data.class_sheet
+                .reverse()
+                .map((day_att, index) => {
+                  return (
+                    <th key={index} style={{ fontWeight: '700' }}>
+                      {day_att.attendance_slot}
                     </th>
                   );
                 })
@@ -488,13 +506,15 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
             <th style={{ fontWeight: '700' }}>Lecture Date.</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
-                return (
-                  <th style={{ fontWeight: '700' }} key={i}>
-                    {day_att.class_date}
-                  </th>
-                );
-              })
+              this.state.fetched_attendance_data.class_sheet
+                .reverse()
+                .map((day_att, i) => {
+                  return (
+                    <th style={{ fontWeight: '700' }} key={i}>
+                      {day_att.class_date}
+                    </th>
+                  );
+                })
             ) : (
               <h5></h5>
             )}
@@ -503,13 +523,15 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
             <th style={{ fontWeight: '700' }}>Duration Hours</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
-                return (
-                  <th style={{ fontWeight: '700' }} key={i}>
-                    {day_att.duration_hour}
-                  </th>
-                );
-              })
+              this.state.fetched_attendance_data.class_sheet
+                .reverse()
+                .map((day_att, i) => {
+                  return (
+                    <th style={{ fontWeight: '700' }} key={i}>
+                      {day_att.duration_hour}
+                    </th>
+                  );
+                })
             ) : (
               <h5></h5>
             )}
@@ -520,11 +542,13 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }}>Roll No </th>
 
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
-                return (
-                  <th style={{ fontWeight: '700', fontSize: '15px' }} key={i}></th>
-                );
-              })
+              this.state.fetched_attendance_data.class_sheet
+                .reverse()
+                .map((day_att, i) => {
+                  return (
+                    <th style={{ fontWeight: '700', fontSize: '15px' }} key={i}></th>
+                  );
+                })
             ) : (
               <h5></h5>
             )}
@@ -533,8 +557,9 @@ class ManualAttendance extends Component {
         <tbody>
           {console.log('Ahsan', this.state.fetched_attendance_data.student_sheets)}
           {this.state.fetched_attendance_data !== undefined ? (
-            this.state.fetched_attendance_data.student_sheets.map(
-              (student_data, index) => {
+            this.state.fetched_attendance_data.student_sheets
+              .reverse()
+              .map((student_data, index) => {
                 return (
                   <tr key={index}>
                     <td>{index + 1}</td>
@@ -546,12 +571,13 @@ class ManualAttendance extends Component {
                     <td>{student_data.student.uid}</td>
 
                     {student_data.attendance_sheet.attendance.length > 0 ? (
-                      this.state.fetched_attendance_data.class_sheet.map(
-                        (class_att) => {
+                      this.state.fetched_attendance_data.class_sheet
+                        .reverse()
+                        .map((class_att) => {
                           let attendance_of_stud = student_data.attendance_sheet.attendance.filter(
                             (att_obj) =>
                               att_obj.class_date === class_att.class_date &&
-                              att_obj.class_slot == class_att.class_slot
+                              att_obj.attendance_slot == class_att.attendance_slot
                           );
                           console.log('Hooooooo');
                           console.log(attendance_of_stud);
@@ -612,15 +638,13 @@ class ManualAttendance extends Component {
                                 </Form.Control>
                               </td>
                             );
-                        }
-                      )
+                        })
                     ) : (
                       <h5></h5>
                     )}
                   </tr>
                 );
-              }
-            )
+              })
           ) : (
             <h5></h5>
           )}
