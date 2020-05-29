@@ -6,7 +6,14 @@ import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../Navbar/Navbar';
 import { Card, Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
-import { Table, Container,Modal,ModalFooter,ModalHeader,ModalBody } from 'reactstrap';
+import {
+  Table,
+  Container,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  ModalBody,
+} from 'reactstrap';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Cookies from 'js-cookie';
@@ -237,13 +244,20 @@ class QRAttendance extends Component {
     console.log(c);
     return (
       <tr>
-        <td style={{fontSize: '13.5px',textAlign:'center' }} key={"rowCol" + c.course_name}>{c.course_name}</td>
-        <td style={{ fontSize: '13.5px',textAlign:'center' }}>{c.course_code}</td>
-        <td style={{ fontSize: '13.5px',textAlign:'center' }}>{c.section_name}</td>
-        <td style={{ fontSize: '13.5px',textAlign:'center' }}>{c.section_seats}</td>
-        <td style={{ color: '#10A7F0',textAlign:'center' }}>
+        <td
+          style={{ fontSize: '13.5px', textAlign: 'center' }}
+          key={'rowCol' + c.course_name}
+        >
+          {c.course_name}
+        </td>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.course_code}</td>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.section_name}</td>
+        <td style={{ fontSize: '13.5px', textAlign: 'center' }}>
+          {c.section_seats}
+        </td>
+        <td style={{ color: '#10A7F0', textAlign: 'center' }}>
           <BTTN
-          size='tiny'
+            size="tiny"
             primary
             onClick={() => {
               this.MarkAttendance(c.course_code, c.scsddc, c.section_name);
@@ -253,67 +267,61 @@ class QRAttendance extends Component {
           </BTTN>
         </td>
         <div></div>
-      </tr>
+      </tr >
       // </li>
     );
   }
   render() {
-    // if(this.props.teacher===undefined||this.props.teacher===''||this.props.teacher===null)
-    // return(
-    //     <Redirect to='/axioslogin'/>
-    // )
-    // else
-    return (
-      <div>
-        {/* <Container bsPrefix="cont">
-                <br/><br/><br/>
-                <h5 style={{ textAlign: "left" }}><span style={{ fontWeight: "bold", color: "black" }}>Marks</span> <span>| Distribution</span></h5> */}
-        <NavBar />
+    if (this.props.teacher === []) {
+      return <Redirect to="/auth/login" />;
+    } else
+      return (
+        <div>
+          <NavBar />
 
-        <br />
-        <Container fluid>
-          <div style={{ width: 'auto', paddingBottom: '2rem' }}>
-            <Breadcrumb>
-              <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
-              <Breadcrumb.Item active>QR Attendance</Breadcrumb.Item>
-            </Breadcrumb>
-          </div>
-          <Card style={{ border: '1px solid black' }}>
-            <Card.Header
-              style={{
-                backgroundColor: 'black',
-                border: '1px solid black',
-                marginLeft: '-1px',
-              }}
-            >
-              <span>
-                <h3 style={{ fontWeight: 'bold', color: 'white' }}>
-                  Assign Sections
-                </h3>
-              </span>
-            </Card.Header>
-            <Card.Body>
-              <Table
-                className="align-items-center table-dark table-flush"
-                responsive
+          <br />
+          <Container fluid>
+            <div style={{ width: 'auto', paddingBottom: '2rem' }}>
+              <Breadcrumb>
+                <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
+                <Breadcrumb.Item active>QR Attendance</Breadcrumb.Item>
+              </Breadcrumb>
+            </div>
+            <Card style={{ border: '1px solid black' }}>
+              <Card.Header
+                style={{
+                  backgroundColor: 'black',
+                  border: '1px solid black',
+                  marginLeft: '-1px',
+                }}
               >
-                <thead className="thead-dark">
-                <th style={{textAlign:'center'}}>Course Name</th>
-                  <th style={{textAlign:'center'}}>Course Code</th>
-                  <th style={{textAlign:'center'}}>Section</th>
-                  <th style={{textAlign:'center'}}>No of Seats</th>
-                  <th style={{textAlign:'center'}}>Action</th>
-                </thead>
-                <tbody>{this.state.Section_Nodes}</tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </Container>
-        {this.Modal1render()}
-        {this.Modal2render()}
-        {/* </Container> */}
-      </div>
-    );
+                <span>
+                  <h3 style={{ fontWeight: 'bold', color: 'white' }}>
+                    Assign Sections
+                  </h3>
+                </span>
+              </Card.Header>
+              <Card.Body>
+                <Table
+                  className="align-items-center table-dark table-flush"
+                  responsive
+                >
+                  <thead className="thead-dark">
+                    <th style={{ textAlign: 'center' }}>Course Name</th>
+                    <th style={{ textAlign: 'center' }}>Course Code</th>
+                    <th style={{ textAlign: 'center' }}>Section</th>
+                    <th style={{ textAlign: 'center' }}>No of Seats</th>
+                    <th style={{ textAlign: 'center' }}>Action</th>
+                  </thead>
+                  <tbody>{this.state.Section_Nodes}</tbody>
+                </Table>
+              </Card.Body>
+            </Card>
+          </Container>
+          {this.Modal1render()}
+          {this.Modal2render()}
+        </div>
+      );
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -322,16 +330,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch({ type: 'TeacherSections', payload: { data } });
     },
     changeid: (s) => {
-      console.log('dispatcher ka nder');
-      console.log(s);
       dispatch({ type: 'ChangeId', payload: { s } });
-      //dispatch({type:'ChangeId', payload:id})
     },
   };
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     teacher: state.teacherinfo,
   };

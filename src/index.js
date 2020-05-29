@@ -32,7 +32,7 @@ const reducer = (state = istate, action) => {
     };
   else if (action.type === 'logout') {
     return {
-      teacher: [],
+      state: [],
     };
   } else if (action.type === 'setMarksInfo') {
     return {
