@@ -144,9 +144,9 @@ class SetMarks extends Component {
     form.append('marks_data', JSON.stringify(this.state.marksInfo));
 
     axios.post('/teacher/update_marks/', form).then((response) => {
-      console.log(response);
+      if(response.data.status === "Success")
       this.setState({
-        showSave: true,
+        showSave: false,
       });
     });
   }
@@ -177,6 +177,8 @@ class SetMarks extends Component {
                       this.SaveMarks();
                     }}
                   >
+                    <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
+                    
                     Save
                   </BTTN>
                 ) : (

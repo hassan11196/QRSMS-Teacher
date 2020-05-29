@@ -38,7 +38,7 @@ class ManageMarks extends Component {
       TeacherFetchedCourses: [],
       Evaluation: '',
       course: '',
-      section: null,
+      section: '',
       csrf_token: 0,
       weightage: 0,
       Tmarks: 0,
@@ -413,7 +413,7 @@ class ManageMarks extends Component {
             <br />
             <Row>
               <Col xs={6}>
-               {this.state.marksInfo.length === 0 ? 
+               {this.state.course === '' || this.state.section === '' ? 
                 <BTTN
                 disabled
                 primary
