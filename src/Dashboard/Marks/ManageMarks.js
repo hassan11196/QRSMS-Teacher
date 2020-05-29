@@ -450,7 +450,7 @@ class ManageMarks extends Component {
                 this.finalize()
               }}
              >
-              <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+              <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
               Finalize Grades
             </BTTN>: <BTTN
               primary
@@ -458,8 +458,8 @@ class ManageMarks extends Component {
                 this.finalize()
               }}
              >
-              <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
-              Finalize Grades
+              <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
+             Finalize Grades
             </BTTN>} 
               
             </div>
