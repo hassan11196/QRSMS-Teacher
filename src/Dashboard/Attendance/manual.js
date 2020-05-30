@@ -932,10 +932,17 @@ class ManualAttendance extends Component {
                     paddingBottom: '1rem',
                   }}
                 >
-                  <BTTN primary onClick={() => this.addAttendance()}>
+                  {
+                    this.state.hour === '' || this.state.code === '' || this.state.section  ===''?
+                    <BTTN disabled primary onClick={() => this.addAttendance()}>
+                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+                    Add Attendance
+                  </BTTN>:                   <BTTN primary onClick={() => this.addAttendance()}>
                     <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
                     Add Attendance
                   </BTTN>
+                  }
+
                 </div>
               </Col>
               <Col xs={3}>

@@ -38,12 +38,12 @@ class ManageMarks extends Component {
       TeacherFetchedCourses: [],
       Evaluation: '',
       course: '',
-      section: null,
+      section: '',
       csrf_token: 0,
       weightage: 0,
       Tmarks: 0,
       scsddc: '',
-      marksInfo: '',
+      marksInfo: [],
       visible: false,
       open: false,
     };
@@ -54,6 +54,7 @@ class ManageMarks extends Component {
     this.setCourse = this.setCourse.bind(this);
     this.startMarking = this.startMarking.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.finalize = this.finalize.bind(this);
   }
   componentDidMount() {
     console.log(this.props.teacherSections);
@@ -81,6 +82,15 @@ class ManageMarks extends Component {
       console.log('sectiondata');
       console.log(this.state.SectionInfo);
     });
+  }
+  finalize(){
+    let form = new FormData();
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
+    form.append('scsddc', this.state.scsddc);
+    axios.post('/teacher/generate_grades/', form).then((response) => {
+    console.log(response);
+        
+      });
   }
   startMarking() {
     let form = new FormData();
@@ -162,7 +172,7 @@ class ManageMarks extends Component {
     return <option name={data.course_code}>{data.course_code}</option>;
   }
   render() {
-    console.log('SS', this.props.teacherSections);
+    console.log('SS', this.state.marksInfo);
     if (
       this.props.teacher === [] ||
       this.props.teacher === null ||
@@ -401,7 +411,21 @@ class ManageMarks extends Component {
               <Col md="3"></Col>
             </Row>
             <br />
-            <BTTN
+            <Row>
+              <Col xs={6}>
+               {this.state.course === '' || this.state.section === '' ? 
+                <BTTN
+                disabled
+                primary
+                onClick={() => {
+                  this.setState({
+                    visible: true,
+                  });
+                }}
+              >
+                <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+                Add Evaluation
+              </BTTN> : <BTTN
               primary
               onClick={() => {
                 this.setState({
@@ -411,7 +435,36 @@ class ManageMarks extends Component {
             >
               <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
               Add Evaluation
-            </BTTN>
+            </BTTN> 
+              }       
+              
+            
+              </Col>
+              <Col xs={6}>
+                
+              <div style={{float:'right'}}>
+              {this.state.marksInfo.length === 0 ? <BTTN
+              primary
+              disabled
+              onClick={()=>{
+                this.finalize()
+              }}
+             >
+              <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
+              Finalize Grades
+            </BTTN>: <BTTN
+              primary
+              onClick={()=>{
+                this.finalize()
+              }}
+             >
+              <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
+             Finalize Grades
+            </BTTN>} 
+              
+            </div>
+              </Col>
+            </Row>
             <br />
             <div style={{ height: '1rem' }}></div>
             {this.state.section !== null ? (
