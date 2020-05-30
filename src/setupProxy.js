@@ -13,6 +13,7 @@ module.exports = function (app) {
       // override target 'http://www.example.org' to 'http://localhost:8000'
       'localhost:3000': 'http://localhost:8000',
       'localhost:3001': 'http://localhost:8000',
+      'localhost:3002': 'http://localhost:8000',
       // 'localhost:3000': 'http://172.16.71.12/'
       // 'localhost:3000': 'http://180.149.217.63/'
     },
