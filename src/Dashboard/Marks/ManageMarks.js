@@ -116,7 +116,7 @@ class ManageMarks extends Component {
   }
   setSection(e) {
     let newscs = e.target[e.target.selectedIndex].getAttribute('name');
-    console.log(e.target.name);
+    console.log(e.target[e.target.selectedIndex].getAttribute('name'));
     this.setState(
       {
         section: e.target.value,
@@ -378,8 +378,8 @@ class ManageMarks extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                      <h2>Courses Not Available</h2>
-                    )}
+                        <h2>Courses Not Available</h2>
+                      )}
                   </Form.Control>
                 </form>
               </Col>
@@ -393,8 +393,8 @@ class ManageMarks extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                      <option>Select A Course First</option>
-                    )}
+                        <option>Select A Course First</option>
+                      )}
                   </Form.Control>
                 </form>
               </Col>
@@ -584,30 +584,30 @@ class ManageMarks extends Component {
                     </Card>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      marginTop: '2rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    No Marks Data
-                  </div>
-                )}
+                    <div
+                      style={{
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        marginTop: '2rem',
+                        textAlign: 'center',
+                      }}
+                    >
+                      No Marks Data
+                    </div>
+                  )}
               </div>
             ) : (
-              <div
-                style={{
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  marginTop: '2rem',
-                  textAlign: 'center',
-                }}
-              >
-                Select Course and Section First
-              </div>
-            )}
+                <div
+                  style={{
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    marginTop: '2rem',
+                    textAlign: 'center',
+                  }}
+                >
+                  Select Course and Section First
+                </div>
+              )}
           </Container>
         </div>
       );
