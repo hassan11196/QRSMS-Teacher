@@ -157,7 +157,7 @@ class ManualAttendance extends Component {
     super(props);
     this.state = {
       students: undefined,
-      fetched_data: undefined,
+      fetched_data: [],
       students_api: undefined,
       class_api: undefined,
       students_sheets: [],
@@ -654,23 +654,16 @@ class ManualAttendance extends Component {
   }
 
   addAttendance() {
-    let sheet = this.state.fetched_data;
-    console.log(sheet);
-    let new_entry = this.getNewAttendanceEntry(
-      sheet.attendance_list,
-      sheet.student_list
-    );
-    sheet.attendance_list.push(new_entry);
-    this.setState({
-      fetched_data: sheet,
-    });
     var sec = this.state.ssdc.split('_');
     let form = new FormData();
     console.log(this.state.section);
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('slot', this.state.hour);
-    form.append('scsddc', this.state.ssdc);
-    form.append('section', sec[0]);
+    form.append(
+      'scsddc',
+      this.state.section + '_' + this.state.code + '_' + this.state.ssdc
+    );
+    form.append('section', this.state.section);
     form.append('course_code', this.state.code);
     axios
       .post('/teacher/start_attendance/', form)
@@ -689,7 +682,7 @@ class ManualAttendance extends Component {
           campus: 'MainCampus',
           department: 'ComputerSciences',
           degree: 'BS(CS)',
-          semester_code: 'FALL2020',
+          semester_code: 'Spring2020',
           course_code: this.state.code,
           section: sec[0],
         };
@@ -740,6 +733,16 @@ class ManualAttendance extends Component {
       })
       .then(() => {
         // window.location.reload()
+        let sheet = this.state.fetched_data;
+        console.log(sheet);
+        let new_entry = this.getNewAttendanceEntry(
+          sheet.attendance_list,
+          sheet.student_list
+        );
+        sheet.attendance_list.push(new_entry);
+        this.setState({
+          fetched_data: this.state.fetched_attendance_data,
+        });
       });
     // let sheet = this.state.fetched_data;
     // let new_entry = this.getNewAttendanceEntry(sheet.attendance_list, sheet.student_list);
@@ -797,7 +800,7 @@ class ManualAttendance extends Component {
       campus: 'MainCampus',
       department: 'ComputerSciences',
       degree: 'BS(CS)',
-      semester_code: 'FALL2020',
+      semester_code: 'Spring2020',
       course_code: this.state.code,
       section: sec,
     };
@@ -816,15 +819,14 @@ class ManualAttendance extends Component {
         console.log('attendace data arha h');
         console.log(response.data);
         //console.log(attendance_data.student_sheets[0].attendance_sheet.scsddc);
-        console.log(
-          response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
-        );
+        // console.log(
+        //   response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
+        // );
         this.setState({
           fetched_attendance_data: response.data.attendance_data,
           copy: response.data.attendance_data,
           fetched_status: true,
-          ssdc:
-            response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc,
+          ssdc: 'Spring2020_BS(CS)_ComputerSciences_MainCampus_Karachi', // Hardcoded ssdc
           course_code: response.data.attendance_data.course_code,
           section: response.data.attendance_data.section,
         });
@@ -932,17 +934,25 @@ class ManualAttendance extends Component {
                     paddingBottom: '1rem',
                   }}
                 >
-                  {
-                    this.state.hour === '' || this.state.code === '' || this.state.section  ===''?
+                  {this.state.hour === '' ||
+                  this.state.code === '' ||
+                  this.state.section === '' ? (
                     <BTTN disabled primary onClick={() => this.addAttendance()}>
-                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
-                    Add Attendance
-                  </BTTN>:                   <BTTN primary onClick={() => this.addAttendance()}>
-                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
-                    Add Attendance
-                  </BTTN>
-                  }
-
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-plus"
+                      ></i>
+                      Add Attendance
+                    </BTTN>
+                  ) : (
+                    <BTTN primary onClick={() => this.addAttendance()}>
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-plus"
+                      ></i>
+                      Add Attendance
+                    </BTTN>
+                  )}
                 </div>
               </Col>
               <Col xs={3}>

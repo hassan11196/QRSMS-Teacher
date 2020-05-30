@@ -95,6 +95,13 @@ var routes = [
     name: 'Login',
     icon: 'ni ni-circle-08 text-white',
     component: CustomLogin,
+    layout: '/accounts',
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    icon: 'ni ni-circle-08 text-white',
+    component: CustomLogin,
     layout: '/auth',
   },
 ];
