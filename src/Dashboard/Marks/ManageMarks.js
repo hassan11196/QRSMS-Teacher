@@ -83,14 +83,14 @@ class ManageMarks extends Component {
       console.log(this.state.SectionInfo);
     });
   }
-  finalize(){
+  finalize() {
     let form = new FormData();
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('scsddc', this.state.scsddc);
     axios.post('/teacher/generate_grades/', form).then((response) => {
-    console.log(response);
-        
-      });
+      console.log(response);
+
+    });
   }
   startMarking() {
     let form = new FormData();
@@ -413,56 +413,56 @@ class ManageMarks extends Component {
             <br />
             <Row>
               <Col xs={6}>
-               {this.state.course === '' || this.state.section === '' ? 
-                <BTTN
-                disabled
-                primary
-                onClick={() => {
-                  this.setState({
-                    visible: true,
-                  });
-                }}
-              >
-                <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+                {this.state.course === '' || this.state.section === '' ?
+                  <BTTN
+                    disabled
+                    primary
+                    onClick={() => {
+                      this.setState({
+                        visible: true,
+                      });
+                    }}
+                  >
+                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
                 Add Evaluation
               </BTTN> : <BTTN
-              primary
-              onClick={() => {
-                this.setState({
-                  visible: true,
-                });
-              }}
-            >
-              <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+                    primary
+                    onClick={() => {
+                      this.setState({
+                        visible: true,
+                      });
+                    }}
+                  >
+                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
               Add Evaluation
-            </BTTN> 
-              }       
-              
-            
+            </BTTN>
+                }
+
+
               </Col>
               <Col xs={6}>
-                
-              <div style={{float:'right'}}>
-              {this.state.marksInfo.length === 0 ? <BTTN
-              primary
-              disabled
-              onClick={()=>{
-                this.finalize()
-              }}
-             >
-              <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
+
+                <div style={{ float: 'right' }}>
+                  {this.state.marksInfo.length === 0 ? <BTTN
+                    primary
+                    disabled
+                    onClick={() => {
+                      this.finalize()
+                    }}
+                  >
+                    <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
               Finalize Grades
-            </BTTN>: <BTTN
-              primary
-              onClick={()=>{
-                this.finalize()
-              }}
-             >
-              <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
+            </BTTN> : <BTTN
+                      primary
+                      onClick={() => {
+                        this.finalize()
+                      }}
+                    >
+                      <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
              Finalize Grades
-            </BTTN>} 
-              
-            </div>
+            </BTTN>}
+
+                </div>
               </Col>
             </Row>
             <br />
@@ -563,7 +563,7 @@ class ManageMarks extends Component {
                                       paddingTop: '2rem',
                                     }}
                                   >
-                                    {obj.mean}
+                                    {obj.marks_mean.toFixed(2)}
                                   </td>
                                   <td
                                     style={{
@@ -571,7 +571,7 @@ class ManageMarks extends Component {
                                       paddingTop: '2rem',
                                     }}
                                   >
-                                    {obj.sd}
+                                    {obj.marks_standard_deviation.toFixed(2)}
                                   </td>
                                   <td
                                     style={{
