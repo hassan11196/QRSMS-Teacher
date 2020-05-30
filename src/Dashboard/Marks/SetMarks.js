@@ -144,10 +144,10 @@ class SetMarks extends Component {
     form.append('marks_data', JSON.stringify(this.state.marksInfo));
 
     axios.post('/teacher/update_marks/', form).then((response) => {
-      if (response.data.status === "Success")
-        this.setState({
-          showSave: false,
-        });
+      if(response.data.status === "Success")
+      this.setState({
+        showSave: false,
+      });
     });
   }
   render() {
@@ -178,21 +178,21 @@ class SetMarks extends Component {
                     }}
                   >
                     <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
-
+                    
                     Save
                   </BTTN>
                 ) : (
-                    <BTTN
-                      disabled
-                      primary
-                      onClick={() => {
-                        this.SaveMarks();
-                      }}
-                    >
-                      <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
+                  <BTTN
+                    disabled
+                    primary
+                    onClick={() => {
+                      this.SaveMarks();
+                    }}
+                  >
+                    <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
                     Save
-                    </BTTN>
-                  )}
+                  </BTTN>
+                )}
               </div>
             </Col>
             <Col xs={3}>
@@ -236,7 +236,6 @@ class SetMarks extends Component {
                   {/* <th style={{textAlign:'center'}}>Serial No.</th> */}
                   <th style={{ textAlign: 'center' }}>S No.</th>
                   <th style={{ textAlign: 'center' }}>ID</th>
-                  <th style={{ textAlign: 'center' }}>Student Name</th>
                   {/* <th style={{ textAlign: 'center' }}>Name</th> */}
                   <th style={{ textAlign: 'center' }}>Marks</th>
                   <th style={{ textAlign: 'center' }}>Weightage</th>
@@ -245,9 +244,8 @@ class SetMarks extends Component {
                   {this.state.copyMarksInfo.map((obj, i) => {
                     return (
                       <tr key={i} style={{ textAlign: 'center' }}>
-                        <td align="left">{i + 1}</td>
+                        <td>{i + 1}</td>
                         <td>{obj.student_id}</td>
-                        <td align="left">{obj.student_name}</td>
                         {/* <td></td> */}
                         <td style={{ width: '5rem', textAlign: 'center' }}>
                           <Input
@@ -261,7 +259,7 @@ class SetMarks extends Component {
                             onChange={this.onChange}
                           />
                         </td>
-                        <td align="left">{this.state.wtgArray[i]}</td>
+                        <td>{this.state.wtgArray[i]}</td>
                       </tr>
                     );
                   })}

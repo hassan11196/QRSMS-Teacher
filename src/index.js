@@ -17,6 +17,9 @@ const istate = {
   TeacherSections: null,
   marksType: null,
   sectionMarksSemester: null,
+  currentCourse:null,
+  currentSection:null,
+  currentSCSDDC:null,
 };
 const reducer = (state = istate, action) => {
   console.log(action);
@@ -25,7 +28,15 @@ const reducer = (state = istate, action) => {
       ...state,
       TeacherSections: action.payload.data,
     };
-  } else if (action.type === 'ChangeId')
+  }else if (action.type === 'changeCourse') {
+    return {
+      ...state,
+      currentCourse:action.payload.s,
+      currentSection:action.payload.d,
+      currentSCSDDC:action.payload.f
+    };
+  }
+   else if (action.type === 'ChangeId')
     return {
       ...state,
       teacher: action.payload.s,
