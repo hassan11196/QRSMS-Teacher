@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { connect } from 'react-redux';
 import Switch from 'react-switch';
+import Graphics3 from '../../assets/img/d.png';
 import { Initial } from 'react-initial';
 import { FaSlidersH, FaInfoCircle } from 'react-icons/fa';
 import {
@@ -59,6 +63,80 @@ class ManageMarks extends Component {
     this.finalize = this.finalize.bind(this);
     this.handleSwitch = this.handleSwitch.bind(this);
   }
+  notify = () => {
+    toast.success(
+      <div
+        style={{
+          paddingLeft: '1rem',
+          borderRadius: '50%',
+          height: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ marginLeft: '-6px', marginRight: '8px', marginTop: '-32px' }}>
+          <i className="fas fa-check-circle"></i>
+        </div>
+        <div>
+          <h5 style={{ marginTop: '0.8rem' }}>
+            <b style={{ fontSize: '16px' }}>{'Action Successful'}</b>
+          </h5>
+
+          <h6
+            style={{
+              paddingBottom: '1rem',
+              fontSize: '13px',
+              marginLeft: '-20px',
+              width: '200px',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {this.state.snackMessage}
+          </h6>
+        </div>
+      </div>,
+      { containerId: 'B' }
+    );
+  };
+  notifyDanger = () => {
+    toast.error(
+      <div
+        style={{
+          paddingLeft: '1rem',
+          borderRadius: '50%',
+          height: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ marginLeft: '-6px', marginRight: '8px', marginTop: '-26px' }}>
+          <i className="fas fa-exclamation-triangle"></i>
+        </div>
+        <div>
+          <h5 style={{ marginTop: '0.8rem' }}>
+            <b style={{ fontSize: '16px' }}>{'An Error Occured'}</b>
+          </h5>
+
+          <h6
+            style={{
+              marginBottom: '1rem',
+              fontSize: '13px',
+              marginLeft: '-20px',
+              width: '200px',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {this.state.snackMessage}
+          </h6>
+        </div>
+      </div>,
+      { containerId: 'A' }
+    );
+  };
   handleSwitch(custom) {
     this.setState({ custom }, () => {
       console.log(this.state.custom);
@@ -110,17 +188,39 @@ class ManageMarks extends Component {
     axios.get('/management/get_csrf');
     console.log(form);
     axios.post('/teacher/add_marks/', form).then((response) => {
-      let form = new FormData();
+      if (response.data.message !== 'Marks Open For This Section.') {
+        this.setState(
+          {
+            type: 'error',
+            snackMessage: response.data.message,
+          },
+          () => {
+            this.notifyDanger();
+          }
+        );
+      } else {
+        this.setState(
+          {
+            type: 'Success',
+            snackMessage: 'Evaluation Added Successfully!',
+          },
+          () => {
+            this.notify();
+          }
+        );
+        let form = new FormData();
 
-      form.append('csrfmiddlewaretoken', this.state.csrf_token);
-      form.append('scsddc', this.state.scsddc);
-      axios.post('/teacher/get_marks_info/', form).then((response) => {
-        console.log(response.data);
-        this.setState({
-          marksInfo: response.data,
+        form.append('csrfmiddlewaretoken', this.state.csrf_token);
+        form.append('scsddc', this.state.scsddc);
+        axios.post('/teacher/get_marks_info/', form).then((response) => {
+          {
+            this.setState({
+              marksInfo: response.data,
+            });
+          }
         });
-      });
-      console.log(response.data);
+      }
+
       this.setState({
         visible: false,
       });
@@ -179,7 +279,6 @@ class ManageMarks extends Component {
     return <option name={data.course_code}>{data.course_code}</option>;
   }
   render() {
-    console.log('SS', this.state.marksInfo);
     if (
       this.props.teacher === [] ||
       this.props.teacher === null ||
@@ -199,6 +298,16 @@ class ManageMarks extends Component {
                 <Breadcrumb.Item active>Manage Marks</Breadcrumb.Item>
               </Breadcrumb>
             </div>
+            <ToastContainer
+              enableMultiContainer
+              containerId={'B'}
+              position={toast.POSITION.TOP_RIGHT}
+            />{' '}
+            <ToastContainer
+              enableMultiContainer
+              containerId={'A'}
+              position={toast.POSITION.TOP_RIGHT}
+            />{' '}
             <Modal
               isOpen={this.state.open}
               toggle={() => {
@@ -215,7 +324,7 @@ class ManageMarks extends Component {
               <ModalBody>
                 <Row>
                   <Col xs={9}>
-                    {this.state.custom === true ? (
+                    {this.state.custom === false ? (
                       <form>
                         <Form.Label style={{ fontWeight: 'bold' }}>
                           Evaluation Type
@@ -242,7 +351,14 @@ class ManageMarks extends Component {
                           <option name="Quiz" value="Quiz">
                             Quiz
                           </option>
-                          <option name="Assignment" value="Assignment">
+                          <option
+                            style={{
+                              backgroundImage: 'url(' + Graphics3 + ')',
+                            }}
+                            className="en"
+                            name="Assignment"
+                            value="Assignment"
+                          >
                             Assignment
                           </option>
                         </Form.Control>

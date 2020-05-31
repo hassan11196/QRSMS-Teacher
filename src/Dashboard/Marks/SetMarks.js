@@ -32,10 +32,78 @@ class SetMarks extends Component {
     this.onChange = this.onChange.bind(this);
   }
   notify = () => {
-    toast.success(this.state.snackMessage, { containerId: 'B' });
+    toast.success(
+      <div
+        style={{
+          paddingLeft: '1rem',
+          borderRadius: '50%',
+          height: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ marginLeft: '-6px', marginRight: '8px', marginTop: '-32px' }}>
+          <i className="fas fa-check-circle"></i>
+        </div>
+        <div>
+          <h5 style={{ marginTop: '0.8rem' }}>
+            <b style={{ fontSize: '16px' }}>{'Action Successful'}</b>
+          </h5>
+
+          <h6
+            style={{
+              paddingBottom: '1rem',
+              fontSize: '13px',
+              marginLeft: '-20px',
+              width: '200px',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {this.state.snackMessage}
+          </h6>
+        </div>
+      </div>,
+      { containerId: 'B' }
+    );
   };
   notifyDanger = () => {
-    toast.success(this.state.snackMessage, { containerId: 'A' });
+    toast.error(
+      <div
+        style={{
+          paddingLeft: '1rem',
+          borderRadius: '50%',
+          height: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ marginLeft: '-6px', marginRight: '8px', marginTop: '-26px' }}>
+          <i className="fas fa-exclamation-triangle"></i>
+        </div>
+        <div>
+          <h5 style={{ marginTop: '0.8rem' }}>
+            <b style={{ fontSize: '16px' }}>{'An Error Occured'}</b>
+          </h5>
+
+          <h6
+            style={{
+              marginBottom: '1rem',
+              fontSize: '13px',
+              marginLeft: '-20px',
+              width: '200px',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {this.state.snackMessage}
+          </h6>
+        </div>
+      </div>,
+      { containerId: 'A' }
+    );
   };
   onSearch(e) {
     console.log(e.target.value);
@@ -167,7 +235,7 @@ class SetMarks extends Component {
       } else {
         this.setState(
           {
-            type: 'danger',
+            type: 'error',
             snackMessage: 'Unable to save Marks',
           },
           () => {
@@ -189,7 +257,8 @@ class SetMarks extends Component {
           <div style={{ width: 'auto', paddingBottom: '0' }}>
             <Breadcrumb>
               <Breadcrumb.Item href="/dashboard/home">Home</Breadcrumb.Item>
-              <Breadcrumb.Item active>Manage Marks</Breadcrumb.Item>
+              <Breadcrumb.Item href="/portal/Marks">Manage Marks</Breadcrumb.Item>
+              <Breadcrumb.Item active>Set Marks</Breadcrumb.Item>
             </Breadcrumb>
           </div>
           <ToastContainer
