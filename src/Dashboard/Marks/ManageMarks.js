@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import Switch from 'react-switch';
 import { Initial } from 'react-initial';
 import { FaSlidersH, FaInfoCircle } from 'react-icons/fa';
 import {
@@ -46,6 +47,7 @@ class ManageMarks extends Component {
       marksInfo: [],
       visible: false,
       open: false,
+      custom: false,
     };
     this.CourseBox = this.CourseBox.bind(this);
     this.SectionBox = this.SectionBox.bind(this);
@@ -55,6 +57,12 @@ class ManageMarks extends Component {
     this.startMarking = this.startMarking.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.finalize = this.finalize.bind(this);
+    this.handleSwitch = this.handleSwitch.bind(this);
+  }
+  handleSwitch(custom) {
+    this.setState({ custom }, () => {
+      console.log(this.state.custom);
+    });
   }
   componentDidMount() {
     console.log(this.props.teacherSections);
@@ -89,7 +97,6 @@ class ManageMarks extends Component {
     form.append('scsddc', this.state.scsddc);
     axios.post('/teacher/generate_grades/', form).then((response) => {
       console.log(response);
-
     });
   }
   startMarking() {
@@ -207,38 +214,62 @@ class ManageMarks extends Component {
               </ModalHeader>
               <ModalBody>
                 <Row>
-                  <Col>
-                    <Form.Label style={{ fontWeight: 'bold' }}>
-                      Evaluation Type
+                  <Col xs={9}>
+                    {this.state.custom === true ? (
+                      <form>
+                        <Form.Label style={{ fontWeight: 'bold' }}>
+                          Evaluation Type
+                        </Form.Label>
+                        <Form.Control as="select" onChange={this.setEvaluation}>
+                          <option selected disabled>
+                            {this.state.currentEvaluationtype}
+                          </option>
+                          <option name="Mid 1" value="Mid 1">
+                            Mid 1
+                          </option>
+                          <option name="Mid 2" value="Mid 2">
+                            Mid 2
+                          </option>
+                          <option name="Final" value="Final">
+                            Final
+                          </option>
+                          <option name="CP" value="CP">
+                            Class Participation
+                          </option>
+                          <option name="Project" value="Project">
+                            Project
+                          </option>
+                          <option name="Quiz" value="Quiz">
+                            Quiz
+                          </option>
+                          <option name="Assignment" value="Assignment">
+                            Assignment
+                          </option>
+                        </Form.Control>
+                      </form>
+                    ) : (
+                      <div>
+                        <Form.Label style={{ fontWeight: 'bold' }}>
+                          Evaluation Type
+                        </Form.Label>
+                        <form>
+                          <Input
+                            onChange={this.setEvaluation}
+                            value={this.state.currentEvaluationtype}
+                          />
+                        </form>
+                      </div>
+                    )}
+                  </Col>
+                  <Col xs={3}>
+                    <Form.Label style={{ marginBottom: '1rem', fontWeight: 'bold' }}>
+                      Custom ?
                     </Form.Label>
-                    <form>
-                      <Form.Control as="select" onChange={this.setEvaluation}>
-                        <option selected disabled>
-                          {this.state.currentEvaluationtype}
-                        </option>
-                        <option name="Mid 1" value="Mid 1">
-                          Mid 1
-                        </option>
-                        <option name="Mid 2" value="Mid 2">
-                          Mid 2
-                        </option>
-                        <option name="Final" value="Final">
-                          Final
-                        </option>
-                        <option name="CP" value="CP">
-                          Class Participation
-                        </option>
-                        <option name="Project" value="Project">
-                          Project
-                        </option>
-                        <option name="Quiz" value="Quiz">
-                          Quiz
-                        </option>
-                        <option name="Assignment" value="Assignment">
-                          Assignment
-                        </option>
-                      </Form.Control>
-                    </form>
+                    <Switch
+                      checked={this.state.custom}
+                      onChange={this.handleSwitch}
+                      className="mr-2 mb-2"
+                    />
                   </Col>
                 </Row>
                 <Row style={{ marginTop: '1rem' }}>
@@ -297,38 +328,67 @@ class ManageMarks extends Component {
               </ModalHeader>
               <ModalBody>
                 <Row>
-                  <Col>
-                    <Form.Label style={{ fontWeight: 'bold' }}>
-                      Evaluation Type
+                  <Col xs={9}>
+                    {this.state.custom === false ? (
+                      <div>
+                        <form>
+                          <Form.Label style={{ fontWeight: 'bold' }}>
+                            Evaluation Type
+                          </Form.Label>
+                          <Form.Control as="select" onChange={this.setEvaluation}>
+                            <option selected disabled>
+                              Evaluation Type
+                            </option>
+                            <option name="Mid 1" value="Mid 1">
+                              Mid 1
+                            </option>
+                            <option name="Mid 2" value="Mid 2">
+                              Mid 2
+                            </option>
+                            <option name="Final" value="Final">
+                              Final
+                            </option>
+                            <option name="CP" value="CP">
+                              Class Participation
+                            </option>
+                            <option name="Project" value="Project">
+                              Project
+                            </option>
+                            <option name="Quiz" value="Quiz">
+                              Quiz
+                            </option>
+                            <option name="Assignment" value="Assignment">
+                              Assignment
+                            </option>
+                          </Form.Control>
+                        </form>
+                      </div>
+                    ) : (
+                      <div>
+                        <Form.Label style={{ fontWeight: 'bold' }}>
+                          Evaluation Type
+                        </Form.Label>
+                        <form>
+                          <Input
+                            placeholder={'Enter Evaluation Type'}
+                            style={{ width: '100%' }}
+                            onChange={this.setEvaluation}
+                          />
+                        </form>
+                      </div>
+                    )}
+                  </Col>
+                  <Col xs={3}>
+                    <Form.Label style={{ marginBottom: '1rem', fontWeight: 'bold' }}>
+                      Custom ?
                     </Form.Label>
-                    <form>
-                      <Form.Control as="select" onChange={this.setEvaluation}>
-                        <option selected disabled>
-                          Select Evaluation Type
-                        </option>
-                        <option name="Mid 1" value="Mid 1">
-                          Mid 1
-                        </option>
-                        <option name="Mid 2" value="Mid 2">
-                          Mid 2
-                        </option>
-                        <option name="Final" value="Final">
-                          Final
-                        </option>
-                        <option name="CP" value="CP">
-                          Class Participation
-                        </option>
-                        <option name="Project" value="Project">
-                          Project
-                        </option>
-                        <option name="Quiz" value="Quiz">
-                          Quiz
-                        </option>
-                        <option name="Assignment" value="Assignment">
-                          Assignment
-                        </option>
-                      </Form.Control>
-                    </form>
+                    {/* <br />
+                    <br /> */}
+                    <Switch
+                      checked={this.state.custom}
+                      onChange={this.handleSwitch}
+                      className="mr-2 mb-2"
+                    />
                   </Col>
                 </Row>
                 <Row style={{ marginTop: '1rem' }}>
@@ -388,8 +448,8 @@ class ManageMarks extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                        <h2>Courses Not Available</h2>
-                      )}
+                      <h2>Courses Not Available</h2>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -403,8 +463,8 @@ class ManageMarks extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                        <option>Select A Course First</option>
-                      )}
+                      <option>Select A Course First</option>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -413,7 +473,7 @@ class ManageMarks extends Component {
             <br />
             <Row>
               <Col xs={6}>
-                {this.state.course === '' || this.state.section === '' ?
+                {this.state.course === '' || this.state.section === '' ? (
                   <BTTN
                     disabled
                     primary
@@ -424,8 +484,10 @@ class ManageMarks extends Component {
                     }}
                   >
                     <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
-                Add Evaluation
-              </BTTN> : <BTTN
+                    Add Evaluation
+                  </BTTN>
+                ) : (
+                  <BTTN
                     primary
                     onClick={() => {
                       this.setState({
@@ -434,34 +496,40 @@ class ManageMarks extends Component {
                     }}
                   >
                     <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
-              Add Evaluation
-            </BTTN>
-                }
-
-
+                    Add Evaluation
+                  </BTTN>
+                )}
               </Col>
               <Col xs={6}>
-
                 <div style={{ float: 'right' }}>
-                  {this.state.marksInfo.length === 0 ? <BTTN
-                    primary
-                    disabled
-                    onClick={() => {
-                      this.finalize()
-                    }}
-                  >
-                    <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
-              Finalize Grades
-            </BTTN> : <BTTN
+                  {this.state.marksInfo.length === 0 ? (
+                    <BTTN
                       primary
+                      disabled
                       onClick={() => {
-                        this.finalize()
+                        this.finalize();
                       }}
                     >
-                      <i style={{ paddingRight: '1rem' }} className="fas fa-check-circle"></i>
-             Finalize Grades
-            </BTTN>}
-
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-check-circle"
+                      ></i>
+                      Finalize Grades
+                    </BTTN>
+                  ) : (
+                    <BTTN
+                      primary
+                      onClick={() => {
+                        this.finalize();
+                      }}
+                    >
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-check-circle"
+                      ></i>
+                      Finalize Grades
+                    </BTTN>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -637,30 +705,30 @@ class ManageMarks extends Component {
                     </Card>
                   </div>
                 ) : (
-                    <div
-                      style={{
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        marginTop: '2rem',
-                        textAlign: 'center',
-                      }}
-                    >
-                      No Marks Data
-                    </div>
-                  )}
+                  <div
+                    style={{
+                      fontSize: '20px',
+                      fontWeight: 'bold',
+                      marginTop: '2rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    No Marks Data
+                  </div>
+                )}
               </div>
             ) : (
-                <div
-                  style={{
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                    marginTop: '2rem',
-                    textAlign: 'center',
-                  }}
-                >
-                  Select Course and Section First
-                </div>
-              )}
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                Select Course and Section First
+              </div>
+            )}
           </Container>
         </div>
       );

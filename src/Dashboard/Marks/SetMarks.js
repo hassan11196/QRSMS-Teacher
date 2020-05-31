@@ -6,6 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { Table, Input, CardBody, Card, CardHeader } from 'reactstrap';
 import { Button, Container, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -29,6 +31,12 @@ class SetMarks extends Component {
     this.SaveMarks = this.SaveMarks.bind(this);
     this.onChange = this.onChange.bind(this);
   }
+  notify = () => {
+    toast.success(this.state.snackMessage, { containerId: 'B' });
+  };
+  notifyDanger = () => {
+    toast.success(this.state.snackMessage, { containerId: 'A' });
+  };
   onSearch(e) {
     console.log(e.target.value);
     if (e.target.value === '') {
@@ -142,12 +150,31 @@ class SetMarks extends Component {
     form.append('scsddc', this.props.marks);
     form.append('marks_type', this.props.scsddc);
     form.append('marks_data', JSON.stringify(this.state.marksInfo));
-
     axios.post('/teacher/update_marks/', form).then((response) => {
-      if(response.data.status === "Success")
-      this.setState({
-        showSave: false,
-      });
+      console.log(response);
+      if (response.data.Status === 'Success') {
+        this.setState(
+          {
+            type: 'success',
+            snackMessage: 'Marks Saved Successfully',
+
+            showSave: false,
+          },
+          () => {
+            this.notify();
+          }
+        );
+      } else {
+        this.setState(
+          {
+            type: 'danger',
+            snackMessage: 'Unable to save Marks',
+          },
+          () => {
+            this.notifyDanger();
+          }
+        );
+      }
     });
   }
   render() {
@@ -165,110 +192,125 @@ class SetMarks extends Component {
               <Breadcrumb.Item active>Manage Marks</Breadcrumb.Item>
             </Breadcrumb>
           </div>
-
-          {/* <Container> */}
-          <Row>
-            <Col xs={9}>
-              <div style={{ paddingBottom: '1rem' }}>
-                {this.state.showSave ? (
-                  <BTTN
-                    primary
-                    onClick={() => {
-                      this.SaveMarks();
+          <ToastContainer
+            enableMultiContainer
+            containerId={'B'}
+            position={toast.POSITION.TOP_RIGHT}
+          />{' '}
+          <ToastContainer
+            enableMultiContainer
+            containerId={'A'}
+            position={toast.POSITION.TOP_RIGHT}
+          />{' '}
+          <Container style={{ marginLeft: '-15px' }}>
+            <Row>
+              <Col xs={9}>
+                <div style={{ paddingBottom: '1rem' }}>
+                  {this.state.showSave ? (
+                    <BTTN
+                      primary
+                      onClick={() => {
+                        this.SaveMarks();
+                      }}
+                    >
+                      <i
+                        className="fas fa-save"
+                        style={{ paddingRight: '1rem' }}
+                      ></i>
+                      Save
+                    </BTTN>
+                  ) : (
+                    <BTTN
+                      disabled
+                      primary
+                      onClick={() => {
+                        this.SaveMarks();
+                      }}
+                    >
+                      <i
+                        className="fas fa-save"
+                        style={{ paddingRight: '1rem' }}
+                      ></i>
+                      Save
+                    </BTTN>
+                  )}
+                </div>
+              </Col>
+              <Col xs={3}>
+                <div style={{ paddingRight: '0.4rem' }} className="search">
+                  <span
+                    className="fa fa-search"
+                    style={{
+                      position: 'absolute',
+                      paddingLeft: '1.5rem',
+                      top: '13px',
+                      left: '18px',
+                      fontSize: '15px',
                     }}
-                  >
-                    <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
-                    
-                    Save
-                  </BTTN>
-                ) : (
-                  <BTTN
-                    disabled
-                    primary
-                    onClick={() => {
-                      this.SaveMarks();
-                    }}
-                  >
-                    <i className="fas fa-save" style={{ paddingRight: '1rem' }}></i>
-                    Save
-                  </BTTN>
-                )}
-              </div>
-            </Col>
-            <Col xs={3}>
-              <div style={{ paddingRight: '0.4rem' }} className="search">
-                <span
-                  className="fa fa-search"
+                  ></span>
+                  <Input
+                    type="search"
+                    onChange={this.onSearch}
+                    style={{ width: '96%', marginLeft: '1rem' }}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Card style={{ border: '1px solid' }}>
+              <CardHeader style={{ backgroundColor: 'black', margin: '-1px' }}>
+                <span>
+                  <h3 style={{ fontWeight: 'bold', color: 'white' }}>
+                    Student Marks
+                  </h3>
+                </span>
+              </CardHeader>
+              <CardBody>
+                <Table
                   style={{
-                    position: 'absolute',
-                    paddingLeft: '1.5rem',
-                    top: '13px',
-                    left: '18px',
-                    fontSize: '15px',
+                    paddingTop: '1rem',
+                    borderRadius: '0.25rem',
+                    borderTopLeftRadius: '0.25rem',
+                    borderTopRightRadius: '0.25rem',
                   }}
-                ></span>
-                <Input
-                  type="search"
-                  onChange={this.onSearch}
-                  style={{ width: '96%', marginLeft: '1rem' }}
-                />
-              </div>
-            </Col>
-          </Row>
-          <Card style={{ border: '1px solid' }}>
-            <CardHeader style={{ backgroundColor: 'black', margin: '-1px' }}>
-              <span>
-                <h3 style={{ fontWeight: 'bold', color: 'white' }}>Student Marks</h3>
-              </span>
-            </CardHeader>
-            <CardBody>
-              <Table
-                style={{
-                  paddingTop: '1rem',
-                  borderRadius: '0.25rem',
-                  borderTopLeftRadius: '0.25rem',
-                  borderTopRightRadius: '0.25rem',
-                }}
-                className=" table-dark table-flush"
-                responsive
-              >
-                <thead className="thead-dark">
-                  {/* <th style={{textAlign:'center'}}>Serial No.</th> */}
-                  <th style={{ textAlign: 'center' }}>S No.</th>
-                  <th style={{ textAlign: 'center' }}>ID</th>
-                  {/* <th style={{ textAlign: 'center' }}>Name</th> */}
-                  <th style={{ textAlign: 'center' }}>Marks</th>
-                  <th style={{ textAlign: 'center' }}>Weightage</th>
-                </thead>
-                <tbody>
-                  {this.state.copyMarksInfo.map((obj, i) => {
-                    return (
-                      <tr key={i} style={{ textAlign: 'center' }}>
-                        <td>{i + 1}</td>
-                        <td>{obj.student_id}</td>
-                        {/* <td></td> */}
-                        <td style={{ width: '5rem', textAlign: 'center' }}>
-                          <Input
-                            style={{
-                              width: '5rem',
-                              height: '1.75rem',
-                              textAlign: 'center',
-                            }}
-                            name={obj.student_id}
-                            value={this.state.marksArray[i]}
-                            onChange={this.onChange}
-                          />
-                        </td>
-                        <td>{this.state.wtgArray[i]}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </CardBody>
-          </Card>
+                  className=" table-dark table-flush"
+                  responsive
+                >
+                  <thead className="thead-dark">
+                    <th style={{ textAlign: 'center' }}>Serial No.</th>
+                    <th style={{ textAlign: 'center' }}>ID</th>
+                    <th style={{ textAlign: 'center' }}>Name</th>
+                    <th style={{ textAlign: 'center' }}>Marks</th>
+                    <th style={{ textAlign: 'center' }}>Weightage</th>
+                  </thead>
+                  <tbody>
+                    {this.state.copyMarksInfo.map((obj, i) => {
+                      return (
+                        <tr key={i} style={{ textAlign: 'center' }}>
+                          <td>{i + 1}</td>
+                          <td>{obj.student_id}</td>
+                          <td>{obj.student_name}</td>
+                          <td style={{ width: '5rem', textAlign: 'center' }}>
+                            <Input
+                              style={{
+                                width: '5rem',
+                                height: '1.75rem',
+                                textAlign: 'center',
+                              }}
+                              name={obj.student_id}
+                              value={this.state.marksArray[i]}
+                              onChange={this.onChange}
+                            />
+                          </td>
+                          <td>{this.state.wtgArray[i]}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </CardBody>
+            </Card>
+          </Container>
         </Container>
-        {/* </Container> */}
       </div>
     );
   }

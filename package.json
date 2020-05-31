@@ -60,6 +60,8 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.8",
+    "react-switch": "^5.0.1",
+    "react-toastify": "^6.0.5",
     "reactstrap": "7.1.0",
     "redux": "^4.0.5",
     "rodal": "^1.8.1",

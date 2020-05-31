@@ -14,7 +14,7 @@ import React from 'react';
 import { NavLink as NavLinkRRD, Link } from 'react-router-dom';
 // nodejs library to set properties for components
 import { PropTypes } from 'prop-types';
-
+import { connect } from 'react-redux';
 // reactstrap components
 import {
   Button,
@@ -244,7 +244,22 @@ class Sidebar extends React.Component {
               </InputGroup>
             </Form> */}
             {/* Navigation */}
-            <Nav navbar>{this.createLinks(routes)}</Nav>
+            <Nav navbar>
+              {this.createLinks(routes)}
+              <NavItem>
+                <NavLink
+                  to="/auth/login"
+                  tag={NavLinkRRD}
+                  onClick={() => {
+                    this.props.logout([]);
+                  }}
+                  activeClassName="active"
+                >
+                  <i className="fas fa-sign-in-alt"></i>
+                  Logout
+                </NavLink>
+              </NavItem>
+            </Nav>
             {/* Divider */}
           </Collapse>
         </Container>
@@ -274,4 +289,16 @@ Sidebar.propTypes = {
   }),
 };
 
-export default Sidebar;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: (s) => {
+      dispatch({ type: 'logout', payload: { s } });
+    },
+  };
+};
+const mapStateToProps = (state) => {
+  return {
+    student: state.student,
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

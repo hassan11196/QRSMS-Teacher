@@ -432,6 +432,7 @@ class ManualAttendance extends Component {
                         <select>
                           {student_data_for_day[0].status}
                           <option
+                            // style={{ width: '5rem', height: '3rem' }}
                             selected={
                               student_data_for_day[0].status === 'A' ? true : false
                             }
@@ -439,6 +440,12 @@ class ManualAttendance extends Component {
                             A
                           </option>
                           <option
+                            // style={{
+                            //   minWidth: '5rem',
+                            //   maxWidth: '5rem',
+                            //   minHeight: '1.75rem',
+                            //   maxHeight: '1.75rem',
+                            // }}
                             selected={
                               student_data_for_day[0].status === 'P' ? true : false
                             }
@@ -698,9 +705,7 @@ class ManualAttendance extends Component {
         axios
           .post('/teacher/get_attendance/', query_section, config)
           .then((response) => {
-            console.log('attendace data arha h');
             console.log(response.data);
-            //console.log(attendance_data.student_sheets[0].attendance_sheet.scsddc);
             console.log(
               response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
             );
@@ -969,7 +974,7 @@ class ManualAttendance extends Component {
 
             <div style={{ marginLeft: '-2px', marginTop: '1rem' }}>
               <Card style={{ border: '1px solid black' }}>
-                <Card.Header style={{ backgroundColor: 'black' }}>
+                <Card.Header style={{ marginTop: '-1px', backgroundColor: 'black' }}>
                   <span>
                     <h3 style={{ fontWeight: 'bold', color: 'white' }}>
                       Student Attendance
