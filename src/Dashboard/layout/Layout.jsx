@@ -12,10 +12,10 @@ import routes from 'routes.js';
 
 class DashboardLayout extends React.Component {
   componentDidMount() {
-    document.body.classList.add('bg-default');
+    document.body.classList.add('bg-white');
   }
   componentWillUnmount() {
-    document.body.classList.remove('bg-default');
+    document.body.classList.remove('bg-white');
   }
   getRoutes(routes) {
     return routes.map((prop, key) => {
