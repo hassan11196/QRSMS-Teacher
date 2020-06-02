@@ -62,7 +62,13 @@ class NavBar extends Component {
   }
   render() {
     console.log(this.state.TeacherInfo);
-    if (this.state.TeacherInfo === [] || this.state.logout === true) {
+    if (
+      this.state.logout === true ||
+      this.state.TeacherInfo === [] ||
+      this.props.teacher === [] ||
+      this.props.teacher === null ||
+      this.props.teacher === undefined
+    ) {
       return <Redirect to="/auth/login" />;
     } else
       return (

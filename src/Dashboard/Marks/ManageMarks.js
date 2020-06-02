@@ -57,6 +57,7 @@ class ManageMarks extends Component {
       custom: false,
       visible: false,
       open: false,
+      custom: false,
     };
     this.CourseBox = this.CourseBox.bind(this);
     this.SectionBox = this.SectionBox.bind(this);
