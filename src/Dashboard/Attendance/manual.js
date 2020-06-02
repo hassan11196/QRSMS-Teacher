@@ -345,17 +345,17 @@ class ManualAttendance extends Component {
   }
   ////////////////////
   getNewAttendanceEntry(attendance_list, student_list) {
-    let new_lno = attendance_list.length + 1;
-    let ldate = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
-    let new_student_list = student_list.map((student) => {
-      return { uid: student.uid, status: 'A' };
-    });
-    return {
-      lno: new_lno,
-      ldate: ldate,
-      student_list: new_student_list,
-      credit_hours: 3,
-    };
+    // let new_lno = attendance_list.length + 1;
+    // let ldate = new Date().toJSON().slice(0, 10).replace(/-/g, '/');
+    // let new_student_list = student_list.map((student) => {
+    //   return { uid: student.uid, status: 'A' };
+    // });
+    // return {
+    //   lno: new_lno,
+    //   ldate: ldate,
+    //   student_list: new_student_list,
+    //   credit_hours: 3,
+    // };
   }
   renderTable() {
     return (
@@ -479,15 +479,15 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
             <th style={{ fontWeight: '700' }}>Lecture No.</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet
-                .reverse()
-                .map((day_att, index) => {
+              this.state.fetched_attendance_data.class_sheet.map(
+                (day_att, index) => {
                   return (
                     <th key={index} style={{ fontWeight: '700' }}>
                       {this.state.fetched_attendance_data.class_sheet.length - index}
                     </th>
                   );
-                })
+                }
+              )
             ) : (
               <h5></h5>
             )}
@@ -496,15 +496,15 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
             <th style={{ fontWeight: '700' }}>Lecture Slot</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet
-                .reverse()
-                .map((day_att, index) => {
+              this.state.fetched_attendance_data.class_sheet.map(
+                (day_att, index) => {
                   return (
                     <th key={index} style={{ fontWeight: '700' }}>
                       {day_att.attendance_slot}
                     </th>
                   );
-                })
+                }
+              )
             ) : (
               <h5></h5>
             )}
@@ -513,15 +513,13 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
             <th style={{ fontWeight: '700' }}>Lecture Date.</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet
-                .reverse()
-                .map((day_att, i) => {
-                  return (
-                    <th style={{ fontWeight: '700' }} key={i}>
-                      {day_att.class_date}
-                    </th>
-                  );
-                })
+              this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
+                return (
+                  <th style={{ fontWeight: '700' }} key={i}>
+                    {day_att.class_date}
+                  </th>
+                );
+              })
             ) : (
               <h5></h5>
             )}
@@ -530,15 +528,13 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
             <th style={{ fontWeight: '700' }}>Duration Hours</th>
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet
-                .reverse()
-                .map((day_att, i) => {
-                  return (
-                    <th style={{ fontWeight: '700' }} key={i}>
-                      {day_att.duration_hour}
-                    </th>
-                  );
-                })
+              this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
+                return (
+                  <th style={{ fontWeight: '700' }} key={i}>
+                    {day_att.duration_hour}
+                  </th>
+                );
+              })
             ) : (
               <h5></h5>
             )}
@@ -549,13 +545,11 @@ class ManualAttendance extends Component {
             <th style={{ fontWeight: '700' }}>Roll No </th>
 
             {this.state.fetched_attendance_data !== undefined ? (
-              this.state.fetched_attendance_data.class_sheet
-                .reverse()
-                .map((day_att, i) => {
-                  return (
-                    <th style={{ fontWeight: '700', fontSize: '15px' }} key={i}></th>
-                  );
-                })
+              this.state.fetched_attendance_data.class_sheet.map((day_att, i) => {
+                return (
+                  <th style={{ fontWeight: '700', fontSize: '15px' }} key={i}></th>
+                );
+              })
             ) : (
               <h5></h5>
             )}
@@ -564,9 +558,8 @@ class ManualAttendance extends Component {
         <tbody>
           {console.log('Ahsan', this.state.fetched_attendance_data.student_sheets)}
           {this.state.fetched_attendance_data !== undefined ? (
-            this.state.fetched_attendance_data.student_sheets
-              .reverse()
-              .map((student_data, index) => {
+            this.state.fetched_attendance_data.student_sheets.map(
+              (student_data, index) => {
                 return (
                   <tr key={index}>
                     <td>{index + 1}</td>
@@ -578,9 +571,8 @@ class ManualAttendance extends Component {
                     <td>{student_data.student.uid}</td>
 
                     {student_data.attendance_sheet.attendance.length > 0 ? (
-                      this.state.fetched_attendance_data.class_sheet
-                        .reverse()
-                        .map((class_att) => {
+                      this.state.fetched_attendance_data.class_sheet.map(
+                        (class_att) => {
                           let attendance_of_stud = student_data.attendance_sheet.attendance.filter(
                             (att_obj) =>
                               att_obj.class_date === class_att.class_date &&
@@ -645,13 +637,15 @@ class ManualAttendance extends Component {
                                 </Form.Control>
                               </td>
                             );
-                        })
+                        }
+                      )
                     ) : (
                       <h5></h5>
                     )}
                   </tr>
                 );
-              })
+              }
+            )
           ) : (
             <h5></h5>
           )}
@@ -738,16 +732,17 @@ class ManualAttendance extends Component {
       })
       .then(() => {
         // window.location.reload()
-        let sheet = this.state.fetched_data;
-        console.log(sheet);
-        let new_entry = this.getNewAttendanceEntry(
-          sheet.attendance_list,
-          sheet.student_list
-        );
-        sheet.attendance_list.push(new_entry);
-        this.setState({
-          fetched_data: this.state.fetched_attendance_data,
-        });
+        // let sheet = this.state.fetched_data;
+        // console.log(sheet);
+        // // let new_entry = this.getNewAttendanceEntry(
+        // //   sheet.attendance_list,
+        // //   sheet.student_list
+        // // );
+        // // sheet.attendance_list.push(new_entry);
+        // this.setState({
+        //   fetched_data: this.state.fetched_attendance_data,
+        // });
+        this.getAttendanceOfSection();
       });
     // let sheet = this.state.fetched_data;
     // let new_entry = this.getNewAttendanceEntry(sheet.attendance_list, sheet.student_list);
@@ -789,6 +784,7 @@ class ManualAttendance extends Component {
       },
       () => {
         console.log(this.state.section);
+        this.getAttendanceOfSection();
       }
     );
     // this.setState(
@@ -799,6 +795,8 @@ class ManualAttendance extends Component {
     //     console.log(this.state.section);
     //   }
     // );
+  }
+  getAttendanceOfSection() {
     console.log(this.state.section);
     let query_section = {
       city: 'Karachi',
@@ -807,7 +805,7 @@ class ManualAttendance extends Component {
       degree: 'BS(CS)',
       semester_code: 'Spring2020',
       course_code: this.state.code,
-      section: sec,
+      section: this.state.section,
     };
 
     let config = {
@@ -827,8 +825,21 @@ class ManualAttendance extends Component {
         // console.log(
         //   response.data.attendance_data.student_sheets[0].attendance_sheet.scsddc
         // );
+        let fetched_data = response.data.attendance_data;
+
+        let sorted_class_sheet = response.data.attendance_data.class_sheet
+          .sort((first, second) => {
+            var n = Date(first.class_date) - Date(second.class_date);
+            if (n !== 0) {
+              return n;
+            } else {
+              return first.attendance_slot - second.attendance_slot;
+            }
+          })
+          .reverse();
+        fetched_data.class_sheet = sorted_class_sheet;
         this.setState({
-          fetched_attendance_data: response.data.attendance_data,
+          fetched_attendance_data: fetched_data,
           copy: response.data.attendance_data,
           fetched_status: true,
           ssdc: 'Spring2020_BS(CS)_ComputerSciences_MainCampus_Karachi', // Hardcoded ssdc
@@ -889,14 +900,14 @@ class ManualAttendance extends Component {
                   </Form.Label>
                   <Form.Control as="select" onChange={this.setHour}>
                     <option>Select Hour</option>
-                    <option name="1"> 8:00 AM - 9:00</option>
-                    <option name="2">9:00 AM- 10:00</option>
-                    <option name="3">10:00 AM- 11:00</option>
-                    <option name="4">11:00 AM- 12:00</option>
-                    <option name="5">12:00 AM- 1:00</option>
-                    <option name="6">1:00 AM- 2:00</option>
-                    <option name="7">2:00 AM- 3:00</option>
-                    <option name="8">3:00 AM- 4:00</option>
+                    <option name="1">08:00 AM - 09:00</option>
+                    <option name="2">09:00 AM - 10:00</option>
+                    <option name="3">10:00 AM - 11:00</option>
+                    <option name="4">11:00 AM - 12:00</option>
+                    <option name="5">12:00 PM - 01:00</option>
+                    <option name="6">01:00 PM - 02:00</option>
+                    <option name="7">02:00 PM - 03:00</option>
+                    <option name="8">03:00 PM - 04:00</option>
                   </Form.Control>
                 </form>
               </Col>
