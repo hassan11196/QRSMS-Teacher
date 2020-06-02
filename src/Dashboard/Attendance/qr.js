@@ -272,7 +272,7 @@ class QRAttendance extends Component {
     );
   }
   render() {
-    if (this.props.teacher === []) {
+    if (this.props.teacherSections === [] || this.props.teacherSections === null || this.props.teacherSections === undefined) {
       return <Redirect to="/auth/login" />;
     } else
       return (
