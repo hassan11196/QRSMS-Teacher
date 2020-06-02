@@ -30,7 +30,7 @@ class QRAttendance extends Component {
       hour: '',
       csrf_token: 0,
       json_qr: '',
-      SectionInfo: [],
+      SectionInfo: null,
       nodey: [],
       Section_Nodes: [],
       new_scsddc: '',
@@ -67,10 +67,10 @@ class QRAttendance extends Component {
       console.log('Weird Table');
       let nodey = [];
       // nodey.push(this.renderdata(this.state.SectionInfo[0]));
-
-      this.state.SectionInfo[0].forEach((element) => {
-        nodey.push(this.renderdata(element));
-      });
+      if (this.state.SectionInfo !== null)
+        this.state.SectionInfo[0].forEach((element) => {
+          nodey.push(this.renderdata(element));
+        });
 
       console.log(nodey);
       this.setState({
@@ -272,7 +272,7 @@ class QRAttendance extends Component {
     );
   }
   render() {
-    if (this.props.teacherSections === [] || this.props.teacherSections === null || this.props.teacherSections === undefined) {
+    if (this.props.teacher === [] || this.props.teacher === null || this.props.teacher === undefined || this.props.teacherSections === [] || this.props.teacherSections === null || this.props.teacherSections === undefined) {
       return <Redirect to="/auth/login" />;
     } else
       return (
