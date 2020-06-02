@@ -129,13 +129,13 @@ class QRAttendance extends Component {
     });
     this.toggle();
   };
+  1;
   Modal1render = () => {
     console.log('this.state.json_qr');
     console.log(this.state.json_qr);
     return (
-      <Modal id="modal" isOpen={this.state.modal2} toggle={this.toggle2}>
+      <Modal isOpen={this.state.modal2} toggle={this.toggle2}>
         <ModalBody style={{ textAlign: 'center', overflow: 'auto' }}>
-          {/* <h3>{this.state.response_start_attendance}</h3> */}
           <QRCode
             level="L"
             id="QR"
@@ -267,7 +267,7 @@ class QRAttendance extends Component {
           </BTTN>
         </td>
         <div></div>
-      </tr >
+      </tr>
       // </li>
     );
   }
@@ -290,6 +290,7 @@ class QRAttendance extends Component {
             <Card style={{ border: '1px solid black' }}>
               <Card.Header
                 style={{
+                  marginTop: '-1px',
                   backgroundColor: 'black',
                   border: '1px solid black',
                   marginLeft: '-1px',

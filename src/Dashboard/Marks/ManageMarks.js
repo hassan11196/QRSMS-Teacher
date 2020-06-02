@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon, Input } from 'semantic-ui-react';
 
+import { Message } from 'semantic-ui-react';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { connect } from 'react-redux';
@@ -40,6 +42,7 @@ class ManageMarks extends Component {
       currentWtg: '',
       currentMarks: '',
       newWtg: 0,
+      Total: 0,
       newMarks: 0,
       code: '',
       TeacherFetchedCourses: [],
@@ -51,6 +54,7 @@ class ManageMarks extends Component {
       Tmarks: 0,
       scsddc: '',
       marksInfo: [],
+      custom: false,
       visible: false,
       open: false,
     };
@@ -67,36 +71,50 @@ class ManageMarks extends Component {
   }
 
   change_evaluation() {
-
     let form = new FormData();
-    form.append('csrfmiddlewaretoken', this.state.csrf_token)
-    form.append('scsddc', this.state.scsddc)
-    form.append('marks_type', this.state.currentEvaluationtype)
-    form.append('new_type', this.state.currentEvaluationtype)
-    form.append('old_marks', this.state.currentMarks)
-    form.append('new_marks', this.state.newMarks)
-    form.append('old_weightage', this.state.currentWtg)
-    form.append('new_weightage', this.state.newWtg)
+    form.append('csrfmiddlewaretoken', this.state.csrf_token);
+    form.append('scsddc', this.state.scsddc);
+    form.append('marks_type', this.state.currentEvaluationtype);
+    form.append('new_type', this.state.currentEvaluationtype);
+    form.append('old_marks', this.state.currentMarks);
+    form.append('new_marks', this.state.newMarks);
+    form.append('old_weightage', this.state.currentWtg);
+    form.append('new_weightage', this.state.newWtg);
 
     axios.post('/teacher/update_evaluation/', form).then((response) => {
-      if (response.data.Status === "Success") {
-
+      if (response.data.Status === 'Success') {
         form.append('csrfmiddlewaretoken', this.state.csrf_token);
-        form.append('scsddc', this.state.scsddc)
+        form.append('scsddc', this.state.scsddc);
         axios.post('/teacher/get_marks_info/', form).then((response) => {
-          console.log(response.data);
+          console.log(response);
           this.setState({
             marksInfo: response.data,
             open: false,
           });
         });
-        alert("Evaluation Updated")
+        this.setState(
+          {
+            type: 'success',
+            snackMessage: 'Evaluation Updated',
+          },
+          () => {
+            this.notify();
+          }
+        );
+        // alert('Evaluation Updated');
+      } else {
+        this.setState(
+          {
+            type: 'error',
+            snackMessage: "Evaluation Couldn't be updated.Please Retry",
+          },
+          () => {
+            this.notifyDanger();
+          }
+        );
+        // alert("Evaluation Couldn't be updated.Please Retry");
       }
-      else {
-        alert("Evaluation Couldn't be updated.Please Retry")
-      }
-    })
-
+    });
   }
   notify = () => {
     toast.success(
@@ -209,10 +227,39 @@ class ManageMarks extends Component {
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('scsddc', this.state.scsddc);
     axios.post('/teacher/generate_grades/', form).then((response) => {
-      console.log(response);
+      if (response.data === 'Success') {
+        this.setState(
+          {
+            type: 'success',
+            snackMessage: 'Grades Finalize',
+          },
+          () => {
+            this.notify();
+          }
+        );
+      } else {
+        this.setState(
+          {
+            type: 'error',
+            snackMessage: 'Unable to Finalize Grades',
+          },
+          () => {
+            this.notifyDanger();
+          }
+        );
+      }
     });
   }
   startMarking() {
+    if (this.state.Evaluation === '') {
+      this.setState({
+        error: 'Evaluation Type is not defined',
+        showAlert: true,
+        visible: false,
+      });
+      return;
+    }
+
     let form = new FormData();
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('scsddc', this.state.scsddc);
@@ -279,14 +326,25 @@ class ManageMarks extends Component {
       }
     );
     let form = new FormData();
-
+    var Total = 0;
     form.append('csrfmiddlewaretoken', this.state.csrf_token);
     form.append('scsddc', newscs);
     axios.post('/teacher/get_marks_info/', form).then((response) => {
       console.log(response.data);
-      this.setState({
-        marksInfo: response.data,
-      });
+      this.setState(
+        {
+          marksInfo: response.data,
+        },
+        () => {
+          var len = this.state.marksInfo.length;
+          for (var i = 0; i < len; i++) {
+            Total = Total + this.state.marksInfo[i].weightage;
+          }
+          this.setState({
+            Total: Total,
+          });
+        }
+      );
     });
     console.log(this.state.marksInfo);
   }
@@ -296,7 +354,9 @@ class ManageMarks extends Component {
         newEvaluationtype: e.target.value,
       },
       () => {
-        console.log(this.state.newEvaluationtype + "  " + this.state.currentEvaluationtype);
+        console.log(
+          this.state.newEvaluationtype + '  ' + this.state.currentEvaluationtype
+        );
       }
     );
   }
@@ -306,7 +366,7 @@ class ManageMarks extends Component {
     }
   }
   handleChange(e) {
-    console.log(e.target.value + " " + e.target.name)
+    console.log(e.target.value + ' ' + e.target.name);
     this.setState({
       [e.target.name]: e.target.value,
     });
@@ -325,7 +385,6 @@ class ManageMarks extends Component {
       return (
         <div>
           <NavBar />
-
           <Container fluid>
             <br />
             <div style={{ width: 'auto', paddingBottom: '2rem' }}>
@@ -355,26 +414,11 @@ class ManageMarks extends Component {
                   this.setState({ open: !this.state.visible });
                 }}
               >
-                <h2 style={{ fontWeight: 'bold' }}>Edit {this.state.currentEvaluationtype}'s Evaluation</h2>
+                <h2 style={{ fontWeight: 'bold' }}>
+                  Edit {this.state.currentEvaluationtype}'s Evaluation
+                </h2>
               </ModalHeader>
               <ModalBody>
-                <Row>
-                  <Col xs={9}>
-                    <div>
-                      <Form.Label style={{ fontWeight: 'bold' }}>
-                        Evaluation Type
-                        </Form.Label>
-                      <form>
-                        <Input
-                          onChange={this.setEvaluation}
-                          value={this.state.newEvaluationtype}
-                        />
-                      </form>
-                    </div>
-
-                  </Col>
-
-                </Row>
                 <Row style={{ marginTop: '1rem' }}>
                   <Col xs={6}>
                     <form>
@@ -405,11 +449,14 @@ class ManageMarks extends Component {
                 </Row>
               </ModalBody>
               <ModalFooter>
-                <BTTN color="primary"
+                <BTTN
+                  color="primary"
                   onClick={() => {
-                    this.change_evaluation()
+                    this.change_evaluation();
                   }}
-                >Save</BTTN>{' '}
+                >
+                  Save
+                </BTTN>{' '}
                 <BTTN
                   color="secondary"
                   onClick={() => {
@@ -461,24 +508,24 @@ class ManageMarks extends Component {
                             <option name="Project" value="Project">
                               Project
                             </option>
-
                           </Form.Control>
                         </form>
                       </div>
                     ) : (
-                        <div>
-                          <Form.Label style={{ fontWeight: 'bold' }}>
-                            Evaluation Type
+                      <div>
+                        <Form.Label style={{ fontWeight: 'bold' }}>
+                          Evaluation Type
                         </Form.Label>
-                          <form>
-                            <Input
-                              placeholder={'Enter Evaluation Type'}
-                              style={{ width: '100%' }}
-                              onChange={this.setEvaluation}
-                            />
-                          </form>
-                        </div>
-                      )}
+                        <form>
+                          <Input
+                            name="Evaluation"
+                            placeholder={'Enter Evaluation Type'}
+                            style={{ width: '100%' }}
+                            onChange={this.handleChange}
+                          />
+                        </form>
+                      </div>
+                    )}
                   </Col>
                   <Col xs={3}>
                     <Form.Label style={{ marginBottom: '1rem', fontWeight: 'bold' }}>
@@ -550,8 +597,8 @@ class ManageMarks extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                        <h2>Courses Not Available</h2>
-                      )}
+                      <h2>Courses Not Available</h2>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -565,8 +612,8 @@ class ManageMarks extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                        <option>Select A Course First</option>
-                      )}
+                      <option>Select A Course First</option>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -589,22 +636,22 @@ class ManageMarks extends Component {
                     Add Evaluation
                   </BTTN>
                 ) : (
-                    <BTTN
-                      primary
-                      onClick={() => {
-                        this.setState({
-                          visible: true,
-                        });
-                      }}
-                    >
-                      <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+                  <BTTN
+                    primary
+                    onClick={() => {
+                      this.setState({
+                        visible: true,
+                      });
+                    }}
+                  >
+                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
                     Add Evaluation
-                    </BTTN>
-                  )}
+                  </BTTN>
+                )}
               </Col>
               <Col xs={6}>
                 <div style={{ float: 'right' }}>
-                  {this.state.marksInfo.length === 0 ? (
+                  {this.state.marksInfo.length === 0 || this.state.Total < 100 ? (
                     <BTTN
                       primary
                       disabled
@@ -619,23 +666,46 @@ class ManageMarks extends Component {
                       Finalize Grades
                     </BTTN>
                   ) : (
-                      <BTTN
-                        primary
-                        onClick={() => {
-                          this.finalize();
-                        }}
-                      >
-                        <i
-                          style={{ paddingRight: '1rem' }}
-                          className="fas fa-check-circle"
-                        ></i>
+                    <BTTN
+                      primary
+                      onClick={() => {
+                        this.finalize();
+                      }}
+                    >
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-check-circle"
+                      ></i>
                       Finalize Grades
-                      </BTTN>
-                    )}
+                    </BTTN>
+                  )}
                 </div>
               </Col>
             </Row>
             <br />
+            {this.state.showAlert === true ? (
+              <Message negative>
+                <Message.Header>
+                  <i
+                    className="fas fa-exclamation-triangle"
+                    style={{ paddingRight: '2rem' }}
+                  ></i>
+                  {this.state.error}
+                  <span style={{ float: 'right' }}>
+                    {' '}
+                    <i
+                      className="fa fa-times"
+                      style={{ paddingRight: '2rem' }}
+                      onClick={() => {
+                        this.setState({
+                          showAlert: false,
+                        });
+                      }}
+                    ></i>
+                  </span>
+                </Message.Header>
+              </Message>
+            ) : null}
             <div style={{ height: '1rem' }}></div>
             {this.state.section !== null ? (
               <div>
@@ -828,30 +898,30 @@ class ManageMarks extends Component {
                     </Card>
                   </div>
                 ) : (
-                    <div
-                      style={{
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        marginTop: '2rem',
-                        textAlign: 'center',
-                      }}
-                    >
-                      No Marks Data
-                    </div>
-                  )}
+                  <div
+                    style={{
+                      fontSize: '20px',
+                      fontWeight: 'bold',
+                      marginTop: '2rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    No Marks Data
+                  </div>
+                )}
               </div>
             ) : (
-                <div
-                  style={{
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                    marginTop: '2rem',
-                    textAlign: 'center',
-                  }}
-                >
-                  Select Course and Section First
-                </div>
-              )}
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginTop: '2rem',
+                  textAlign: 'center',
+                }}
+              >
+                Select Course and Section First
+              </div>
+            )}
           </Container>
         </div>
       );

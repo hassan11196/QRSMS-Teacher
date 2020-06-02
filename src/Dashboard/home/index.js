@@ -67,7 +67,10 @@ class Home extends React.Component {
             <Container className="mt-7" fluid style={{ paddingBottom: '3rem' }}>
               <Row>
                 <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
-                  <Card className="card-profile shadow">
+                  <Card
+                    style={{ border: '1px solid black' }}
+                    className="card-profile shadow"
+                  >
                     <Row className="justify-content-center">
                       <Col className="order-lg-2" lg="3">
                         <div className="card-profile-image">
@@ -108,7 +111,7 @@ class Home extends React.Component {
                   </Card>
                 </Col>
                 <Col className="order-xl-1" xl="8">
-                  <Card className="shadow">
+                  <Card className="shadow" style={{ border: '1px solid black' }}>
                     <CardHeader className="bg-white border-0">
                       <Row className="align-items-center">
                         <Col xs="8">

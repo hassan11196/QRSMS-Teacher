@@ -14,16 +14,36 @@ import {
   DropdownToggle,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+
 class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      csrf: '',
+      logout: false,
       TeacherInfo: [],
       popoverOpen: false,
     };
     this.toggle = this.toggle.bind(this);
   }
   componentDidMount() {
+    axios.get('/management/get_csrf').then((response) => {
+      return response.data.csrftoken;
+    });
+
+    this.setState(
+      {
+        csrf_token: Cookies.get('csrftoken'),
+      },
+      () => {
+        // console.log(this.state.csrf_token);
+      }
+    );
     this.setState({
       TeacherInfo: this.props.teacher,
     });
@@ -42,7 +62,7 @@ class NavBar extends Component {
   }
   render() {
     console.log(this.state.TeacherInfo);
-    if (this.state.TeacherInfo === []) {
+    if (this.state.TeacherInfo === [] || this.state.logout === true) {
       return <Redirect to="/auth/login" />;
     } else
       return (
@@ -65,41 +85,6 @@ class NavBar extends Component {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="ml-auto">
-                {/* <div
-                style={{ display: 'inline-flex', float: 'right' }}
-                bg="dark"
-                variant="dark"
-                float="right"
-              >
-                <h3
-                  style={{
-                    paddingTop: '1rem',
-                    paddingRight: '1rem',
-                    color: 'white',
-                    wordSpacing: '2px',
-                  }}
-                >
-                  <img
-                    onClick={
-                      (() => {
-                        this.toggle();
-                      },
-                      () => {
-                        console.log(this.state.popoverOpen);
-                      })
-                    }
-                    id="Popover1"
-                    src={D}
-                    style={{
-                      width: '3.5rem',
-                      height: '3.5rem',
-                      borderRadius: '50%',
-                      margin: '1rem',
-                    }}
-                  />
-                  Howdy, {this.state.user.first_name} {this.state.user.last_name}{' '}
-                </h3>
-              </div> */}
                 <UncontrolledDropdown nav style={{ marginLeft: '-50px' }}>
                   <DropdownToggle className="pr-2" nav>
                     <Media className="align-items-center">
@@ -152,9 +137,23 @@ class NavBar extends Component {
                   </DropdownItem> */}
                     <DropdownItem divider />
                     <DropdownItem
-                      onClick={() => {
-                        this.props.logout([]);
-                      }}
+                      onClick={
+                        (() => {
+                          this.props.logout([]);
+                        },
+                        () => {
+                          let form = new FormData();
+                          form.append('csrfmiddlewaretoken', this.state.csrf_token);
+                          axios.post('/teacher/logout/', form).then((response) => {
+                            console.log(response);
+                            if (response.status === 200) {
+                              this.setState({
+                                logout: true,
+                              });
+                            }
+                          });
+                        })
+                      }
                     >
                       <i className="ni ni-user-run" />
                       <span>Logout</span>

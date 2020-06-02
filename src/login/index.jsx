@@ -1,6 +1,8 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { Message } from 'semantic-ui-react';
+
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 // reactstrap components
@@ -25,6 +27,7 @@ class FacultyLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      invalidLogin: false,
       loading: false,
       username: '',
       password: '',
@@ -61,11 +64,6 @@ class FacultyLogin extends React.Component {
       loading: true,
       csrf_token: Cookies.get('csrftoken'),
     });
-    console.log('Start mein set hone k baad');
-
-    console.log(this.state.loading);
-
-    console.log('login function start horaha hai');
     // console.log(this.state)
     e.preventDefault();
     var formd = new FormData();
@@ -86,6 +84,13 @@ class FacultyLogin extends React.Component {
               facultydata: response.data,
             });
           }
+        });
+      })
+      .catch((error) => {
+        console.log(error.response.data.status);
+        this.setState({
+          invalidLogin: true,
+          error: error.response.data.status,
         });
       })
       .finally((response) => {
@@ -110,10 +115,36 @@ class FacultyLogin extends React.Component {
     }
     return (
       <>
+        {/* <div>
+          {this.state.invalidLogin === true ? (
+            <Message negative>
+              <Message.Header>
+                <i className="fas fa-exclamation-triangle"></i>
+                {this.state.error}
+              </Message.Header>
+            </Message>
+          ) : null}
+        </div> */}
+
         <Col lg="5" md="7">
           <Card className="shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
+            <div style={{ margin: '1rem' }}>
+              {this.state.invalidLogin === true ? (
+                <Message negative>
+                  <Message.Header style={{ textAlign: 'center' }}>
+                    <i
+                      className="fas fa-exclamation-triangle"
+                      style={{ marginRight: '1rem' }}
+                    ></i>
+                    <span style={{ textAlign: 'center' }}>
+                      Invalid ID or Password
+                    </span>
+                  </Message.Header>
+                </Message>
+              ) : null}
+            </div>
+            <CardHeader style={{ border: 'none' }} className="bg-transparent pb-5">
+              <div className="text-muted text-center mb-3">
                 QRSMS - Teacher Portal
               </div>
             </CardHeader>
@@ -149,7 +180,7 @@ class FacultyLogin extends React.Component {
                     />
                   </InputGroup>
                 </FormGroup>
-                <div className="custom-control custom-control-alternative custom-checkbox">
+                {/* <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
                     className="custom-control-input"
                     id=" customCheckLogin"
@@ -161,14 +192,18 @@ class FacultyLogin extends React.Component {
                   >
                     <span className="text-muted">Remember me</span>
                   </label>
-                </div>
+                </div> */}
                 <div className="text-center">
                   {this.state.loading ? (
                     this.LoadingSpinner()
                   ) : (
                     <Button
                       className="my-4"
-                      style={{borderRadius:'0.5rem',color:'white', backgroundColor:'black'}}
+                      style={{
+                        borderRadius: '0.5rem',
+                        color: 'white',
+                        backgroundColor: 'black',
+                      }}
                       type="button"
                       color="black"
                       onClick={this.handlelogin}
@@ -181,15 +216,6 @@ class FacultyLogin extends React.Component {
             </CardBody>
           </Card>
           <Row className="mt-3">
-            <Col xs="6">
-              <a
-                className="text-light"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <small>Forgot password?</small>
-              </a>
-            </Col>
             <Col className="text-right" xs="6">
               <a
                 className="text-light"

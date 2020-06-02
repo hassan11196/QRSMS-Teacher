@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import NavBar from '../Navbar/Navbar';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
 import { Table, Input } from 'reactstrap';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 import {
   Button,
   Card,
@@ -332,17 +334,57 @@ class ManualAttendance extends Component {
         }));
       })
       .then(() => {
-        console.log('HelloWrorld');
         axios
           .put(url, this.state.attData)
           .then((response) => {
             console.log(response);
           })
-          .catch((err) => {
-            console.log(err);
+          .catch((error) => {
+            console.log(error.response.data.status);
+            this.setState({
+              snackMessage: error.response.data.status,
+            });
+            this.notifyDanger();
           });
       });
   }
+  notifyDanger = () => {
+    toast.error(
+      <div
+        style={{
+          paddingLeft: '1rem',
+          borderRadius: '50%',
+          height: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div style={{ marginLeft: '-6px', marginRight: '8px', marginTop: '-26px' }}>
+          <i className="fas fa-exclamation-triangle"></i>
+        </div>
+        <div>
+          <h5 style={{ marginTop: '0.8rem' }}>
+            <b style={{ fontSize: '16px' }}>{'An Error Occured'}</b>
+          </h5>
+
+          <h6
+            style={{
+              marginBottom: '1rem',
+              fontSize: '13px',
+              marginLeft: '-20px',
+              width: '200px',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+            }}
+          >
+            {this.state.snackMessage}
+          </h6>
+        </div>
+      </div>,
+      { containerId: 'A' }
+    );
+  };
   ////////////////////
   getNewAttendanceEntry(attendance_list, student_list) {
     // let new_lno = attendance_list.length + 1;
@@ -884,6 +926,11 @@ class ManualAttendance extends Component {
       return (
         <div>
           <NavBar />
+          <ToastContainer
+            enableMultiContainer
+            containerId={'A'}
+            position={toast.POSITION.TOP_RIGHT}
+          />{' '}
           <Container fluid>
             <br />
             <div style={{ width: 'auto', paddingBottom: '2rem' }}>

@@ -15,6 +15,12 @@ import { NavLink as NavLinkRRD, Link } from 'react-router-dom';
 // nodejs library to set properties for components
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+
 // reactstrap components
 import {
   Button,
@@ -50,6 +56,7 @@ var ps;
 
 class Sidebar extends React.Component {
   state = {
+    csrf: '',
     collapseOpen: false,
   };
   constructor(props) {
@@ -72,6 +79,20 @@ class Sidebar extends React.Component {
       collapseOpen: false,
     });
   };
+  componentDidMount() {
+    axios.get('/management/get_csrf').then((response) => {
+      return response.data.csrftoken;
+    });
+
+    this.setState(
+      {
+        csrf_token: Cookies.get('csrftoken'),
+      },
+      () => {
+        console.log(this.state.csrf_token);
+      }
+    );
+  }
   // creates the links that appear in the left menu / Sidebar
   createLinks = (routes) => {
     return routes.map((prop, key) => {
@@ -250,9 +271,23 @@ class Sidebar extends React.Component {
                 <NavLink
                   to="/auth/login"
                   tag={NavLinkRRD}
-                  onClick={() => {
-                    this.props.logout([]);
-                  }}
+                  onClick={
+                    (() => {
+                      this.props.logout([]);
+                    },
+                    () => {
+                      let form = new FormData();
+                      form.append('csrfmiddlewaretoken', this.state.csrf_token);
+                      axios.post('/teacher/logout/', form).then((response) => {
+                        console.log(response);
+                        if (response.status === 200) {
+                          this.setState({
+                            logout: true,
+                          });
+                        }
+                      });
+                    })
+                  }
                   activeClassName="active"
                 >
                   <i className="fas fa-sign-in-alt"></i>
