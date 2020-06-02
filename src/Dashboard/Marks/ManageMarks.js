@@ -79,7 +79,22 @@ class ManageMarks extends Component {
     form.append('new_weightage', this.state.newWtg)
 
     axios.post('/teacher/update_evaluation/', form).then((response) => {
-      console.log(response.data)
+      if (response.data.Status === "Success") {
+
+        form.append('csrfmiddlewaretoken', this.state.csrf_token);
+        form.append('scsddc', this.state.scsddc)
+        axios.post('/teacher/get_marks_info/', form).then((response) => {
+          console.log(response.data);
+          this.setState({
+            marksInfo: response.data,
+            open: false,
+          });
+        });
+        alert("Evaluation Updated")
+      }
+      else {
+        alert("Evaluation Couldn't be updated.Please Retry")
+      }
     })
 
   }
