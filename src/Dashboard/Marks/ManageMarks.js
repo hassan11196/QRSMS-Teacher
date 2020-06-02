@@ -39,6 +39,8 @@ class ManageMarks extends Component {
       currentEvaluationtype: '',
       currentWtg: '',
       currentMarks: '',
+      newWtg: 0,
+      newMarks: 0,
       code: '',
       TeacherFetchedCourses: [],
       Evaluation: '',
@@ -51,7 +53,6 @@ class ManageMarks extends Component {
       marksInfo: [],
       visible: false,
       open: false,
-      custom: false,
     };
     this.CourseBox = this.CourseBox.bind(this);
     this.SectionBox = this.SectionBox.bind(this);
@@ -62,6 +63,25 @@ class ManageMarks extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.finalize = this.finalize.bind(this);
     this.handleSwitch = this.handleSwitch.bind(this);
+    this.change_evaluation = this.change_evaluation.bind(this);
+  }
+
+  change_evaluation() {
+
+    let form = new FormData();
+    form.append('csrfmiddlewaretoken', this.state.csrf_token)
+    form.append('scsddc', this.state.scsddc)
+    form.append('marks_type', this.state.currentEvaluationtype)
+    form.append('new_type', this.state.currentEvaluationtype)
+    form.append('old_marks', this.state.currentMarks)
+    form.append('new_marks', this.state.newMarks)
+    form.append('old_weightage', this.state.currentWtg)
+    form.append('new_weightage', this.state.newWtg)
+
+    axios.post('/teacher/update_evaluation/', form).then((response) => {
+      console.log(response.data)
+    })
+
   }
   notify = () => {
     toast.success(
@@ -258,10 +278,10 @@ class ManageMarks extends Component {
   setEvaluation(e) {
     this.setState(
       {
-        Evaluation: e.target.value,
+        newEvaluationtype: e.target.value,
       },
       () => {
-        console.log(this.state.Evaluation);
+        console.log(this.state.newEvaluationtype + "  " + this.state.currentEvaluationtype);
       }
     );
   }
@@ -271,6 +291,7 @@ class ManageMarks extends Component {
     }
   }
   handleChange(e) {
+    console.log(e.target.value + " " + e.target.name)
     this.setState({
       [e.target.name]: e.target.value,
     });
@@ -319,74 +340,25 @@ class ManageMarks extends Component {
                   this.setState({ open: !this.state.visible });
                 }}
               >
-                <h2 style={{ fontWeight: 'bold' }}>Edit Evaluation</h2>
+                <h2 style={{ fontWeight: 'bold' }}>Edit {this.state.currentEvaluationtype}'s Evaluation</h2>
               </ModalHeader>
               <ModalBody>
                 <Row>
                   <Col xs={9}>
-                    {this.state.custom === false ? (
+                    <div>
+                      <Form.Label style={{ fontWeight: 'bold' }}>
+                        Evaluation Type
+                        </Form.Label>
                       <form>
-                        <Form.Label style={{ fontWeight: 'bold' }}>
-                          Evaluation Type
-                        </Form.Label>
-                        <Form.Control as="select" onChange={this.setEvaluation}>
-                          <option selected disabled>
-                            {this.state.currentEvaluationtype}
-                          </option>
-                          <option name="Mid 1" value="Mid 1">
-                            Mid 1
-                          </option>
-                          <option name="Mid 2" value="Mid 2">
-                            Mid 2
-                          </option>
-                          <option name="Final" value="Final">
-                            Final
-                          </option>
-                          <option name="CP" value="CP">
-                            Class Participation
-                          </option>
-                          <option name="Project" value="Project">
-                            Project
-                          </option>
-                          <option name="Quiz" value="Quiz">
-                            Quiz
-                          </option>
-                          <option
-                            style={{
-                              backgroundImage: 'url(' + Graphics3 + ')',
-                            }}
-                            className="en"
-                            name="Assignment"
-                            value="Assignment"
-                          >
-                            Assignment
-                          </option>
-                        </Form.Control>
+                        <Input
+                          onChange={this.setEvaluation}
+                          value={this.state.newEvaluationtype}
+                        />
                       </form>
-                    ) : (
-                      <div>
-                        <Form.Label style={{ fontWeight: 'bold' }}>
-                          Evaluation Type
-                        </Form.Label>
-                        <form>
-                          <Input
-                            onChange={this.setEvaluation}
-                            value={this.state.currentEvaluationtype}
-                          />
-                        </form>
-                      </div>
-                    )}
+                    </div>
+
                   </Col>
-                  <Col xs={3}>
-                    <Form.Label style={{ marginBottom: '1rem', fontWeight: 'bold' }}>
-                      Custom ?
-                    </Form.Label>
-                    <Switch
-                      checked={this.state.custom}
-                      onChange={this.handleSwitch}
-                      className="mr-2 mb-2"
-                    />
-                  </Col>
+
                 </Row>
                 <Row style={{ marginTop: '1rem' }}>
                   <Col xs={6}>
@@ -396,9 +368,9 @@ class ManageMarks extends Component {
                       </Form.Label>
                       <Form.Control
                         as="input"
-                        value={this.state.currentMarks}
+                        value={this.state.newMarks}
                         onChange={this.handleChange}
-                        name="currentMarks"
+                        name="newMarks"
                       ></Form.Control>
                     </form>
                   </Col>
@@ -409,16 +381,20 @@ class ManageMarks extends Component {
                       </Form.Label>
                       <Form.Control
                         as="input"
-                        value={this.state.currentWtg}
+                        value={this.state.newWtg}
                         onChange={this.handleChange}
-                        name="currentWtg"
+                        name="newWtg"
                       ></Form.Control>
                     </form>
                   </Col>
                 </Row>
               </ModalBody>
               <ModalFooter>
-                <BTTN color="primary">Save</BTTN>{' '}
+                <BTTN color="primary"
+                  onClick={() => {
+                    this.change_evaluation()
+                  }}
+                >Save</BTTN>{' '}
                 <BTTN
                   color="secondary"
                   onClick={() => {
@@ -470,29 +446,24 @@ class ManageMarks extends Component {
                             <option name="Project" value="Project">
                               Project
                             </option>
-                            <option name="Quiz" value="Quiz">
-                              Quiz
-                            </option>
-                            <option name="Assignment" value="Assignment">
-                              Assignment
-                            </option>
+
                           </Form.Control>
                         </form>
                       </div>
                     ) : (
-                      <div>
-                        <Form.Label style={{ fontWeight: 'bold' }}>
-                          Evaluation Type
+                        <div>
+                          <Form.Label style={{ fontWeight: 'bold' }}>
+                            Evaluation Type
                         </Form.Label>
-                        <form>
-                          <Input
-                            placeholder={'Enter Evaluation Type'}
-                            style={{ width: '100%' }}
-                            onChange={this.setEvaluation}
-                          />
-                        </form>
-                      </div>
-                    )}
+                          <form>
+                            <Input
+                              placeholder={'Enter Evaluation Type'}
+                              style={{ width: '100%' }}
+                              onChange={this.setEvaluation}
+                            />
+                          </form>
+                        </div>
+                      )}
                   </Col>
                   <Col xs={3}>
                     <Form.Label style={{ marginBottom: '1rem', fontWeight: 'bold' }}>
@@ -564,8 +535,8 @@ class ManageMarks extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                      <h2>Courses Not Available</h2>
-                    )}
+                        <h2>Courses Not Available</h2>
+                      )}
                   </Form.Control>
                 </form>
               </Col>
@@ -579,8 +550,8 @@ class ManageMarks extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                      <option>Select A Course First</option>
-                    )}
+                        <option>Select A Course First</option>
+                      )}
                   </Form.Control>
                 </form>
               </Col>
@@ -603,18 +574,18 @@ class ManageMarks extends Component {
                     Add Evaluation
                   </BTTN>
                 ) : (
-                  <BTTN
-                    primary
-                    onClick={() => {
-                      this.setState({
-                        visible: true,
-                      });
-                    }}
-                  >
-                    <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
+                    <BTTN
+                      primary
+                      onClick={() => {
+                        this.setState({
+                          visible: true,
+                        });
+                      }}
+                    >
+                      <i style={{ paddingRight: '1rem' }} className="fas fa-plus"></i>
                     Add Evaluation
-                  </BTTN>
-                )}
+                    </BTTN>
+                  )}
               </Col>
               <Col xs={6}>
                 <div style={{ float: 'right' }}>
@@ -633,19 +604,19 @@ class ManageMarks extends Component {
                       Finalize Grades
                     </BTTN>
                   ) : (
-                    <BTTN
-                      primary
-                      onClick={() => {
-                        this.finalize();
-                      }}
-                    >
-                      <i
-                        style={{ paddingRight: '1rem' }}
-                        className="fas fa-check-circle"
-                      ></i>
+                      <BTTN
+                        primary
+                        onClick={() => {
+                          this.finalize();
+                        }}
+                      >
+                        <i
+                          style={{ paddingRight: '1rem' }}
+                          className="fas fa-check-circle"
+                        ></i>
                       Finalize Grades
-                    </BTTN>
-                  )}
+                      </BTTN>
+                    )}
                 </div>
               </Col>
             </Row>
@@ -686,6 +657,8 @@ class ManageMarks extends Component {
                             <th style={{ textAlign: 'center' }}>
                               Standard Deviation
                             </th>
+                            <th style={{ textAlign: 'center' }}>Max</th>
+                            <th style={{ textAlign: 'center' }}>Min</th>
                             <th style={{ textAlign: 'center' }}>Action</th>
                           </thead>
                           <tbody>
@@ -763,6 +736,22 @@ class ManageMarks extends Component {
                                       paddingTop: '2rem',
                                     }}
                                   >
+                                    {obj.max_marks}
+                                  </td>
+                                  <td
+                                    style={{
+                                      textAlign: 'center',
+                                      paddingTop: '2rem',
+                                    }}
+                                  >
+                                    {obj.min_marks}
+                                  </td>
+                                  <td
+                                    style={{
+                                      textAlign: 'center',
+                                      paddingTop: '2rem',
+                                    }}
+                                  >
                                     <UncontrolledDropdown>
                                       <DropdownToggle
                                         style={{ border: 'none' }}
@@ -789,6 +778,9 @@ class ManageMarks extends Component {
                                           right
                                           onClick={() => {
                                             this.setState({
+                                              newMarks: obj.total_marks,
+                                              newWtg: obj.weightage,
+                                              newEvaluationtype: obj.marks_type,
                                               currentEvaluationtype: obj.marks_type,
                                               currentMarks: obj.total_marks,
                                               currentWtg: obj.weightage,
@@ -821,30 +813,30 @@ class ManageMarks extends Component {
                     </Card>
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      fontSize: '20px',
-                      fontWeight: 'bold',
-                      marginTop: '2rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    No Marks Data
-                  </div>
-                )}
+                    <div
+                      style={{
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        marginTop: '2rem',
+                        textAlign: 'center',
+                      }}
+                    >
+                      No Marks Data
+                    </div>
+                  )}
               </div>
             ) : (
-              <div
-                style={{
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  marginTop: '2rem',
-                  textAlign: 'center',
-                }}
-              >
-                Select Course and Section First
-              </div>
-            )}
+                <div
+                  style={{
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    marginTop: '2rem',
+                    textAlign: 'center',
+                  }}
+                >
+                  Select Course and Section First
+                </div>
+              )}
           </Container>
         </div>
       );

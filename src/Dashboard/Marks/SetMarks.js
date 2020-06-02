@@ -289,20 +289,20 @@ class SetMarks extends Component {
                       Save
                     </BTTN>
                   ) : (
-                    <BTTN
-                      disabled
-                      primary
-                      onClick={() => {
-                        this.SaveMarks();
-                      }}
-                    >
-                      <i
-                        className="fas fa-save"
-                        style={{ paddingRight: '1rem' }}
-                      ></i>
+                      <BTTN
+                        disabled
+                        primary
+                        onClick={() => {
+                          this.SaveMarks();
+                        }}
+                      >
+                        <i
+                          className="fas fa-save"
+                          style={{ paddingRight: '1rem' }}
+                        ></i>
                       Save
-                    </BTTN>
-                  )}
+                      </BTTN>
+                    )}
                 </div>
               </Col>
               <Col xs={3}>
@@ -348,6 +348,7 @@ class SetMarks extends Component {
                     <th style={{ textAlign: 'center' }}>Serial No.</th>
                     <th style={{ textAlign: 'center' }}>ID</th>
                     <th style={{ textAlign: 'center' }}>Name</th>
+                    <th style={{ textAlign: 'center' }}>Total Marks</th>
                     <th style={{ textAlign: 'center' }}>Marks</th>
                     <th style={{ textAlign: 'center' }}>Weightage</th>
                   </thead>
@@ -358,6 +359,7 @@ class SetMarks extends Component {
                           <td>{i + 1}</td>
                           <td>{obj.student_id}</td>
                           <td>{obj.student_name}</td>
+                          <td>{obj.total_marks}</td>
                           <td style={{ width: '5rem', textAlign: 'center' }}>
                             <Input
                               style={{
