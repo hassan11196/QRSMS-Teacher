@@ -272,7 +272,7 @@ class QRAttendance extends Component {
     );
   }
   render() {
-    if (this.props.teacher === [] || this.props.teacher === null || this.props.teacher === undefined || this.props.teacherSections === [] || this.props.teacherSections === null || this.props.teacherSections === undefined) {
+    if (this.props.teacherSections === [] || this.props.teacherSections === null || this.props.teacherSections === undefined) {
       return <Redirect to="/auth/login" />;
     } else
       return (
@@ -338,6 +338,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     teacher: state.teacherinfo,
+    teacherSections: state.TeacherSections,
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(QRAttendance);
