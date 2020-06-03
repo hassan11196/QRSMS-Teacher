@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 // import 'mdbreact/dist/css/mdb.css';
 import { TableRow, td } from 'material-ui';
 import { Button as BTTN, Icon } from 'semantic-ui-react';
+import { Initial } from 'react-initial';
 import { Redirect } from 'react-router-dom';
 import NavBar from '../Navbar/Navbar';
 import { Card, Button, Row, Col, Form, Breadcrumb } from 'react-bootstrap';
@@ -10,6 +11,7 @@ import {
   Table,
   Container,
   Modal,
+  Media,
   ModalFooter,
   ModalHeader,
   ModalBody,
@@ -154,7 +156,7 @@ class QRAttendance extends Component {
                 this.zoomin();
               }}
             >
-              <i className="icon-zoom-in"></i>
+              <i style={{paddingRight:'1rem'}} className="fas fa-search-minus"></i>
               Zoom In
             </BTTN>
           </div>
@@ -164,7 +166,7 @@ class QRAttendance extends Component {
               this.zoomout();
             }}
           >
-            <i className="icon-zoom-out"></i>
+            <i style={{paddingRight:'1rem'}} className="fas fa-search-plus"></i>
             Zoom Out
           </BTTN>
         </ModalFooter>
@@ -173,15 +175,15 @@ class QRAttendance extends Component {
   };
   zoomin = () => {
     var GFG = document.getElementById('QR');
-    var modal1 = document.getElementById('modal');
+    // var modal1 = document.getElementById('m  odal');
     var currWidth = GFG.clientWidth;
     var currHeight = GFG.clientHeight;
-    var modalWidth = modal1.clientWidth;
-    var modalHeight = modal1.clientHeight;
+    // var modalWidth = modal1.clientWidth;
+    // var modalHeight = modal1.clientHeight;
     GFG.style.width = currWidth + 100 + 'px';
     GFG.style.height = currHeight + 100 + 'px';
-    modal1.style.width = modalWidth + 100 + 'px';
-    modal1.style.height = modalHeight + 100 + 'px';
+    // modal1.style.width = modalWidth + 100 + 'px';
+    // modal1.style.height = modalHeight + 100 + 'px';
   };
 
   zoomout = () => {
@@ -243,13 +245,36 @@ class QRAttendance extends Component {
     console.log('registration table k ander');
     console.log(c);
     return (
-      <tr>
-        <td
-          style={{ fontSize: '13.5px', textAlign: 'center' }}
-          key={'rowCol' + c.course_name}
-        >
-          {c.course_name}
-        </td>
+      <tr    key={'rowCol' + c.course_name}
+      >
+        <th scope="row" style={{ textAlign: 'center' }}>
+                                    <Media className="align-items-center">
+                                      <a
+                                        className="avatar rounded-circle mr-3"
+                                        onClick={(e) => e.preventDefault()}
+                                      >
+                                        <Initial
+                                          radius={55}
+                                          height={40}
+                                          width={40}
+                                          seed={1}
+                                          fontSize={20}
+                                          name={c.course.course_name}
+                                        />
+                                      </a>
+                                      <Media>
+                                        <span
+                                          style={{fontSize: '13.5px', textAlign: 'center' }}
+                                          className="mb-0 text-sm"
+                                        >
+                                          {c.course.course_name}
+                                        </span>
+                                      </Media>
+                                    </Media>
+                                  </th>
+        
+          
+        
         <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.course_code}</td>
         <td style={{ fontSize: '13.5px', textAlign: 'center' }}>{c.section_name}</td>
         <td style={{ fontSize: '13.5px', textAlign: 'center' }}>
@@ -308,7 +333,7 @@ class QRAttendance extends Component {
                   responsive
                 >
                   <thead className="thead-dark">
-                    <th style={{ textAlign: 'center' }}>Course Name</th>
+                    <th style={{marginLeft:'2rem'}}>Course Name</th>
                     <th style={{ textAlign: 'center' }}>Course Code</th>
                     <th style={{ textAlign: 'center' }}>Section</th>
                     <th style={{ textAlign: 'center' }}>No of Seats</th>
