@@ -318,7 +318,7 @@ class ManualAttendance extends Component {
     url = url.replace('http://localhost:8000', '');
     console.log('URL Before Replace', url);
     console.log(window.location.protocol);
-    if (window.location.protocol === 'https') {
+    if (window.location.protocol === 'https:') {
       url = url.replace(/^http:\/\//i, 'https://');
     }
     console.log('URL Aftet Replace', url);
