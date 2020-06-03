@@ -55,7 +55,7 @@ class DashboardLayout extends React.Component {
             imgAlt: '...',
           }}
         />
-        <div style={{backgroundColor:'#1B6A90', height:'70rem'}} className="main-content" ref="mainContent">
+        <div style={{backgroundColor:'#133469', height:'70rem'}} className="main-content" ref="mainContent">
           {/* <AdminNavbar
             {...this.props}
             brandText={this.getBrandText(this.props.location.pathname)}

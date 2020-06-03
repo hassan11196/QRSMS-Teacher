@@ -251,7 +251,7 @@ class Home extends React.Component {
                               }}
                             >
                               {' '}
-                              {this.state.user_data.current_city}
+                              {this.state.user_data.permanent_city}
                             </span>
                           </Col>
                         </Row>
@@ -291,6 +291,45 @@ class Home extends React.Component {
                             >
                               {' '}
                               {this.state.user_data.CNIC}
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row style={{ paddingTop: '1rem   ' }}>
+                          {' '}
+                          <Col lg="6">
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-country"
+                            >
+                              Mobile No:
+                            </label>
+                            <span
+                              style={{
+                                fontWeight: '500',
+                                paddingLeft: '0.6rem',
+                                fontSize: '13px',
+                              }}
+                            >
+                              {' '}
+                              {this.state.user_data.mobile_contact}
+                            </span>
+                          </Col>
+                          <Col lg="6">
+                            <label
+                              className="form-control-label"
+                              htmlFor="input-country"
+                            >
+                              Emergency Contact:
+                            </label>
+                            <span
+                              style={{
+                                fontWeight: '500',
+                                paddingLeft: '0.6rem',
+                                fontSize: '13px',
+                              }}
+                            >
+                              {' '}
+                              {this.state.user_data.emergency_contact}
                             </span>
                           </Col>
                         </Row>
