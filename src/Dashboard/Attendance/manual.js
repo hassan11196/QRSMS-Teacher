@@ -23,7 +23,7 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 
 class AttendanceEntry {
-  constructor() { }
+  constructor() {}
 }
 
 const attendance_data = {
@@ -316,7 +316,12 @@ class ManualAttendance extends Component {
     let url = e.target.options[e.target.selectedIndex].getAttribute('url');
     let state = e.target.options[e.target.selectedIndex].getAttribute('state');
     url = url.replace('http://localhost:8000', '');
-
+    console.log('URL Before Replace', url);
+    console.log(window.location.protocol);
+    if (window.location.protocol === 'https:') {
+      url = url.replace(/^http:\/\//i, 'https://');
+    }
+    console.log('URL Aftet Replace', url);
     axios
       .get(url)
       .then((response) => {
@@ -531,8 +536,8 @@ class ManualAttendance extends Component {
                 }
               )
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
@@ -548,8 +553,8 @@ class ManualAttendance extends Component {
                 }
               )
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
@@ -563,8 +568,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr>
             <th style={{ fontWeight: '700' }} colSpan="2"></th>
@@ -578,8 +583,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
           <tr style={{ border: 'thin solid white' }}>
             <th style={{ fontWeight: '700' }}>S no.</th>
@@ -593,8 +598,8 @@ class ManualAttendance extends Component {
                 );
               })
             ) : (
-                <h5></h5>
-              )}
+              <h5></h5>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -682,15 +687,15 @@ class ManualAttendance extends Component {
                         }
                       )
                     ) : (
-                        <h5></h5>
-                      )}
+                      <h5></h5>
+                    )}
                   </tr>
                 );
               }
             )
           ) : (
-              <h5></h5>
-            )}
+            <h5></h5>
+          )}
         </tbody>
       </Table>
     );
@@ -919,10 +924,14 @@ class ManualAttendance extends Component {
     console.log(this.state.hour);
   };
   render() {
-    console.log("HGe")
+    console.log('HGe');
     console.log(this.props.teacherSections);
-    console.log("HGe")
-    if (this.props.teacherSections === [] || this.props.teacherSections === null || this.props.teacherSections === undefined) {
+    console.log('HGe');
+    if (
+      this.props.teacherSections === [] ||
+      this.props.teacherSections === null ||
+      this.props.teacherSections === undefined
+    ) {
       return <Redirect to="/auth/login" />;
     } else
       return (
@@ -970,8 +979,8 @@ class ManualAttendance extends Component {
                         return this.CourseBox(c);
                       })
                     ) : (
-                        <h2>Courses Not Available</h2>
-                      )}
+                      <h2>Courses Not Available</h2>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -985,8 +994,8 @@ class ManualAttendance extends Component {
                         return this.SectionBox(c);
                       })
                     ) : (
-                        <option>Select A Course First</option>
-                      )}
+                      <option>Select A Course First</option>
+                    )}
                   </Form.Control>
                 </form>
               </Col>
@@ -1000,24 +1009,24 @@ class ManualAttendance extends Component {
                   }}
                 >
                   {this.state.hour === '' ||
-                    this.state.code === '' ||
-                    this.state.section === '' ? (
-                      <BTTN disabled primary onClick={() => this.addAttendance()}>
-                        <i
-                          style={{ paddingRight: '1rem' }}
-                          className="fas fa-plus"
-                        ></i>
+                  this.state.code === '' ||
+                  this.state.section === '' ? (
+                    <BTTN disabled primary onClick={() => this.addAttendance()}>
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-plus"
+                      ></i>
                       Add Attendance
-                      </BTTN>
-                    ) : (
-                      <BTTN primary onClick={() => this.addAttendance()}>
-                        <i
-                          style={{ paddingRight: '1rem' }}
-                          className="fas fa-plus"
-                        ></i>
+                    </BTTN>
+                  ) : (
+                    <BTTN primary onClick={() => this.addAttendance()}>
+                      <i
+                        style={{ paddingRight: '1rem' }}
+                        className="fas fa-plus"
+                      ></i>
                       Add Attendance
-                      </BTTN>
-                    )}
+                    </BTTN>
+                  )}
                 </div>
               </Col>
               <Col xs={3}>
