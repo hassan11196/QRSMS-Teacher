@@ -255,7 +255,7 @@ class Home extends React.Component {
                             </span>
                           </Col>
                         </Row>
-                        <Row style={{ paddingTop: '1rem   ' }}>
+                        <Row >
                           {' '}
                           <Col lg="6">
                             <label
@@ -294,7 +294,7 @@ class Home extends React.Component {
                             </span>
                           </Col>
                         </Row>
-                        <Row style={{ paddingTop: '1rem   ' }}>
+                        <Row >
                           {' '}
                           <Col lg="6">
                             <label
