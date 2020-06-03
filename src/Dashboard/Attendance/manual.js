@@ -319,7 +319,9 @@ class ManualAttendance extends Component {
     console.log('URL Before Replace', url);
     console.log(window.location.protocol);
     if (window.location.protocol === 'https:') {
-      url = url.replace(/^http:\/\//i, 'https://');
+      console.log(url);
+      url = url.replace('http', 'https');
+      console.log(url);
     }
     console.log('URL Aftet Replace', url);
     axios
