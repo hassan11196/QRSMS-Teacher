@@ -141,9 +141,9 @@ class QRAttendance extends Component {
           <QRCode
             level="L"
             id="QR"
-            size="900"
+            size="1500"
             value={JSON.stringify(this.state.json_qr)}
-            style={{ width: '50%', height: '50%' }}
+            style={{ width: '100%', height: '100%' }}
           />
           ,
           <br />

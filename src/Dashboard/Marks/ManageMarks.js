@@ -352,11 +352,11 @@ class ManageMarks extends Component {
   setEvaluation(e) {
     this.setState(
       {
-        newEvaluationtype: e.target.value,
+        Evaluation: e.target.value,
       },
       () => {
         console.log(
-          this.state.newEvaluationtype + '  ' + this.state.currentEvaluationtype
+          this.state.Evaluation + '  ' + this.state.currentEvaluationtype
         );
       }
     );
