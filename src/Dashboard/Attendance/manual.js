@@ -316,9 +316,12 @@ class ManualAttendance extends Component {
     let url = e.target.options[e.target.selectedIndex].getAttribute('url');
     let state = e.target.options[e.target.selectedIndex].getAttribute('state');
     url = url.replace('http://localhost:8000', '');
-    if (window.location === 'https') {
-      url = url.replace('http', 'https');
+    console.log('URL Before Replace', url);
+    console.log(window.location.protocol);
+    if (window.location.protocol === 'https') {
+      url = url.replace(/^http:\/\//i, 'https://');
     }
+    console.log('URL Aftet Replace', url);
     axios
       .get(url)
       .then((response) => {
