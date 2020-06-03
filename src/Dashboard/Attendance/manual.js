@@ -316,7 +316,7 @@ class ManualAttendance extends Component {
     let url = e.target.options[e.target.selectedIndex].getAttribute('url');
     let state = e.target.options[e.target.selectedIndex].getAttribute('state');
     url = url.replace('http://localhost:8000', '');
-    url = url.replace(window.location.origin, '');
+    url = url.replace('http://qrsms-v1.herokuapp.com', '');
     console.log('URL Before Replace', url);
     // console.log(window.location.protocol);
     // if (window.location.protocol === 'https:') {
