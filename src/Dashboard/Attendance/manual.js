@@ -630,63 +630,100 @@ class ManualAttendance extends Component {
                           );
                           console.log('Hooooooo');
                           console.log(attendance_of_stud);
-                          if (attendance_of_stud[0].state == 'A')
+                          if (attendance_of_stud.length == 0) {
                             return (
                               <td>
-                                <Form.Control
-                                  as="select"
-                                  onChange={this.handleAttState}
-                                >
-                                  <option url={attendance_of_stud[0].url} state="A">
-                                    {attendance_of_stud[0].state}
-                                  </option>
-                                  <option url={attendance_of_stud[0].url} state="P">
-                                    P
-                                  </option>
-                                  <option url={attendance_of_stud[0].url} state="L">
-                                    L
-                                  </option>
+                                <Form.Control as="select">
+                                  <option state="NR">NR</option>
                                 </Form.Control>
                               </td>
                             );
-                          else if (attendance_of_stud[0].state == 'P')
-                            return (
-                              <td>
-                                <Form.Control
-                                  as="select"
-                                  onChange={this.handleAttState}
-                                >
-                                  <option url={attendance_of_stud[0].url} state="P">
-                                    {attendance_of_stud[0].state}
-                                  </option>
-                                  <option url={attendance_of_stud[0].url} state="A">
-                                    A
-                                  </option>
-                                  <option url={attendance_of_stud[0].url} state="L">
-                                    L
-                                  </option>
-                                </Form.Control>
-                              </td>
-                            );
-                          else if (attendance_of_stud[0].state == 'L')
-                            return (
-                              <td>
-                                <Form.Control
-                                  as="select"
-                                  onChange={this.handleAttState}
-                                >
-                                  <option url={attendance_of_stud[0].url} state="L">
-                                    {attendance_of_stud[0].state}
-                                  </option>
-                                  <option url={attendance_of_stud[0].url} state="P">
-                                    P
-                                  </option>
-                                  <option url={attendance_of_stud[0].url} state="A">
-                                    A
-                                  </option>
-                                </Form.Control>
-                              </td>
-                            );
+                          } else {
+                            if (attendance_of_stud[0].state == 'A')
+                              return (
+                                <td>
+                                  <Form.Control
+                                    as="select"
+                                    onChange={this.handleAttState}
+                                  >
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="A"
+                                    >
+                                      {attendance_of_stud[0].state}
+                                    </option>
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="P"
+                                    >
+                                      P
+                                    </option>
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="L"
+                                    >
+                                      L
+                                    </option>
+                                  </Form.Control>
+                                </td>
+                              );
+                            else if (attendance_of_stud[0].state == 'P')
+                              return (
+                                <td>
+                                  <Form.Control
+                                    as="select"
+                                    onChange={this.handleAttState}
+                                  >
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="P"
+                                    >
+                                      {attendance_of_stud[0].state}
+                                    </option>
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="A"
+                                    >
+                                      A
+                                    </option>
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="L"
+                                    >
+                                      L
+                                    </option>
+                                  </Form.Control>
+                                </td>
+                              );
+                            else if (attendance_of_stud[0].state == 'L')
+                              return (
+                                <td>
+                                  <Form.Control
+                                    as="select"
+                                    onChange={this.handleAttState}
+                                  >
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="L"
+                                    >
+                                      {attendance_of_stud[0].state}
+                                    </option>
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="P"
+                                    >
+                                      P
+                                    </option>
+                                    <option
+                                      url={attendance_of_stud[0].url}
+                                      state="A"
+                                    >
+                                      A
+                                    </option>
+                                  </Form.Control>
+                                </td>
+                              );
+                          }
                         }
                       )
                     ) : (
