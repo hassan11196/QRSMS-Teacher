@@ -160,8 +160,8 @@ class FacultyLogin extends React.Component {
                     <Input
                       name="username"
                       onChange={this.handlechange}
-                      placeholder="NU Email"
-                      type="email"
+                      placeholder="NU username - e.g farrukh.hassan"
+                      type="text"
                     />
                   </InputGroup>
                 </FormGroup>
